@@ -1,0 +1,39 @@
+div {
+  border: 1px solid black;
+}
+
+li { list-style-type: none; }
+/* daily page */
+#diarypage { 
+    
+}
+#diarypage #timetracker { 
+    
+}
+#diarypage #times { 
+    
+}
+#diarypage #listings { 
+    
+}
+#notes {
+
+}
+
+#diarypage #times ul li {  
+    display: block;
+    border-bottom: 1px solid gray;
+    width: 100%;
+    height: 2em; 
+}
+#diarypage #listings ul li { 
+    border-bottom: 1px solid gray;
+    display: block;
+    width: 100%;
+    height: 2em; 
+    
+}
+nav ul li {
+    display: inline-block;
+}
+.bottom-nav ul li { display: inline-block; }
