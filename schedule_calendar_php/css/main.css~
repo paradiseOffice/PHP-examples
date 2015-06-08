@@ -2,6 +2,11 @@ div {
   border: 1px solid black;
 }
 
+header { height: 120px; width: 80%; }
+header h1 {
+   text-align: center;
+}
+
 li { list-style-type: none; }
 /* daily page */
 #diarypage { 
@@ -33,7 +38,16 @@ li { list-style-type: none; }
     height: 2em; 
     
 }
+#diarypage #timetracker input {
+    height: 2em;
+}
 nav ul li {
     display: inline-block;
 }
 .bottom-nav ul li { display: inline-block; }
+.time {
+    margin-left: -50px;
+    font-size: 80%;
+    font-weight: oblique;
+    background-color: #ddd;
+}

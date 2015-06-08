@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="scripts/lib/bootstrap-3.1.1-dist/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="css/fonts.css" />
     <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="stylesheet" type="text/css" href="css/dark_tech.css" />
 <script type="text/JavaScript"
 src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
 </script>
@@ -33,7 +34,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
   </nav>
 <div class="container-fluid" >
   <div class="col-sm-8" id="diarypage">  
-    <div class="col-sm-2" id="timetracker">
+    <div class="col-sm-3" id="timetracker">
       <input type="text" class="form-control 0800" />
       <input type="text" class="form-control 0830" />
       <input type="text" class="form-control 0900" />
@@ -66,7 +67,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
       <input type="text" class="form-control 2230" />
       <input type="text" class="form-control 2300" />
     </div>
-    <div class="col-sm-1" id="times">
+    <div class="col-sm-2" id="times">
       <ul>
       <li class="0800">8:00 </li>
       <li class="0830">8:30 </li>

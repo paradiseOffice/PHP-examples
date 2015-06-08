@@ -1,0 +1,128 @@
+/*  Modern Glass theme
+
+    blue: #0098f9
+    purple: #8900e0
+    med grey: #999
+    white-grey: #ddd
+    dark grey: #343234
+ */
+
+
+@font-face {
+    font-family: mg_body;
+    src: url(fonts/serif/DroidSerif-Regular.ttf);
+}
+@font-face {
+    font-family: mg_body-italic;
+    src: url(fonts/serif/DroidSerif-Italic.ttf);
+}
+@font-face {
+    font-family: mg_body-bold;
+    src: url(fonts/serif/DroidSerif-Bold.ttf);   
+}
+@font-face {
+    font-family: mg_links;
+    src: url(fonts/sans/PontanoSans-Regular.ttf);
+}
+@font-face {
+    font-family: mg_headings;
+    src: url(fonts/script/Pacifico.ttf);
+}
+body { 
+    background: white;
+    font-family: mg_body, Garamond, "Times New Roman", serif;
+}
+.biggest_wrapper { box-shadow: 1px 1px 12px #0098f9; }
+.top {   }
+/* start of links part */
+nav.main { 
+    text-align: center;
+    background: #343234; 
+    margin-top: 5px;
+}
+nav a {
+    background: #343234 url(modern_glass/bg_link.png) no-repeat;
+    background-size: 100% 100%;
+    color: #FFF;
+    outline: none;
+    line-height: 1.4;
+    padding: 0 14px 0 14px;
+    font-family: mg_links, Helvetica, Arial, sans-serif;
+    font-size: 140%;
+    text-decoration: none;
+    text-shadow: -1px -1px 1px #eee, 
+                  1px 1px 1px #000, 
+                  2px 2px 1px #000;  
+}
+nav a:visited {
+    text-decoration: none; color: #FFF; outline: none;
+}
+nav a:hover, nav a:active { 
+    text-decoration: none; 
+    color: #8900e0;
+    text-shadow: -1px -1px 1px #fff, 1px 1px 1px #222, 2px 2px 1px #000; 
+}
+
+
+/* end of general navigation links bit */
+header { 
+    background: url(modern_glass/bg_header.png) no-repeat;
+    background-size: 100% 100%;
+}
+.top header h1 { 
+    text-align: center;
+    color: #ddd; 
+    font-family: mg_headings, Impact, Helvetica, Arial, sans-serif; 
+    font-size: 400%; 
+    border-bottom: 0;
+    line-height: 0.4;
+    margin-left: 0;
+    text-shadow: -1px -1px 0px #222, 0px 0px 1px #fff, 1px 1px 1px #fff;
+}
+.top header h2 { 
+    text-align: center;
+    font-family: mg_body-bold, Garamond, "Times New Roman", serif; 
+    color: #ddd; 
+    border-bottom: 0;
+    margin-left: 0;
+    font-size: 200%; 
+    
+}
+/* different column sizes, the smaller ones are often nav. */
+.biggest_wrapper, .col-lg-12, .col-xs-3, .col-sm-3, .col-lg-6, .col-lg-9 {  
+    background: #ddd;
+
+    color: black;
+}
+aside { 
+    background: #343234 url(modern_glass/bg_aside.png) no-repeat;
+    background-size: 100% 100%;
+    color: #fff;
+    font-family: mg_body, Garamond, "Times New Roman", serif; 
+    text-shadow: -1px 1px 3px #8900e0;
+    margin: 5px; 
+}
+div h1, h2, h3, h4, h5, h6 { 
+    color: #0098f9;
+    border-bottom: 5px double #8900e0;
+    font-family: mg_headings, Helvetica, Arial, sans-serif; 
+}
+div h1 {   }
+div h2 { }
+div h3 { }
+div h4 { }
+div h5 { }
+div h6 { }
+div p { padding: 5px; text-align: justify; }
+div p a { color: #0098f9; }
+div p a:hover { color: #8900e0;  }
+div ul, ol { padding: 5px; list-style: inside; }
+div ol { list-style-type: decimal; }
+
+.bottom { }
+.bottom nav { 
+    background: #343234;
+    text-align: center;
+    margin-bottom: 5px;
+}
+.bottom footer { background: #fff; color: #343234; }
