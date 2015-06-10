@@ -1,22 +1,67 @@
-CREATE TABLE time_usage {
-  usage_id INTEGER NOT NULL PRIMARY_KEY AUTO_INCREMENT,
-  start_time    TIMESTAMP NOT NULL,
-  end_time      TIMESTAMP NOT NULL,
-  activity      VARCHAR(100) DEFAULT "event shown"    
-};
+CREATE TABLE time_usage (
+  usage_id      INT AUTO_INCREMENT PRIMARY KEY,
+  s_day         DATE NOT NULL,
+  start_time    TIME NOT NULL,
+  end_time      TIME NOT NULL,
+  activity      VARCHAR(100) DEFAULT "--&lt;"
+);
 
-CREATE TABLE categories {
-  cat_id INTEGER NOT NULL PRIMARY_KEY AUTO_INCREMENT,
-  name   VARCHAR(100),
-  colour VARCHAR(100) /* rgba(255,255,255,1.0) */
-};
+CREATE TABLE categories (
+  cat_id        INTEGER PRIMARY KEY AUTO_INCREMENT,
+  name          VARCHAR(100) NOT NULL,
+  colour        VARCHAR(100) NOT NULL 
+  /* rgba(255,255,255,1.0) */
+);
 
-todo_item table
+CREATE TABLE todo_item (
+  task_id       INTEGER PRIMARY KEY AUTO_INCREMENT,
+  task          VARCHAR(100) NOT NULL,
+  s_day         DATE NOT NULL,
+  start_time    TIME,
+  end_time      TIME,
+  details       VARCHAR(1000),
+  priority      ENUM("urgent", "high", "medium", "low"),
+  cat_id        INTEGER, 
+  CONSTRAINT FOREIGN KEY (cat_id) REFERENCES categories(cat_id)
+);
 
-routine_events table
+CREATE TABLE routine_events (
+  event_id      INTEGER AUTO_INCREMENT,
+  event         VARCHAR(100) NOT NULL,
+  recurs        ENUM("daily", "weekly", "fortnightly", "monthly", "quarterly", "biannual", "yearly") NOT NULL,
+  start_time    TIME NOT NULL,
+  end_time      TIME NOT NULL,
+  place         VARCHAR(100),
+  attendees     VARCHAR(300),
+  details       VARCHAR(1000),
+  url           VARCHAR(200),
+  cat_id        INTEGER NOT NULL, 
+  PRIMARY KEY (event_id),
+  CONSTRAINT FOREIGN KEY (cat_id) REFERENCES categories(cat_id)
+);
 
-work_hol table # work /holiday date ranges
+CREATE TABLE work_hol (
+  num           INT AUTO_INCREMENT,
+  start_date    DATE NOT NULL,
+  end_date      DATE NOT NULL,
+  work_days     BOOLEAN,
+  hol_days      BOOLEAN,
+  PRIMARY KEY (num)
+);
 
-special_events table # birthdays etc. other day long events
+CREATE TABLE special_events (
+  num           INT AUTO_INCREMENT,
+  event         VARCHAR(100) NOT NULL,
+  yearly        BOOLEAN,
+  attendees     VARCHAR(300),
+  details       VARCHAR(1000),
+  PRIMARY KEY (num)
+);
 
-bank_holidays table
+CREATE TABLE bank_holidays (
+  num           INT AUTO_INCREMENT,
+  title         VARCHAR(100) NOT NULL,
+  shops_open    VARCHAR(200) NOT NULL,
+  holiday       DATE NOT NULL,
+  PRIMARY KEY (num)
+);

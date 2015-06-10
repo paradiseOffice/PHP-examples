@@ -5,7 +5,7 @@
 <!--[if lt IE 9]>
 <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
-     <title>Year</title>
+     <title>Month - Year</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="" content="" />
     <link rel="stylesheet" type="text/css" href="scripts/lib/bootstrap-3.1.1-dist/css/bootstrap.min.css" />
@@ -21,11 +21,83 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
 </head>
 <body>
 
-  <header>2015</header>
-  <div class="month little col" id="jan"></div>
+  <header>June 2015</header>
+  <nav class="nav nav-pills top-nav">
+    <ul>
+    <li><a href="#" id="prev_month" title="Previous month" class="glyphicon glyphicon-arrow-left"></a></li>
+    <li><a href="#" id="this_month" >June</a></li>
+    <li><a href="#" id="next_month" title="Next month" class="glyphicon glyphicon-arrow-right"></a></li>
+    </ul>
+  </nav>
+<div class="container-fluid">
 
-
-
-
+  <table class="table-striped table-bordered table-hover" id="month">
+    <thead>
+    <th> Monday</th>
+    <th> Tuesday</th>
+    <th>Wednesday</th>
+    <th>Thursday</th>
+    <th>Friday</th>
+    <th>Saturday</th>
+  </thead>
+  <tbody>
+  <tr>
+    <td id="1"> Date</td>
+    <td id="2"> Date</td>
+    <td id="3"> Date</td>
+    <td id="4"> Date</td>
+    <td id="5"> Date</td>
+    <td id="6"> Date</td>
+    <td id="7"> Date</td>
+  </tr><tr>
+    <td id="8"> Date</td>
+    <td id="9"> Date</td>
+    <td id="10"> Date</td>
+    <td id="11"> Date</td>
+    <td id="12"> Date</td>
+    <td id="13"> Date</td>
+    <td id="14"> Date</td>
+  </tr><tr>
+    <td id="15"> Date</td>
+    <td id="16"> Date</td>
+    <td id="17"> Date</td>
+    <td id="18"> Date</td>
+    <td id="19"> Date</td>
+    <td id="20"> Date</td>
+    <td id="21"> Date</td>
+  </tr><tr>
+    <td id="22"> Date</td>
+    <td id="23"> Date</td>
+    <td id="24"> Date</td>
+    <td id="25"> Date</td>
+    <td id="26"> Date</td>
+    <td id="27"> Date</td>
+    <td id="28"> Date</td>
+  </tr><tr>
+    <td id="29"> Date</td>
+    <td id="30"> Date</td>
+    <td id="31"> Date</td>
+    <td id="32"> Date</td>
+    <td id="33"> Date</td>
+    <td id="34"> Date</td>
+    <td id="35"> Date</td>
+  </tr>
+  </tbody>
+  </table>
+  
+  
+</div>
+<footer>
+  <nav id="main-nav">
+    <ul class="nav navbar-nav">
+    <li><a href="new_event.html" >New Event</a></li>
+    <li><a href="new_task.html" >New Task</a></li>
+    <li><a href="daily.html">Daily</a></li>
+    <li><a href="week.html" >Week</a></li>
+    <li class="active"><a href="month.html" >Month</a></li>
+    <li><a href="year.html" >Year</a></li>
+    </ul>
+  </nav>
+</footer>
 </body>
 </html>

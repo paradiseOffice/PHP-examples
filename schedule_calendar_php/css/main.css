@@ -51,3 +51,5 @@ nav ul li {
     font-weight: oblique;
     background-color: #ddd;
 }
+#month { width: 80%; }
+#month tr { height: 4em; }
