@@ -22,12 +22,12 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
 <body>
 
   <header><h1>New Event</h1></header>
-  <nav class="nav nav-pills top-nav">
-    <ul>
-    <li><a href="#" id="special" title="Special event" class="glyphicon glyphicon-star-empty">Special event</a></li>
-    <li><a href="#" id="work_hols" class="glyphicon glyphicon-calendar">Days off</a></li>
-    <li><a href="#" id="bank_holiday" title="Next month" class="glyphicon glyphicon-arrow-right">Add bank holiday</a></li>
-    <li><strong><a href="#" id="recurring_event" title="Recurring event" class="glyphicon glyphicon-refresh">Recurring Event</a></strong></li>
+  <nav class="nav top-nav">
+    <ul class="nav-pills">
+    <li><a href="special_event.php" id="special" title="Special event" class="glyphicon glyphicon-star-empty">Special event</a></li>
+    <li><a href="add_work_hols.php" id="work_hols" class="glyphicon glyphicon-calendar">Days off</a></li>
+    <li><a href="add_bank_holiday.php" id="bank_holiday" title="Next month" class="glyphicon glyphicon-arrow-right">Add bank holiday</a></li>
+    <li><strong><a href="new_recurring_event.php" id="recurring_event" title="Recurring event" class="disabled glyphicon glyphicon-refresh">Recurring Event</a></strong></li>
     </ul>
   </nav>
   
@@ -68,24 +68,25 @@ CREATE TABLE routine_events (
   CONSTRAINT FOREIGN KEY (cat_id) REFERENCES categories(cat_id)
 );
 -->
+
   <section id="recurring_event_form">
   <h2>Recurring Event</h2>
   <form>
     <div class="form-group">
-    <input class="form-control" type="text" length="100" placeholder="event name" />
+    <input class="form-control" type="text" id="event_name" name="event_name"  length="100" placeholder="event name" />
     </div>
     <div class="form-group">
     <div class="col-sm-4">
     <label for="start_time">Starts: </label>
-    <input  class="form-control" type="time" id="start_time" />
+    <input  class="form-control" type="time" id="start_time" name="start_time" placeholder="00:00" />
     </div>
     <div class="col-sm-4">
     <label for="end_time">Ends: </label>
-    <input  class="form-control" type="time" id="end_time" />
+    <input  class="form-control" type="time" id="end_time" name="end_time" placeholder="00:00"  />
     </div>
     <div class="col-sm-4">
     <label for="recurs">Recurs: </label>
-    <select class="form-control col-sm-3"  id="recurs">
+    <select class="form-control col-sm-3"  id="recurs" name="recurs">
       <option>daily</option>
       <option>weekly</option>
       <option>fortnightly</option>
@@ -98,35 +99,36 @@ CREATE TABLE routine_events (
     <div class="form-group">
     <div class="col-sm-10">
       <label for="place" class="sr-only">Place:</label>
-      <input type="text" id="place" class="form-control" length="100" placeholder="Place" />
+      <input type="text" id="place" name="place" class="form-control" length="100" placeholder="Place" />
     </div><div class="col-sm-2">
       <a href="http://www.bing.com/maps/" target="blank" title="Map with GPS" class="glyphicon glyphicon-map-marker"> Find</a>
     </div></div>
       <label for="attendees" class="sr-only">Attendees: </label>
-      <input id="attendees" type="text" class="form-control" placeholder="attendees" />
-    <textarea id="details" class="form-group col-sm-12" placeholder="Details..." rows="4"></textarea>
+      <input id="attendees" name="attendees" type="text" class="form-control" placeholder="attendees" />
+    <textarea id="details" name="details" class="form-group col-sm-12" placeholder="Details..." rows="4"></textarea>
     <div class="col-sm-8">
       <label for="url" class="sr-only">Web page</label>
-      <input type="url" class="form-control" id="url" placeholder="web page" />
+      <input type="url" class="form-control" id="url" name="url" placeholder="web page" />
     </div>
     <div class="col-sm-4">
-      <select id="category" class="form-control">
+      <select id="category" name="category" class="form-control">
         <option>None</option>
       </select>
     </div>
     <button type="submit" id="submit" name="submit" class="btn btn-primary btn-lg">Submit</button>
   </form>
   </section>
+  
 </div><!--container-->
 <footer>
   <nav id="main-nav">
     <ul class="nav navbar-nav">
-    <li><a href="new_event.html" >New Event</a></li>
-    <li><a href="new_task.html" >New Task</a></li>
-    <li><a href="daily.html">Daily</a></li>
-    <li><a href="week.html" >Week</a></li>
-    <li class="active"><a href="month.html" >Month</a></li>
-    <li><a href="year.html" >Year</a></li>
+    <li class="disabled active"><a href="new_event.php" >New Event</a></li>
+    <li><a href="new_task.php" >New Task</a></li>
+    <li><a href="daily.php">Daily</a></li>
+    <li><a href="week.php" >Week</a></li>
+    <li><a href="month.php" >Month</a></li>
+    <li><a href="year.php" >Year</a></li>
     </ul>
   </nav>
 </footer>

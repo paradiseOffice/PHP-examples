@@ -125,12 +125,12 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
 <footer>
   <nav id="main-nav">
     <ul class="nav navbar-nav">
-    <li><a href="new_event.html" >New Event</a></li>
-    <li><a href="new_task.html" >New Task</a></li>
-    <li><a href="daily.html">Daily</a></li>
-    <li><a href="week.html" >Week</a></li>
-    <li class="active"><a href="month.html" >Month</a></li>
-    <li><a href="year.html" >Year</a></li>
+    <li><a href="new_event.php" >New Event</a></li>
+    <li><a href="new_task.php" >New Task</a></li>
+    <li><a href="daily.php">Daily</a></li>
+    <li class="disabled active"><a href="week.php" >Week</a></li>
+    <li><a href="month.php" >Month</a></li>
+    <li><a href="year.php" >Year</a></li>
     </ul>
   </nav>
 </footer>
