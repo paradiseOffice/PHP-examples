@@ -1,3 +1,17 @@
+<?php
+  include('../settings.php');
+  $pdo = new PDO(
+  sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
+    $settings['host'],
+    $settings['dbname'],
+    $settings['port'],
+    $settings['charset']
+  ),
+  $settings['username'],
+  $settings['password']
+  );
+  $errors = '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -116,7 +130,32 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
       <li><span class="time">16 - 18</span>  </li>
       <li><span class="time">18 - 20</span>  </li>
       <li><span class="time">20 - 22</span>  </li>
-      <li><span class="time">22 - midnight</span> </li>
+      <li><span class="time">22 - midnight</span>
+<?php
+  
+  if ($db != NULL ) {
+    $select = "select * from categories ORDER BY cat_id";
+    $statement = $pdo->prepare($select);
+    $statement->execute();
+    if ($statement !== 0) 
+    {
+        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
+        {
+          print("<option value='$row[\"cat_id\"]' style='background-color: $row[\"colour\"];'>$row[\"name\"]</option>\n");
+        }
+    }
+    else 
+    {
+      print("<option value=\"0\">No categories</option>");
+    } // mysqli num rows if
+  } 
+  else 
+  {
+    print("<p class=\"error\">Connection to the database has failed.</p>");
+  }
+?>      
+      
+      </li>
     </ul>
   </div>
 </div>

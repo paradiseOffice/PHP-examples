@@ -16,7 +16,7 @@ CREATE TABLE categories (
 CREATE TABLE todo_item (
   task_id       INTEGER PRIMARY KEY AUTO_INCREMENT,
   task          VARCHAR(100) NOT NULL,
-  s_day         DATE NOT NULL,
+  s_day         VARCHAR(8),
   start_time    TIME,
   end_time      TIME,
   details       VARCHAR(1000),
@@ -29,6 +29,7 @@ CREATE TABLE routine_events (
   event_id      INTEGER AUTO_INCREMENT,
   event         VARCHAR(100) NOT NULL,
   recurs        ENUM("daily", "weekly", "fortnightly", "monthly", "quarterly", "biannual", "yearly") NOT NULL,
+  s_day         VARCHAR(8),
   start_time    TIME NOT NULL,
   end_time      TIME NOT NULL,
   place         VARCHAR(100),
@@ -42,8 +43,8 @@ CREATE TABLE routine_events (
 
 CREATE TABLE work_hol (
   num           INT AUTO_INCREMENT,
-  start_date    DATE NOT NULL,
-  end_date      DATE NOT NULL,
+  start_date    VARCHAR(8),
+  end_date      VARCHAR(8),
   work_days     BOOLEAN,
   hol_days      BOOLEAN,
   PRIMARY KEY (num)
@@ -52,6 +53,7 @@ CREATE TABLE work_hol (
 CREATE TABLE special_events (
   num           INT AUTO_INCREMENT,
   event         VARCHAR(100) NOT NULL,
+  s_day         VARCHAR(8),
   yearly        BOOLEAN,
   attendees     VARCHAR(300),
   details       VARCHAR(1000),
@@ -62,6 +64,6 @@ CREATE TABLE bank_holidays (
   num           INT AUTO_INCREMENT,
   title         VARCHAR(100) NOT NULL,
   shops_open    VARCHAR(200) NOT NULL,
-  holiday       DATE NOT NULL,
+  holiday       VARCHAR(8),
   PRIMARY KEY (num)
 );

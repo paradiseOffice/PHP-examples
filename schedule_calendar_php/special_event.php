@@ -1,3 +1,64 @@
+<?php
+  include('../settings.php');
+  $pdo = new PDO(
+  sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
+    $settings['host'],
+    $settings['dbname'],
+    $settings['port'],
+    $settings['charset']
+  ),
+  $settings['username'],
+  $settings['password']
+  );
+  $errors = '';
+  $event_name = trim($_POST['event_name']); /* a-z A-Z spaces */
+  $event_name = preg_replace('/[^a-zA-Z ]+/', '', $event_name);
+  $start_time = trim($_POST['start_time']); /* 00:00 */
+  $start_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*+/', '', $start_time); 
+  $end_time = trim($_POST['end_time']); 
+  $end_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $end_time);
+  $recurs = $_POST['recurs']; 
+  $place = trim($_POST['place']); /* a-z -+ 0-9 spaces () */
+  $place = preg_replace('/[^a-zA-Z \(\)-_]+/', '', $place);
+  $attendees = trim($_POST['attendees']); /* A-z - spaces */
+  $attendees = preg_replace('/[^a-zA-Z ]+/', '', $attendees);
+  $details = trim($_POST['details']); /* A-z .,- */
+  $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
+  $url = trim($_POST['url']); /* url regex */
+  $url = preg_replace('/[^A-Za-z\/:\.]+/', '', $url);
+  $cat_id = $_POST['category']; 
+
+  if(
+    empty($_POST['event_name']) ||
+    empty($_POST['start_time']) ||
+    empty($_POST['end_time']) ||
+     empty($_POST['recurs']))
+{
+    $errors .= "\n Please fill in these required fields.";
+}
+
+ if ($_POST['submit']) {
+    $insert = "INSERT INTO routine_events (event, recurs, start_time, end_time, place, attendees, details, url, cat_id) VALUES (:event_name, :start_time, :end_time, :recurs, :place, :attendees, :details, :url, :category ) ";
+    $statement = $pdo->prepare($insert);
+    $statement->bindValue(":event_name", $event_name);
+    $statement->bindValue(":start_time", $start_time);
+    $statement->bindValue(":end_time", $end_time);
+    $statement->bindValue(":place", $place);
+    $statement->bindValue(":attendees", $attendees);
+    $statement->bindValue(":details", $details);
+    $statement->bindValue(":url", $url);
+    $statement->bindValue(":category", $cat_id, PDO::PARAM_INT);
+    if ($statement->execute()) 
+    {
+    $errors .= "\n Your event was successfully saved.";
+    } 
+    else 
+    {
+    $errors .= "\n Unable to insert record!" . mysqli_error_list($db);
+    }
+  }
+    
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,17 +122,10 @@ CREATE TABLE routine_events (
   end_time      TIME NOT NULL,
   place         VARCHAR(100),
   attendees     VARCHAR(300),
-  details       VARCHAR(1000),
-  url           VARCHAR(200),
-  cat_id        INTEGER NOT NULL, 
-  PRIMARY KEY (event_id),
-  CONSTRAINT FOREIGN KEY (cat_id) REFERENCES categories(cat_id)
-);
 -->
-
   <section id="recurring_event_form">
   <h2>Recurring Event</h2>
-  <form>
+  <form action="new_recurring_event.php" method="post" class="form">
     <div class="form-group">
     <input class="form-control" type="text" id="event_name" name="event_name"  length="100" placeholder="event name" />
     </div>
@@ -112,7 +166,31 @@ CREATE TABLE routine_events (
     </div>
     <div class="col-sm-4">
       <select id="category" name="category" class="form-control">
-        <option>None</option>
+      
+<?php
+  
+  if ($db != NULL ) {
+    $select = "select * from categories ORDER BY cat_id";
+    $statement = $pdo->prepare($select);
+    $statement->execute();
+    if ($statement !== 0) 
+    {
+        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
+        {
+          print("<option value='$row[\"cat_id\"]' style='background-color: $row[\"colour\"];'>$row[\"name\"]</option>\n");
+        }
+    }
+    else 
+    {
+      print("<option value=\"0\">No categories</option>");
+    } // mysqli num rows if
+  } 
+  else 
+  {
+    print("<p class=\"error\">Connection to the database has failed.</p>");
+  }
+?>
+        
       </select>
     </div>
     <button type="submit" id="submit" name="submit" class="btn btn-primary btn-lg">Submit</button>

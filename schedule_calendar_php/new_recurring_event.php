@@ -17,6 +17,7 @@
   $start_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*+/', '', $start_time); 
   $end_time = trim($_POST['end_time']); 
   $end_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $end_time);
+  $s_day = trim($_POST['s_day']);
   $recurs = $_POST['recurs']; 
   $place = trim($_POST['place']); /* a-z -+ 0-9 spaces () */
   $place = preg_replace('/[^a-zA-Z \(\)-_]+/', '', $place);
@@ -38,7 +39,7 @@
 }
 
  if ($_POST['submit']) {
-    $insert = "INSERT INTO routine_events (event, recurs, start_time, end_time, place, attendees, details, url, cat_id) VALUES (:event_name, :start_time, :end_time, :recurs, :place, :attendees, :details, :url, :category ) ";
+    $insert = "INSERT INTO routine_events (event, recurs, start_time, end_time, place, attendees, details, url, cat_id, s_day) VALUES (:event_name, :start_time, :end_time, :recurs, :place, :attendees, :details, :url, :category, :s_day ) ";
     $statement = $pdo->prepare($insert);
     $statement->bindValue(":event_name", $event_name);
     $statement->bindValue(":start_time", $start_time);
@@ -48,6 +49,7 @@
     $statement->bindValue(":details", $details);
     $statement->bindValue(":url", $url);
     $statement->bindValue(":category", $cat_id, PDO::PARAM_INT);
+    $statement->bindValue(":s_day", $s_day);
     if ($statement->execute()) 
     {
     $errors .= "\n Your event was successfully saved.";
@@ -93,47 +95,23 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
   </nav>
   
 <div class="container">
-<!--
-
-CREATE TABLE categories (
-  cat_id        INTEGER PRIMARY KEY AUTO_INCREMENT,
-  name          VARCHAR(100) NOT NULL,
-  colour        VARCHAR(100) NOT NULL 
-  /* rgba(255,255,255,1.0) */
-);
-
-CREATE TABLE routine_events (
-  event_id      INTEGER AUTO_INCREMENT,
-  event         VARCHAR(100) NOT NULL,
-  recurs        ENUM("daily", "weekly", "fortnightly", "monthly", "quarterly", "biannual", "yearly") NOT NULL,
-  start_time    TIME NOT NULL,
-  end_time      TIME NOT NULL,
-  place         VARCHAR(100),
-  attendees     VARCHAR(300),
-  details       VARCHAR(1000),
-  url           VARCHAR(200),
-  cat_id        INTEGER NOT NULL, 
-  PRIMARY KEY (event_id),
-  CONSTRAINT FOREIGN KEY (cat_id) REFERENCES categories(cat_id)
-);
--->
 
   <section id="recurring_event_form">
   <h2>Recurring Event</h2>
-  <form>
+  <form action="new_recurring_event.php" method="post" class="form">
     <div class="form-group">
     <input class="form-control" type="text" id="event_name" name="event_name"  length="100" placeholder="event name" />
     </div>
     <div class="form-group">
-    <div class="col-sm-4">
+    <div class="col-sm-3">
     <label for="start_time">Starts: </label>
     <input  class="form-control" type="time" id="start_time" name="start_time" placeholder="00:00" />
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
     <label for="end_time">Ends: </label>
     <input  class="form-control" type="time" id="end_time" name="end_time" placeholder="00:00"  />
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
     <label for="recurs">Recurs: </label>
     <select class="form-control col-sm-3"  id="recurs" name="recurs">
       <option>daily</option>
@@ -144,7 +122,12 @@ CREATE TABLE routine_events (
       <option>quarterly</option>
       <option>biannual</option>
     </select>
-    </div></div>
+    </div>
+    <div class="col-sm-3">
+    <label for="s_day">Date: </label>
+    <input type="date" id="s_day" name="s_day" class="form-control" />
+    </div>
+    </div>
     <div class="form-group">
     <div class="col-sm-10">
       <label for="place" class="sr-only">Place:</label>
@@ -166,9 +149,9 @@ CREATE TABLE routine_events (
   
   if ($db != NULL ) {
     $select = "select * from categories ORDER BY cat_id";
-    $allrows = $pdo->prepare($select);
+    $statement = $pdo->prepare($select);
     $statement->execute();
-    if (mysqli_num_rows($allrows) > 0) 
+    if ($statement !== 0) 
     {
         while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
         {

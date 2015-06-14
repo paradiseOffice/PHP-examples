@@ -1,3 +1,44 @@
+<?php
+  include('../settings.php');
+  $pdo = new PDO(
+  sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
+    $settings['host'],
+    $settings['dbname'],
+    $settings['port'],
+    $settings['charset']
+  ),
+  $settings['username'],
+  $settings['password']
+  );
+  $errors = '';
+  $title = trim($_POST['title']); /* a-z A-Z spaces */
+  $title = preg_replace('/[^a-zA-Z \']+/', '', $title);
+  $shops_open = trim($_POST['shops_open']); 
+  $shops_open = preg_replace('/[^A-Za-z \.,-]+/', '', $shops_open);
+  $holiday = trim($_POST['holiday']); 
+  $holiday = preg_replace('/[^0-9\/-]+/', '', $holiday);
+  if( empty($_POST['title']) ||  empty($_POST['holiday']))
+  {
+    $errors .= "\n Please fill in these required fields.";
+  }
+
+  if ($_POST['submit']) {
+    $insert = "INSERT INTO bank_holidays (num, title, shops_open, holiday) VALUES (:title, :shops_open, :holiday ) ";
+    $statement = $pdo->prepare($insert);
+    $statement->bindValue(":title", $title);
+    $statement->bindValue(":shops_open", $shops_open);
+    $statement->bindValue(":holiday", $holiday);
+    if ($statement->execute()) 
+    {
+    $errors .= "\n Your event was successfully saved.";
+    } 
+    else 
+    {
+    $errors .= "\n Unable to insert record!";
+    }
+  }
+    
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,96 +67,30 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
     <ul class="nav-pills">
     <li><a href="special_event.php" id="special" title="Special event" class="glyphicon glyphicon-star-empty">Special event</a></li>
     <li><a href="add_work_hols.php" id="work_hols" class="glyphicon glyphicon-calendar">Days off</a></li>
-    <li><a href="add_bank_holiday.php" id="bank_holiday" title="Next month" class="glyphicon glyphicon-arrow-right">Add bank holiday</a></li>
+    <li class="active disabled"><a href="add_bank_holiday.php" id="bank_holiday" title="Next month" class="glyphicon glyphicon-arrow-right">Add bank holiday</a></li>
     <li><strong><a href="new_recurring_event.php" id="recurring_event" title="Recurring event" class="disabled glyphicon glyphicon-refresh">Recurring Event</a></strong></li>
     </ul>
   </nav>
   
 <div class="container">
-<!--
 
-CREATE TABLE categories (
-  cat_id        INTEGER PRIMARY KEY AUTO_INCREMENT,
-  name          VARCHAR(100) NOT NULL,
-  colour        VARCHAR(100) NOT NULL 
-  /* rgba(255,255,255,1.0) */
-);
-
-CREATE TABLE todo_item (
-  task_id       INTEGER PRIMARY KEY AUTO_INCREMENT,
-  task          VARCHAR(100) NOT NULL,
-  s_day         DATE NOT NULL,
-  start_time    TIME,
-  end_time      TIME,
-  details       VARCHAR(1000),
-  priority      ENUM("urgent", "high", "medium", "low"),
-  cat_id        INTEGER, 
-  CONSTRAINT FOREIGN KEY (cat_id) REFERENCES categories(cat_id)
-);
-
-CREATE TABLE routine_events (
-  event_id      INTEGER AUTO_INCREMENT,
-  event         VARCHAR(100) NOT NULL,
-  recurs        ENUM("daily", "weekly", "fortnightly", "monthly", "quarterly", "biannual", "yearly") NOT NULL,
-  start_time    TIME NOT NULL,
-  end_time      TIME NOT NULL,
-  place         VARCHAR(100),
-  attendees     VARCHAR(300),
-  details       VARCHAR(1000),
-  url           VARCHAR(200),
-  cat_id        INTEGER NOT NULL, 
-  PRIMARY KEY (event_id),
-  CONSTRAINT FOREIGN KEY (cat_id) REFERENCES categories(cat_id)
-);
--->
-
-  <section id="recurring_event_form">
-  <h2>Recurring Event</h2>
-  <form>
+  <section id="bank_holiday">
+  <h2>Bank Holiday</h2>
+  <form action="add_bank_holiday.php" method="post" class="form">
     <div class="form-group">
-    <input class="form-control" type="text" id="event_name" name="event_name"  length="100" placeholder="event name" />
+    <label for="title" class="sr-only">Holiday</label>
+    <input class="form-control" type="text" id="title" name="title"  length="100" placeholder="Holiday title" />
     </div>
     <div class="form-group">
-    <div class="col-sm-4">
-    <label for="start_time">Starts: </label>
-    <input  class="form-control" type="time" id="start_time" name="start_time" placeholder="00:00" />
+    <label for="shops_open">Shops Open</label>
+    <input  class="form-control" type="text" id="shops_open" name="shops_open" length="200"  />
     </div>
-    <div class="col-sm-4">
-    <label for="end_time">Ends: </label>
-    <input  class="form-control" type="time" id="end_time" name="end_time" placeholder="00:00"  />
-    </div>
-    <div class="col-sm-4">
-    <label for="recurs">Recurs: </label>
-    <select class="form-control col-sm-3"  id="recurs" name="recurs">
-      <option>daily</option>
-      <option>weekly</option>
-      <option>fortnightly</option>
-      <option>monthly</option>
-      <option>yearly</option>
-      <option>quarterly</option>
-      <option>biannual</option>
-    </select>
-    </div></div>
     <div class="form-group">
-    <div class="col-sm-10">
-      <label for="place" class="sr-only">Place:</label>
-      <input type="text" id="place" name="place" class="form-control" length="100" placeholder="Place" />
-    </div><div class="col-sm-2">
-      <a href="http://www.bing.com/maps/" target="blank" title="Map with GPS" class="glyphicon glyphicon-map-marker"> Find</a>
-    </div></div>
-      <label for="attendees" class="sr-only">Attendees: </label>
-      <input id="attendees" name="attendees" type="text" class="form-control" placeholder="attendees" />
-    <textarea id="details" name="details" class="form-group col-sm-12" placeholder="Details..." rows="4"></textarea>
-    <div class="col-sm-8">
-      <label for="url" class="sr-only">Web page</label>
-      <input type="url" class="form-control" id="url" name="url" placeholder="web page" />
+      <label for="holiday">Date</label>
+      <input type="date" id="holiday" name="holiday" class="form-control" placeholder="dd-mm-yyyy" />
     </div>
-    <div class="col-sm-4">
-      <select id="category" name="category" class="form-control">
-        <option>None</option>
-      </select>
-    </div>
-    <button type="submit" id="submit" name="submit" class="btn btn-primary btn-lg">Submit</button>
+
+    <button type="submit" id="submit" name="submit" class="btn btn-primary btn-lg">Add</button>
   </form>
   </section>
   

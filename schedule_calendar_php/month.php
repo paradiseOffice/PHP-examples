@@ -1,3 +1,17 @@
+<?php
+  include('../settings.php');
+  $pdo = new PDO(
+  sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
+    $settings['host'],
+    $settings['dbname'],
+    $settings['port'],
+    $settings['charset']
+  ),
+  $settings['username'],
+  $settings['password']
+  );
+  $errors = '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -85,7 +99,29 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
   </tr>
   </tbody>
   </table>
-  
+<?php
+  /* ("urgent", "high", "medium", "low"), priority */
+  if ($pdo != NULL ) {
+    $select = "SELECT task, s_day, details, priority FROM todo_item WHERE s_day = :today   LIMIT 1";
+    $statement = $pdo->prepare($select);
+    $statement->execute();
+    if ($statement !== 0) 
+    {
+        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
+        {
+          print("<option value='$row[\"cat_id\"]' style='background-color: $row[\"colour\"];'>$row[\"name\"]</option>\n");
+        }
+    }
+    else 
+    {
+      print("<option value=\"0\">No categories</option>");
+    } // mysqli num rows if
+  } 
+  else 
+  {
+    print("<p class=\"error\">Connection to the database has failed.</p>");
+  }
+?>  
   
 </div>
 <footer>

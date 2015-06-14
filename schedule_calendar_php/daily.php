@@ -1,3 +1,17 @@
+<?php
+  include('../settings.php');
+  $pdo = new PDO(
+  sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
+    $settings['host'],
+    $settings['dbname'],
+    $settings['port'],
+    $settings['charset']
+  ),
+  $settings['username'],
+  $settings['password']
+  );
+  $errors = '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,11 +34,183 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
 <script type="text/JavaScript" src="scripts/lib/jquery-ui.min.js"></script>
 <script type="text/JavaScript" src="scripts/lib/bootstrap-3.1.1-dist/js/bootstrap.min.js"></script>
 <script type="text/JavaScript" src="scripts/application.js"></script>
+<?php
+<script type="text/JavaScript">
+  echo "$(document).ready(function() {\n";
+  if ($pdo != NULL ) {
+    $today = date("d m Y");
+    $recurSql = "SELECT * FROM routine_events WHERE s_day = :today ORDER BY start_time";
+    $statement = $pdo->prepare($recurSql);
+    $statement->bindValue(":today", $today);
+    $statement->execute();
+    if ($statement !== 0) 
+    {
+        print("var routineArray = [];\n");
+        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
+        {
+          for ($i = 0; $i < count($row); $i++) 
+          {
+            print("var routineArray[$i] = \"<div class='routine-event $row[\"start_time\"]'>\n<h3 class='summary'>$row[\"event\"]</h3>\n<div class='event-details'><span class='time'>Starts $row[\"start_time\"]</span><span class='time'> Ends $row[\"end_time\"]</span>\" Recurring $row[\"recurs\"]<br />\n<h4 class='place'>$row[\"place\"]</h4>\n<p>$row[\"details\"]</p>\n<p class='attendees'>$row['attendees'] <br />\n<a href='$row[\"url\"]' target='blank'>$row[\"url\"]</a></p>\n</div>\n");
+            if ($row['start_time'] >= "8:00:00" || $row['start_time'] <= "8:30:00") {
+              print("$('#listings.0800').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "8:30:00" || $row['start_time'] <= "9:00:00") {
+              print("$('#listings.0830').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "9:00:00" || $row['start_time'] <= "9:30:00") {
+              print("$('#listings.0900').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "9:30:00" || $row['start_time'] <= "10:00:00") {
+              print("$('#listings.0930').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "10:00:00" || $row['start_time'] <= "10:30:00") {
+              print("$('#listings.1000').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "10:30:00" || $row['start_time'] <= "11:00:00") {
+              print("$('#listings.1030').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "11:00:00" || $row['start_time'] <= "11:30:00") {
+              print("$('#listings.1100').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "11:30:00" || $row['start_time'] <= "12:00:00") {
+              print("$('#listings.1130').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "12:00:00" || $row['start_time'] <= "12:30:00") {
+              print("$('#listings.1200').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "12:30:00" || $row['start_time'] <= "13:00:00") {
+              print("$('#listings.1230').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "13:00:00" || $row['start_time'] <= "13:30:00") {
+              print("$('#listings.1300').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "13:30:00" || $row['start_time'] <= "14:00:00") {
+              print("$('#listings.1330').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "14:00:00" || $row['start_time'] <= "14:30:00") {
+              print("$('#listings.1400').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "14:30:00" || $row['start_time'] <= "15:00:00") {
+              print("$('#listings.1430').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "15:00:00" || $row['start_time'] <= "15:30:00") {
+              print("$('#listings.1500').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "15:30:00" || $row['start_time'] <= "16:00:00") {
+              print("$('#listings.1530').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "16:00:00" || $row['start_time'] <= "16:30:00") {
+              print("$('#listings.1600').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "16:30:00" || $row['start_time'] <= "17:00:00") {
+              print("$('#listings.1630').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "17:00:00" || $row['start_time'] <= "17:30:00") {
+              print("$('#listings.1700').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "17:30:00" || $row['start_time'] <= "18:00:00") {
+              print("$('#listings.1730').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "18:00:00" || $row['start_time'] <= "18:30:00") {
+              print("$('#listings.1800').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "18:30:00" || $row['start_time'] <= "19:00:00") {
+              print("$('#listings.1830').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "19:00:00" || $row['start_time'] <= "19:30:00") {
+              print("$('#listings.1900').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "19:30:00" || $row['start_time'] <= "20:00:00") {
+              print("$('#listings.1930').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "20:00:00" || $row['start_time'] <= "20:30:00") {
+              print("$('#listings.2000').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "20:30:00" || $row['start_time'] <= "21:00:00") {
+              print("$('#listings.2030').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "21:00:00" || $row['start_time'] <= "21:30:00") {
+              print("$('#listings.2100').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "21:30:00" || $row['start_time'] <= "22:00:00") {
+              print("$('#listings.2130').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "22:00:00" || $row['start_time'] <= "22:30:00") {
+              print("$('#listings.2200').append(routineArray[$i]);\n");
+            } else if ($row['start_time'] >= "22:30:00" || $row['start_time'] <= "23:00:00") {
+              print("$('#listings.2230').append(routineArray[$i]);\n");
+            } 
+          }
+        }
+    }
+    $todoSql = "SELECT * FROM todo_item, categories WHERE s_day = :today ORDER BY start_time";
+    $statement = $pdo->prepare($todoSql);
+    $statement->bindValue(":today", $today);
+    $statement->execute();
+    if ($statement !== 0) 
+    {
+        print("var todoArray = [];\n");
+        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
+        {
+          for ($i = 0; $i < count($row); $i++) 
+          {
+            print("var todoArray[$i] = \"<div class='todo $row[\"start_time\"]'>\n<h3 class='summary' style='background-color: $row[\"colour\"];'>$row[\"task\"]</h3>\n<div class='todo-details'><p><span class='time'>Starts $row[\"start_time\"]</span><span class='time'> Ends $row[\"end_time\"]</span>\" <span class='category'> $row[\"name\"]</span>\n</p><p>$row[\"details\"]</p>\n<p class='priority'>$row['priority'] </p>\n</div>\n");
+            if ($row['start_time'] >= "8:00:00" || $row['start_time'] <= "8:30:00") {
+              print("$('#listings.0800').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "8:30:00" || $row['start_time'] <= "9:00:00") {
+              print("$('#listings.0830').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "9:00:00" || $row['start_time'] <= "9:30:00") {
+              print("$('#listings.0900').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "9:30:00" || $row['start_time'] <= "10:00:00") {
+              print("$('#listings.0930').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "10:00:00" || $row['start_time'] <= "10:30:00") {
+              print("$('#listings.1000').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "10:30:00" || $row['start_time'] <= "11:00:00") {
+              print("$('#listings.1030').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "11:00:00" || $row['start_time'] <= "11:30:00") {
+              print("$('#listings.1100').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "11:30:00" || $row['start_time'] <= "12:00:00") {
+              print("$('#listings.1130').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "12:00:00" || $row['start_time'] <= "12:30:00") {
+              print("$('#listings.1200').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "12:30:00" || $row['start_time'] <= "13:00:00") {
+              print("$('#listings.1230').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "13:00:00" || $row['start_time'] <= "13:30:00") {
+              print("$('#listings.1300').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "13:30:00" || $row['start_time'] <= "14:00:00") {
+              print("$('#listings.1330').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "14:00:00" || $row['start_time'] <= "14:30:00") {
+              print("$('#listings.1400').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "14:30:00" || $row['start_time'] <= "15:00:00") {
+              print("$('#listings.1430').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "15:00:00" || $row['start_time'] <= "15:30:00") {
+              print("$('#listings.1500').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "15:30:00" || $row['start_time'] <= "16:00:00") {
+              print("$('#listings.1530').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "16:00:00" || $row['start_time'] <= "16:30:00") {
+              print("$('#listings.1600').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "16:30:00" || $row['start_time'] <= "17:00:00") {
+              print("$('#listings.1630').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "17:00:00" || $row['start_time'] <= "17:30:00") {
+              print("$('#listings.1700').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "17:30:00" || $row['start_time'] <= "18:00:00") {
+              print("$('#listings.1730').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "18:00:00" || $row['start_time'] <= "18:30:00") {
+              print("$('#listings.1800').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "18:30:00" || $row['start_time'] <= "19:00:00") {
+              print("$('#listings.1830').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "19:00:00" || $row['start_time'] <= "19:30:00") {
+              print("$('#listings.1900').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "19:30:00" || $row['start_time'] <= "20:00:00") {
+              print("$('#listings.1930').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "20:00:00" || $row['start_time'] <= "20:30:00") {
+              print("$('#listings.2000').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "20:30:00" || $row['start_time'] <= "21:00:00") {
+              print("$('#listings.2030').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "21:00:00" || $row['start_time'] <= "21:30:00") {
+              print("$('#listings.2100').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "21:30:00" || $row['start_time'] <= "22:00:00") {
+              print("$('#listings.2130').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "22:00:00" || $row['start_time'] <= "22:30:00") {
+              print("$('#listings.2200').append(todoArray[$i]);\n");
+            } else if ($row['start_time'] >= "22:30:00" || $row['start_time'] <= "23:00:00") {
+              print("$('#listings.2230').append(todoArray[$i]);\n");
+            } 
+          }
+        }
+    }
+
+  } 
+  else 
+  {
+    print("<p class=\"error\">Connection to the database has failed.</p>");
+  }
+
+
+   
+ echo "});\n</script>\n";
+?>
+
 </head>
 <body>
 
   <header>
-    <h1>Saturday, 6 of June, 2015</h1>
+    <h1><?php $todayTitle = date("dd [,.stndrh\t ]+ m ([ .\t-])* y");
+        echo $todayTitle;
+        ?>
+    </h1>
   </header>
   <nav class="nav nav-pills top-nav">
     <ul>
@@ -36,37 +222,33 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
 <div class="container-fluid" >
   <div class="col-sm-8" id="diarypage">  
     <div class="col-sm-3" id="timetracker">
-      <input type="text" class="form-control 0800" />
-      <input type="text" class="form-control 0830" />
-      <input type="text" class="form-control 0900" />
-      <input type="text" class="form-control 0930" />
-      <input type="text" class="form-control 1000" />
-      <input type="text" class="form-control 1030" />
-      <input type="text" class="form-control 1100" />
-      <input type="text" class="form-control 1130" />
-      <input type="text" class="form-control 1200" />
-      <input type="text" class="form-control 1230" />
-      <input type="text" class="form-control 1300" />
-      <input type="text" class="form-control 1330" />
-      <input type="text" class="form-control 1400" />
-      <input type="text" class="form-control 1430" />
-      <input type="text" class="form-control 1500" />
-      <input type="text" class="form-control 1530" />
-      <input type="text" class="form-control 1600" />
-      <input type="text" class="form-control 1630" />
-      <input type="text" class="form-control 1700" />
-      <input type="text" class="form-control 1730" />
-      <input type="text" class="form-control 1800" />
-      <input type="text" class="form-control 1830" />
-      <input type="text" class="form-control 1900" />
-      <input type="text" class="form-control 1930" />
-      <input type="text" class="form-control 2000" />
-      <input type="text" class="form-control 2030" />
-      <input type="text" class="form-control 2100" />
-      <input type="text" class="form-control 2130" />
-      <input type="text" class="form-control 2200" />
-      <input type="text" class="form-control 2230" />
-      <input type="text" class="form-control 2300" />
+    <ul>
+<?php
+  
+  if ($pdo != NULL ) {
+    $today = date("d m Y");
+    $select = "SELECT s_day, start_time, end_time, activity FROM time_usage WHERE s_day = :today ORDER BY start_time";
+    $statement = $pdo->prepare($select);
+    $statement->bindValue(":today", $today);
+    $statement->execute();
+    if ($statement !== 0) 
+    {
+        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
+        {
+          print("<li id='$row[\"start_time\"]' class='tt_activity'><p>$row[\"activity\"]</p></li>\n");
+        }
+    }
+    else 
+    {
+      print("<li> </li>");
+    } 
+  } 
+  else 
+  {
+    print("<p class=\"error\">Connection to the database has failed.</p>");
+  }
+?>  
+    </ul>
     </div>
     <div class="col-sm-2" id="times">
       <ul>
@@ -146,6 +328,8 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
     <ol class="todo-list"></ol>
   </div>
 </div>
+
+
 
 <footer>
   <nav id="main-nav">
