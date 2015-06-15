@@ -11,50 +11,45 @@
   $settings['password']
   );
   $errors = '';
-  $event_name = trim($_POST['event_name']); /* a-z A-Z spaces */
-  $event_name = preg_replace('/[^a-zA-Z ]+/', '', $event_name);
+
+ if (isset($_POST['submit'])) 
+ {
+  $task = trim($_POST['task']); /* a-z A-Z spaces */
+  $task = preg_replace('/[^a-zA-Z ]+/', '', $task);
   $start_time = trim($_POST['start_time']); /* 00:00 */
-  $start_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*+/', '', $start_time); 
+  $start_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $start_time); 
   $end_time = trim($_POST['end_time']); 
   $end_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $end_time);
-  $recurs = $_POST['recurs']; 
-  $place = trim($_POST['place']); /* a-z -+ 0-9 spaces () */
-  $place = preg_replace('/[^a-zA-Z \(\)-_]+/', '', $place);
-  $attendees = trim($_POST['attendees']); /* A-z - spaces */
-  $attendees = preg_replace('/[^a-zA-Z ]+/', '', $attendees);
+  $s_day = $_POST['s_day']; 
+  $priority = $_POST['priority'];
   $details = trim($_POST['details']); /* A-z .,- */
   $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
-  $url = trim($_POST['url']); /* url regex */
-  $url = preg_replace('/[^A-Za-z\/:\.]+/', '', $url);
   $cat_id = $_POST['category']; 
 
   if(
-    empty($_POST['event_name']) ||
+    empty($_POST['task']) ||
     empty($_POST['start_time']) ||
     empty($_POST['end_time']) ||
-     empty($_POST['recurs']))
-{
+     empty($_POST['s_day']))
+  {
     $errors .= "\n Please fill in these required fields.";
-}
-
- if ($_POST['submit']) {
-    $insert = "INSERT INTO routine_events (event, recurs, start_time, end_time, place, attendees, details, url, cat_id) VALUES (:event_name, :start_time, :end_time, :recurs, :place, :attendees, :details, :url, :category ) ";
+  }
+    $insert = "INSERT INTO todo_items (task, s_day, start_time, end_time, details, priority, cat_id) VALUES (:task, :s_day, :start_time, :end_time, :details, :priority, :category ) ";
     $statement = $pdo->prepare($insert);
-    $statement->bindValue(":event_name", $event_name);
+    $statement->bindValue(":task", $task);
     $statement->bindValue(":start_time", $start_time);
     $statement->bindValue(":end_time", $end_time);
-    $statement->bindValue(":place", $place);
-    $statement->bindValue(":attendees", $attendees);
+    $statement->bindValue(":s_day", $s_day);
     $statement->bindValue(":details", $details);
-    $statement->bindValue(":url", $url);
-    $statement->bindValue(":category", $cat_id, PDO::PARAM_INT);
+    $statement->bindValue(":priority", $priority);
+    $statement->bindValue(":category", (int)$cat_id);
     if ($statement->execute()) 
     {
     $errors .= "\n Your event was successfully saved.";
     } 
     else 
     {
-    $errors .= "\n Unable to insert record!" . mysqli_error_list($db);
+    $errors .= "\n Unable to insert record!";
     }
   }
     
@@ -116,53 +111,44 @@ CREATE TABLE todo_item (
 
 -->
 
-  <section id="recurring_event_form">
-  <h2>Recurring Event</h2>
-  <form action="new_recurring_event.php" method="post" class="form">
+  <section id="event_form">
+  <h2>New Todo</h2>
+  <form action="new_event.php" method="post" class="form">
     <div class="form-group">
-    <input class="form-control" type="text" id="event_name" name="event_name"  length="100" placeholder="event name" />
+    <input class="form-control" type="text" id="task" name="task"  length="100" placeholder="Task name" />
     </div>
     <div class="form-group">
-    <div class="col-sm-4">
+    <div class="col-sm-3">
+    <label for="s_day">Date: </label>
+    <input class="form-control" type="date" id="s_day" name="s_day" placeholder="dd/mm/yyyy" />
+    </div>
+    <div class="col-sm-3">
     <label for="start_time">Starts: </label>
     <input  class="form-control" type="time" id="start_time" name="start_time" placeholder="00:00" />
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-3">
     <label for="end_time">Ends: </label>
     <input  class="form-control" type="time" id="end_time" name="end_time" placeholder="00:00"  />
     </div>
-    <div class="col-sm-4">
-    <label for="recurs">Recurs: </label>
-    <select class="form-control col-sm-3"  id="recurs" name="recurs">
-      <option>daily</option>
-      <option>weekly</option>
-      <option>fortnightly</option>
-      <option>monthly</option>
-      <option>yearly</option>
-      <option>quarterly</option>
-      <option>biannual</option>
+    <div class="col-sm-3">
+    <label for="priority">Priority: </label>
+    <select class="form-control col-sm-3"  id="priority" name="priority">
+      <option value="urgent">Urgent</option>
+      <option value="high">high</option>
+      <option value="medium">Medium</option>
+      <option value="low">Low</option>
     </select>
     </div></div>
-    <div class="form-group">
-    <div class="col-sm-10">
-      <label for="place" class="sr-only">Place:</label>
-      <input type="text" id="place" name="place" class="form-control" length="100" placeholder="Place" />
-    </div><div class="col-sm-2">
-      <a href="http://www.bing.com/maps/" target="blank" title="Map with GPS" class="glyphicon glyphicon-map-marker"> Find</a>
-    </div></div>
-      <label for="attendees" class="sr-only">Attendees: </label>
-      <input id="attendees" name="attendees" type="text" class="form-control" placeholder="attendees" />
     <textarea id="details" name="details" class="form-group col-sm-12" placeholder="Details..." rows="4"></textarea>
-    <div class="col-sm-8">
-      <label for="url" class="sr-only">Web page</label>
-      <input type="url" class="form-control" id="url" name="url" placeholder="web page" />
+    <div class="col-sm-7">
+      <p>Category:</p>
     </div>
-    <div class="col-sm-4">
+    <div class="col-sm-5">
       <select id="category" name="category" class="form-control">
       
 <?php
   
-  if ($db != NULL ) {
+  if ($pdo !== NULL ) {
     $select = "select * from categories ORDER BY cat_id";
     $statement = $pdo->prepare($select);
     $statement->execute();
@@ -170,12 +156,12 @@ CREATE TABLE todo_item (
     {
         while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
         {
-          print("<option value='$row[\"cat_id\"]' style='background-color: $row[\"colour\"];'>$row[\"name\"]</option>\n");
+          print("<option value='" . $row["cat_id"] . "' style='background-color: " . $row["colour"] . ";'>" . $row["name"] . "</option>\n");
         }
     }
     else 
     {
-      print("<option value=\"0\">No categories</option>");
+      print("?");
     } // mysqli num rows if
   } 
   else 
@@ -195,9 +181,7 @@ CREATE TABLE todo_item (
   <nav id="main-nav">
     <ul class="nav navbar-nav">
     <li class="disabled active"><a href="new_event.php" >New Event</a></li>
-    <li><a href="new_task.php" >New Task</a></li>
     <li><a href="daily.php">Daily</a></li>
-    <li><a href="week.php" >Week</a></li>
     <li><a href="month.php" >Month</a></li>
     <li><a href="year.php" >Year</a></li>
     </ul>

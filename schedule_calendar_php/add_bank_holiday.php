@@ -11,30 +11,35 @@
   $settings['password']
   );
   $errors = '';
-  $title = trim($_POST['title']); /* a-z A-Z spaces */
-  $title = preg_replace('/[^a-zA-Z \']+/', '', $title);
-  $shops_open = trim($_POST['shops_open']); 
-  $shops_open = preg_replace('/[^A-Za-z \.,-]+/', '', $shops_open);
-  $holiday = trim($_POST['holiday']); 
-  $holiday = preg_replace('/[^0-9\/-]+/', '', $holiday);
-  if( empty($_POST['title']) ||  empty($_POST['holiday']))
+  
+  
+  if ($pdo !== 0) 
   {
-    $errors .= "\n Please fill in these required fields.";
-  }
-
-  if ($_POST['submit']) {
-    $insert = "INSERT INTO bank_holidays (num, title, shops_open, holiday) VALUES (:title, :shops_open, :holiday ) ";
-    $statement = $pdo->prepare($insert);
-    $statement->bindValue(":title", $title);
-    $statement->bindValue(":shops_open", $shops_open);
-    $statement->bindValue(":holiday", $holiday);
-    if ($statement->execute()) 
+    if (isset($_POST['submit'])) 
     {
-    $errors .= "\n Your event was successfully saved.";
-    } 
-    else 
-    {
-    $errors .= "\n Unable to insert record!";
+      if( empty($_POST['title']) ||  empty($_POST['holiday']))
+      {
+        $errors .= "\n Please fill in these required fields.";
+      }
+      $title = trim($_POST['title']); /* a-z A-Z spaces */
+      $title = preg_replace('/[^a-zA-Z \']+/', '', $title);
+      $shops_open = trim($_POST['shops_open']); 
+      $shops_open = preg_replace('/[^A-Za-z \.,-]+/', '', $shops_open);
+      $holiday = trim($_POST['holiday']); 
+      $holiday = preg_replace('/[^0-9]+/', '', $holiday);
+      $insert = "INSERT INTO bank_holidays (title, shops_open, holiday) VALUES (:title, :shops_open, :holiday ) ";
+      $statement = $pdo->prepare($insert);
+      $statement->bindValue(":title", $title);
+      $statement->bindValue(":shops_open", $shops_open);
+      $statement->bindValue(":holiday", $holiday);
+      if ($statement->execute()) 
+      {
+        $errors .= "\n Your event was successfully saved.";
+      } 
+      else 
+      {
+        $errors .= "\n Unable to insert record!";
+      }
     }
   }
     
@@ -62,7 +67,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
 </head>
 <body>
 
-  <header><h1>New Event</h1></header>
+  <header><h1>Add Bank Holiday</h1></header>
   <nav class="nav top-nav">
     <ul class="nav-pills">
     <li><a href="special_event.php" id="special" title="Special event" class="glyphicon glyphicon-star-empty">Special event</a></li>
@@ -90,7 +95,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
       <input type="date" id="holiday" name="holiday" class="form-control" placeholder="dd-mm-yyyy" />
     </div>
 
-    <button type="submit" id="submit" name="submit" class="btn btn-primary btn-lg">Add</button>
+    <input type="submit" id="submit" name="submit" class="btn btn-primary btn-lg" value="Add" />
   </form>
   </section>
   
@@ -99,9 +104,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
   <nav id="main-nav">
     <ul class="nav navbar-nav">
     <li><a href="new_event.php" >New Event</a></li>
-    <li><a href="new_task.php" >New Task</a></li>
     <li><a href="daily.php">Daily</a></li>
-    <li><a href="week.php" >Week</a></li>
     <li><a href="month.php" >Month</a></li>
     <li><a href="year.php" >Year</a></li>
     </ul>

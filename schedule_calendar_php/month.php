@@ -35,12 +35,12 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
 </head>
 <body>
 
-  <header><h1>June 2015</h1></header>
+  <header><h1><?php echo date("M Y"); ?></h1></header>
   <nav class="nav nav-pills top-nav">
     <ul>
-    <li><a href="#" id="prev_month" title="Previous month" class="glyphicon glyphicon-arrow-left"></a></li>
-    <li><a href="#" id="this_month" >June</a></li>
-    <li><a href="#" id="next_month" title="Next month" class="glyphicon glyphicon-arrow-right"></a></li>
+    <li><a href="<?php $today = date("Ymd").strftime("last month"); ?>" id="prev_month" title="Previous month" class="glyphicon glyphicon-arrow-left"></a></li>
+    <li><a href="#" id="this_month" ><?php echo date("M"); ?></a></li>
+    <li><a href="<?php $today = date("Ymd").strftime("next month"); ?>" id="next_month" title="Next month" class="glyphicon glyphicon-arrow-right"></a></li>
     </ul>
   </nav>
 <div class="container-fluid">
@@ -56,81 +56,54 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
     <th>Sunday </th>
   </thead>
   <tbody>
-  <tr>
-    <td id="1"> </td>
-    <td id="2"> </td>
-    <td id="3"> </td>
-    <td id="4"> </td>
-    <td id="5"> </td>
-    <td id="6"> </td>
-    <td id="7"> </td>
-  </tr><tr>
-    <td id="8"> </td>
-    <td id="9"> </td>
-    <td id="10"> </td>
-    <td id="11"> </td>
-    <td id="12"> </td>
-    <td id="13"> </td>
-    <td id="14"> </td>
-  </tr><tr>
-    <td id="15"> </td>
-    <td id="16"> </td>
-    <td id="17"> </td>
-    <td id="18"> </td>
-    <td id="19"> </td>
-    <td id="20"> </td>
-    <td id="21"> </td>
-  </tr><tr>
-    <td id="22"> </td>
-    <td id="23"> </td>
-    <td id="24"> </td>
-    <td id="25"> </td>
-    <td id="26"> </td>
-    <td id="27"> </td>
-    <td id="28"> </td>
-  </tr><tr>
-    <td id="29"> </td>
-    <td id="30"> </td>
-    <td id="31"> </td>
-    <td id="32"> </td>
-    <td id="33"> </td>
-    <td id="34"> </td>
-    <td id="35"> </td>
-  </tr>
-  </tbody>
-  </table>
+
 <?php
   /* ("urgent", "high", "medium", "low"), priority */
-  if ($pdo != NULL ) {
-    $select = "SELECT task, s_day, details, priority FROM todo_item WHERE s_day = :today   LIMIT 1";
+  if ($pdo !== NULL ) {
+    $today = date("Ymd");
+    $endMonth = date("Ymd").strtotime("first day of next month");
+    // $dayno = strtotime($endMonth, strtotime($today));
+    $select = "SELECT * FROM todo_item  LEFT JOIN categories ON todo_item.cat_id = categories.cat_id WHERE priority = :priority AND s_day >= :today AND s_day < 20150701 ORDER BY s_day LIMIT 15";
     $statement = $pdo->prepare($select);
+    $statement->bindValue(":priority", "high");
+    $statement->bindValue(":today", $today);
+    // $statement->bindValue(":endMonth", $endMonth);
+    // $statement->bindValue(":dayno", $dayno, PDO::PARAM_INT);
     $statement->execute();
     if ($statement !== 0) 
     {
         while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
         {
-          print("<option value='$row[\"cat_id\"]' style='background-color: $row[\"colour\"];'>$row[\"name\"]</option>\n");
+          print("<tr>");
+          for ($i = 1; $i <= 7; $i++)
+          {
+            print("<td>\n");
+            print("<div class='todo " . $row["start_time"] . "'>\n<h3 class='summary' style='background-color: " . $row["colour"] . ";'>" . $row["task"] . "</h3>\n<div class='todo-details'>\n<p><span class='time'>Starts " . $row["start_time"] . "</span><span class='time'> Ends " . $row["end_time"] . "</span> <span class='category'> " . $row["name"] . "</span></p>\n<p>" . $row["details"] . "</p>\n<p class='priority'>" . $row["priority"] . "</p></div></td>");
+          }
+          print("</tr>\n");
         }
     }
     else 
     {
-      print("<option value=\"0\">No categories</option>");
+      print(" ?");
     } // mysqli num rows if
   } 
   else 
   {
     print("<p class=\"error\">Connection to the database has failed.</p>");
   }
-?>  
+?>    
+
+  </tbody>
+  </table>
+ 
   
 </div>
 <footer>
   <nav id="main-nav">
     <ul class="nav navbar-nav">
     <li><a href="new_event.php" >New Event</a></li>
-    <li><a href="new_task.php" >New Task</a></li>
     <li><a href="daily.php">Daily</a></li>
-    <li><a href="week.php" >Week</a></li>
     <li class="active disabled"><a href="month.php" >Month</a></li>
     <li><a href="year.php" >Year</a></li>
     </ul>

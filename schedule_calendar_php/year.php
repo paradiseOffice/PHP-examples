@@ -36,13 +36,14 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
 <body class="year-page">
 
   <header>
-    <h1>2015</h1>
+    <h1><?php echo date("Y"); ?></h1>
   </header>
-  <nav class="nav nav-pills top-nav">
-    <ul>
-    <li><a href="#" id="prev_month" title="Previous month" class="glyphicon glyphicon-arrow-left"></a></li>
-    <li><a href="#" id="this_month" >June</a></li>
-    <li><a href="#" id="next_month" title="Next month" class="glyphicon glyphicon-arrow-right"></a></li>
+    <nav class="nav top-nav">
+    <ul class="nav-pills">
+    <li><a href="special_event.php" id="special" title="Special event" class="glyphicon glyphicon-star-empty">Special event</a></li>
+    <li><a href="add_work_hols.php" id="work_hols" class="glyphicon glyphicon-calendar">Days off</a></li>
+    <li class="active disabled"><a href="add_bank_holiday.php" id="bank_holiday" title="Next month" class="glyphicon glyphicon-arrow-right">Add bank holiday</a></li>
+    <li><strong><a href="new_recurring_event.php" id="recurring_event" title="Recurring event" class="disabled glyphicon glyphicon-refresh">Recurring Event</a></strong></li>
     </ul>
   </nav>
   
@@ -52,6 +53,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
   </div>
   <div class="month col-sm-1" id="feb">
     <h2>February</h2>
+    <div class="special-event">Sister's Birthday</div>
   </div>
   <div class="month col-sm-1" id="mar">
     <h2>March</h2>
@@ -64,6 +66,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
   </div>
   <div class="month col-sm-1" id="jun">
     <h2>June</h2>
+    <div class="special-event">Swing Jazz Concert 11:30pm-12:30pm</div>
   </div>
   <div class="month col-sm-1" id="jul">
     <h2>July</h2>
@@ -76,36 +79,15 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
   </div>
   <div class="month col-sm-1" id="oct">
     <h2>October</h2>
+    <div class="hols">2nd-23rd long break</div>
   </div>
   <div class="month col-sm-1" id="nov">
     <h2>November</h2>
   </div>
   <div class="month col-sm-1" id="dec">
     <h2>December</h2>
-    
-<?php
-  
-  if ($db != NULL ) {
-    $select = "select * from categories ORDER BY cat_id";
-    $statement = $pdo->prepare($select);
-    $statement->execute();
-    if ($statement !== 0) 
-    {
-        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
-        {
-          print("<option value='$row[\"cat_id\"]' style='background-color: $row[\"colour\"];'>$row[\"name\"]</option>\n");
-        }
-    }
-    else 
-    {
-      print("<option value=\"0\">No categories</option>");
-    } // mysqli num rows if
-  } 
-  else 
-  {
-    print("<p class=\"error\">Connection to the database has failed.</p>");
-  }
-?>
+    <div class="hols">25th December: Christmas</div>    
+
   </div>
 
 <!-- container div --></div>
@@ -113,9 +95,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
   <nav id="main-nav">
     <ul class="nav navbar-nav">
     <li><a href="new_event.php" >New Event</a></li>
-    <li><a href="new_task.php" >New Task</a></li>
     <li><a href="daily.php">Daily</a></li>
-    <li><a href="week.php" >Week</a></li>
     <li><a href="month.php" >Month</a></li>
     <li class="active disabled"><a href="year.php" >Year</a></li>
     </ul>

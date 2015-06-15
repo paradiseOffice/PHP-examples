@@ -11,35 +11,41 @@
   $settings['password']
   );
   $errors = '';
-  $start_date = trim($_POST['start_date']);
-  $end_date = trim($_POST['end_date']); 
-  $work_days = $_POST['work_days']; 
-  if ($work_days == False) {
-    $work_days = 0;
-  }
-  $hol_days = trim($_POST['hol_days']); 
-  if ($hol_days == False) {
-    $hol_days = 0;
-  }  
-  if( empty($_POST['start_date']) ||  empty($_POST['end_date']) )
-  {
-    $errors .= "\n Please fill in these required fields.";
-  }
-
-  if ($_POST['submit']) {
-    $insert = "INSERT INTO work_hol (num, start_date, end_date, work_days, hol_days) VALUES (:start_date, :end_date, :work_days, :hol_days ) ";
-    $statement = $pdo->prepare($insert);
-    $statement->bindValue(":start_date", $start_date);
-    $statement->bindValue(":end_date", $end_date);
-    $statement->bindValue(":work_days", $work_days);
-    $statement->bindValue(":hol_days", $hol_days);
-    if ($statement->execute()) 
-    {
-    $errors .= "\n Your event was successfully saved.";
-    } 
-    else 
-    {
-    $errors .= "\n Unable to insert record!";
+  
+   
+  
+  if ($pdo !== 0) {
+    if (isset($_POST['submit'])) {
+      if( empty($_POST['start_date']) ||  empty($_POST['end_date']) )
+      {
+        $errors .= "\n Please fill in these required fields.";
+      }
+      $start_date = trim($_POST['start_date']);
+      $end_date = trim($_POST['end_date']); 
+      $work_days = $_POST['work_days']; 
+      $hol_days = trim($_POST['hol_days']); 
+      $start_date = preg_replace('/[^0-9]+/', '', $start_date);
+      $end_date = preg_replace('/[^0-9]+/', '', $end_date);
+      if ($hol_days == False) {
+        $hol_days = 0;
+      } 
+      if ($work_days == False) {
+        $work_days = 0;
+      }
+      $insert = "INSERT INTO work_hol (start_date, end_date, work_days, hol_days) VALUES (:start_date, :end_date, :work_days, :hol_days ) ";
+      $statement = $pdo->prepare($insert);
+      $statement->bindValue(":start_date", $start_date);
+      $statement->bindValue(":end_date", $end_date);
+      $statement->bindValue(":work_days", $work_days);
+      $statement->bindValue(":hol_days", $hol_days);
+      if ($statement->execute()) 
+      {
+        $errors .= "\n Your event was successfully saved.";
+      } 
+      else 
+      {
+        $errors .= "\n Unable to insert record!";
+      }
     }
   }
     
@@ -104,9 +110,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
   <nav id="main-nav">
     <ul class="nav navbar-nav">
     <li><a href="new_event.php" >New Event</a></li>
-    <li><a href="new_task.php" >New Task</a></li>
     <li><a href="daily.php">Daily</a></li>
-    <li><a href="week.php" >Week</a></li>
     <li><a href="month.php" >Month</a></li>
     <li><a href="year.php" >Year</a></li>
     </ul>

@@ -11,34 +11,35 @@
   $settings['password']
   );
   $errors = '';
-  $event_name = trim($_POST['event_name']); /* a-z A-Z spaces */
-  $event_name = preg_replace('/[^a-zA-Z ]+/', '', $event_name);
-  $start_time = trim($_POST['start_time']); /* 00:00 */
-  $start_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*+/', '', $start_time); 
-  $end_time = trim($_POST['end_time']); 
-  $end_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $end_time);
-  $s_day = trim($_POST['s_day']);
-  $recurs = $_POST['recurs']; 
-  $place = trim($_POST['place']); /* a-z -+ 0-9 spaces () */
-  $place = preg_replace('/[^a-zA-Z \(\)-_]+/', '', $place);
-  $attendees = trim($_POST['attendees']); /* A-z - spaces */
-  $attendees = preg_replace('/[^a-zA-Z ]+/', '', $attendees);
-  $details = trim($_POST['details']); /* A-z .,- */
-  $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
-  $url = trim($_POST['url']); /* url regex */
-  $url = preg_replace('/[^A-Za-z\/:\.]+/', '', $url);
-  $cat_id = $_POST['category']; 
 
-  if(
+
+ if (isset($_POST['submit'])) {
+   $event_name = trim($_POST['event_name']); /* a-z A-Z spaces */
+   $event_name = preg_replace('/[^a-zA-Z ]+/', '', $event_name);
+   $start_time = trim($_POST['start_time']); /* 00:00 */
+   $start_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $start_time); 
+   $end_time = trim($_POST['end_time']); 
+   $end_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $end_time);
+   $s_day = trim($_POST['s_day']);
+   $recurs = $_POST['recurs']; 
+   $place = trim($_POST['place']); /* a-z -+ 0-9 spaces () */
+   $place = preg_replace('/[^a-zA-Z \(\)-_]+/', '', $place);
+   $attendees = trim($_POST['attendees']); /* A-z - spaces */
+   $attendees = preg_replace('/[^a-zA-Z ]+/', '', $attendees);
+   $details = trim($_POST['details']); /* A-z .,- */
+   $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
+    $url = trim($_POST['url']); /* url regex */
+    $url = preg_replace('/[^A-Za-z\/:\.]+/', '', $url);
+    $cat_id = $_POST['category']; 
+
+    if(
     empty($_POST['event_name']) ||
     empty($_POST['start_time']) ||
     empty($_POST['end_time']) ||
-     empty($_POST['recurs']))
-{
-    $errors .= "\n Please fill in these required fields.";
-}
-
- if ($_POST['submit']) {
+    empty($_POST['recurs']))
+    {
+      $errors .= "\n Please fill in these required fields.";
+    }
     $insert = "INSERT INTO routine_events (event, recurs, start_time, end_time, place, attendees, details, url, cat_id, s_day) VALUES (:event_name, :start_time, :end_time, :recurs, :place, :attendees, :details, :url, :category, :s_day ) ";
     $statement = $pdo->prepare($insert);
     $statement->bindValue(":event_name", $event_name);
@@ -56,7 +57,7 @@
     } 
     else 
     {
-    $errors .= "\n Unable to insert record!" . mysqli_error_list($db);
+    $errors .= "\n Unable to insert record!";
     }
   }
     
@@ -147,7 +148,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
       
 <?php
   
-  if ($db != NULL ) {
+  if ($pdo !== NULL ) {
     $select = "select * from categories ORDER BY cat_id";
     $statement = $pdo->prepare($select);
     $statement->execute();
@@ -155,7 +156,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
     {
         while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
         {
-          print("<option value='$row[\"cat_id\"]' style='background-color: $row[\"colour\"];'>$row[\"name\"]</option>\n");
+          print("<option value='" . $row["cat_id"] . "' style='background-color: " . $row["colour"] . ";'>" . $row["name"] . "</option>\n");
         }
     }
     else 
@@ -180,9 +181,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
   <nav id="main-nav">
     <ul class="nav navbar-nav">
     <li><a href="new_event.php" >New Event</a></li>
-    <li><a href="new_task.php" >New Task</a></li>
     <li><a href="daily.php">Daily</a></li>
-    <li><a href="week.php" >Week</a></li>
     <li><a href="month.php" >Month</a></li>
     <li><a href="year.php" >Year</a></li>
     </ul>

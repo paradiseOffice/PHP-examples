@@ -11,50 +11,37 @@
   $settings['password']
   );
   $errors = '';
-  $event_name = trim($_POST['event_name']); /* a-z A-Z spaces */
-  $event_name = preg_replace('/[^a-zA-Z ]+/', '', $event_name);
-  $start_time = trim($_POST['start_time']); /* 00:00 */
-  $start_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*+/', '', $start_time); 
-  $end_time = trim($_POST['end_time']); 
-  $end_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $end_time);
-  $recurs = $_POST['recurs']; 
-  $place = trim($_POST['place']); /* a-z -+ 0-9 spaces () */
-  $place = preg_replace('/[^a-zA-Z \(\)-_]+/', '', $place);
-  $attendees = trim($_POST['attendees']); /* A-z - spaces */
-  $attendees = preg_replace('/[^a-zA-Z ]+/', '', $attendees);
-  $details = trim($_POST['details']); /* A-z .,- */
-  $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
-  $url = trim($_POST['url']); /* url regex */
-  $url = preg_replace('/[^A-Za-z\/:\.]+/', '', $url);
-  $cat_id = $_POST['category']; 
 
-  if(
-    empty($_POST['event_name']) ||
-    empty($_POST['start_time']) ||
-    empty($_POST['end_time']) ||
-     empty($_POST['recurs']))
-{
+
+ if (isset($_POST['submit'])) {
+   $event = trim($_POST['event']); /* a-z A-Z spaces */
+   $event = preg_replace('/[^a-zA-Z ]+/', '', $event);
+   $s_day = $_POST['s_day']; 
+   $yearly = $_POST['yearly'];
+   $attendees = trim($_POST['attendees']); /* A-z - spaces */
+   $attendees = preg_replace('/[^a-zA-Z ]+/', '', $attendees);
+   $details = trim($_POST['details']); /* A-z .,- */
+   $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
+
+  if(empty($_POST['event']) || empty($_POST['s_day']) )
+  {
     $errors .= "\n Please fill in these required fields.";
-}
-
- if ($_POST['submit']) {
-    $insert = "INSERT INTO routine_events (event, recurs, start_time, end_time, place, attendees, details, url, cat_id) VALUES (:event_name, :start_time, :end_time, :recurs, :place, :attendees, :details, :url, :category ) ";
+  }
+ 
+  $insert = "INSERT INTO special_events (event, s_day, yearly, attendees, details) VALUES (:event, :s_day, :yearly, :attendees, :details ) ";
     $statement = $pdo->prepare($insert);
-    $statement->bindValue(":event_name", $event_name);
-    $statement->bindValue(":start_time", $start_time);
-    $statement->bindValue(":end_time", $end_time);
-    $statement->bindValue(":place", $place);
+    $statement->bindValue(":event", $event);
+    $statement->bindValue(":s_day", $s_day);
+    $statement->bindValue(":yearly", $yearly);
     $statement->bindValue(":attendees", $attendees);
     $statement->bindValue(":details", $details);
-    $statement->bindValue(":url", $url);
-    $statement->bindValue(":category", $cat_id, PDO::PARAM_INT);
     if ($statement->execute()) 
     {
     $errors .= "\n Your event was successfully saved.";
     } 
     else 
     {
-    $errors .= "\n Unable to insert record!" . mysqli_error_list($db);
+    $errors .= "\n Unable to insert record!";
     }
   }
     
@@ -87,112 +74,33 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
     <ul class="nav-pills">
     <li><a href="special_event.php" id="special" title="Special event" class="glyphicon glyphicon-star-empty">Special event</a></li>
     <li><a href="add_work_hols.php" id="work_hols" class="glyphicon glyphicon-calendar">Days off</a></li>
-    <li><a href="add_bank_holiday.php" id="bank_holiday" title="Next month" class="glyphicon glyphicon-arrow-right">Add bank holiday</a></li>
+    <li><a href="add_bank_holiday.php" id="bank_holiday" class="">Add bank holiday</a></li>
     <li><strong><a href="new_recurring_event.php" id="recurring_event" title="Recurring event" class="disabled glyphicon glyphicon-refresh">Recurring Event</a></strong></li>
     </ul>
   </nav>
   
 <div class="container">
-<!--
 
-CREATE TABLE categories (
-  cat_id        INTEGER PRIMARY KEY AUTO_INCREMENT,
-  name          VARCHAR(100) NOT NULL,
-  colour        VARCHAR(100) NOT NULL 
-  /* rgba(255,255,255,1.0) */
-);
-
-CREATE TABLE todo_item (
-  task_id       INTEGER PRIMARY KEY AUTO_INCREMENT,
-  task          VARCHAR(100) NOT NULL,
-  s_day         DATE NOT NULL,
-  start_time    TIME,
-  end_time      TIME,
-  details       VARCHAR(1000),
-  priority      ENUM("urgent", "high", "medium", "low"),
-  cat_id        INTEGER, 
-  CONSTRAINT FOREIGN KEY (cat_id) REFERENCES categories(cat_id)
-);
-
-CREATE TABLE routine_events (
-  event_id      INTEGER AUTO_INCREMENT,
-  event         VARCHAR(100) NOT NULL,
-  recurs        ENUM("daily", "weekly", "fortnightly", "monthly", "quarterly", "biannual", "yearly") NOT NULL,
-  start_time    TIME NOT NULL,
-  end_time      TIME NOT NULL,
-  place         VARCHAR(100),
-  attendees     VARCHAR(300),
--->
-  <section id="recurring_event_form">
-  <h2>Recurring Event</h2>
-  <form action="new_recurring_event.php" method="post" class="form">
+  <section id="special_event_form">
+  <h2>Special Event</h2>
+  <form action="special_event.php" method="post" class="form">
     <div class="form-group">
-    <input class="form-control" type="text" id="event_name" name="event_name"  length="100" placeholder="event name" />
+    <input class="form-control" type="text" id="event" name="event"  length="100" placeholder="event name" />
     </div>
     <div class="form-group">
-    <div class="col-sm-4">
-    <label for="start_time">Starts: </label>
-    <input  class="form-control" type="time" id="start_time" name="start_time" placeholder="00:00" />
+    <div class="col-sm-5">
+    <label for="s_day">Date: </label>
+    <input  class="form-control" type="date" id="s_day" name="s_day" placeholder="dd/mm/yyyy" />
     </div>
-    <div class="col-sm-4">
-    <label for="end_time">Ends: </label>
-    <input  class="form-control" type="time" id="end_time" name="end_time" placeholder="00:00"  />
+    <div class="col-sm-7">
+    <label for="end_time">Yearly: </label>
+    <input  class="form-control" type="radio" id="yes" name="yearly" value="1">Yes</input>
+    <input class="form-control" type="radio" id="no" name="yearly" value="0">No</input>
     </div>
-    <div class="col-sm-4">
-    <label for="recurs">Recurs: </label>
-    <select class="form-control col-sm-3"  id="recurs" name="recurs">
-      <option>daily</option>
-      <option>weekly</option>
-      <option>fortnightly</option>
-      <option>monthly</option>
-      <option>yearly</option>
-      <option>quarterly</option>
-      <option>biannual</option>
-    </select>
-    </div></div>
-    <div class="form-group">
-    <div class="col-sm-10">
-      <label for="place" class="sr-only">Place:</label>
-      <input type="text" id="place" name="place" class="form-control" length="100" placeholder="Place" />
-    </div><div class="col-sm-2">
-      <a href="http://www.bing.com/maps/" target="blank" title="Map with GPS" class="glyphicon glyphicon-map-marker"> Find</a>
-    </div></div>
+    </div>
       <label for="attendees" class="sr-only">Attendees: </label>
       <input id="attendees" name="attendees" type="text" class="form-control" placeholder="attendees" />
     <textarea id="details" name="details" class="form-group col-sm-12" placeholder="Details..." rows="4"></textarea>
-    <div class="col-sm-8">
-      <label for="url" class="sr-only">Web page</label>
-      <input type="url" class="form-control" id="url" name="url" placeholder="web page" />
-    </div>
-    <div class="col-sm-4">
-      <select id="category" name="category" class="form-control">
-      
-<?php
-  
-  if ($db != NULL ) {
-    $select = "select * from categories ORDER BY cat_id";
-    $statement = $pdo->prepare($select);
-    $statement->execute();
-    if ($statement !== 0) 
-    {
-        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
-        {
-          print("<option value='$row[\"cat_id\"]' style='background-color: $row[\"colour\"];'>$row[\"name\"]</option>\n");
-        }
-    }
-    else 
-    {
-      print("<option value=\"0\">No categories</option>");
-    } // mysqli num rows if
-  } 
-  else 
-  {
-    print("<p class=\"error\">Connection to the database has failed.</p>");
-  }
-?>
-        
-      </select>
-    </div>
     <button type="submit" id="submit" name="submit" class="btn btn-primary btn-lg">Submit</button>
   </form>
   </section>
@@ -202,9 +110,7 @@ CREATE TABLE routine_events (
   <nav id="main-nav">
     <ul class="nav navbar-nav">
     <li><a href="new_event.php" >New Event</a></li>
-    <li><a href="new_task.php" >New Task</a></li>
     <li><a href="daily.php">Daily</a></li>
-    <li><a href="week.php" >Week</a></li>
     <li><a href="month.php" >Month</a></li>
     <li><a href="year.php" >Year</a></li>
     </ul>
