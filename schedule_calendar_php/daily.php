@@ -120,7 +120,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
 <?php
 
   if ($pdo !== 0 ) {
-    $today = date("Ymd");
+    $today = date("dmY");
     $recurSql = "SELECT * FROM routine_events LEFT JOIN categories ON routine_events.cat_id = categories.cat_id WHERE s_day = :today ORDER BY start_time";
     $statement = $pdo->prepare($recurSql);
     $statement->bindValue(":today", $today);

@@ -34,7 +34,7 @@
   {
     $errors .= "\n Please fill in these required fields.";
   }
-    $insert = "INSERT INTO todo_items (task, s_day, start_time, end_time, details, priority, cat_id) VALUES (:task, :s_day, :start_time, :end_time, :details, :priority, :category ) ";
+    $insert = "INSERT INTO todo_item (task, s_day, start_time, end_time, details, priority, cat_id) VALUES (:task, :s_day, :start_time, :end_time, :details, :priority, :category ) ";
     $statement = $pdo->prepare($insert);
     $statement->bindValue(":task", $task);
     $statement->bindValue(":start_time", $start_time);
@@ -42,7 +42,7 @@
     $statement->bindValue(":s_day", $s_day);
     $statement->bindValue(":details", $details);
     $statement->bindValue(":priority", $priority);
-    $statement->bindValue(":category", (int)$cat_id);
+    $statement->bindValue(":category", $cat_id);
     if ($statement->execute()) 
     {
     $errors .= "\n Your event was successfully saved.";
@@ -174,6 +174,7 @@ CREATE TABLE todo_item (
     </div>
     <button type="submit" id="submit" name="submit" class="btn btn-primary btn-lg">Submit</button>
   </form>
+  <p class="php-errors"><?php echo $errors; ?></p>
   </section>
   
 </div><!--container-->

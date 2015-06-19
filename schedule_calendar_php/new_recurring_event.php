@@ -40,7 +40,7 @@
     {
       $errors .= "\n Please fill in these required fields.";
     }
-    $insert = "INSERT INTO routine_events (event, recurs, start_time, end_time, place, attendees, details, url, cat_id, s_day) VALUES (:event_name, :start_time, :end_time, :recurs, :place, :attendees, :details, :url, :category, :s_day ) ";
+    $insert = "INSERT INTO routine_events (event, recurs, start_time, end_time, place, attendees, details, url, cat_id, s_day) VALUES (:event_name, :start_time, :end_time,  :place, :attendees, :details, :url, :category, :s_day ) ";
     $statement = $pdo->prepare($insert);
     $statement->bindValue(":event_name", $event_name);
     $statement->bindValue(":start_time", $start_time);
