@@ -1,16 +1,5 @@
 <?php
-  include('../settings.php');
-  $pdo = new PDO(
-  sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
-    $settings['host'],
-    $settings['dbname'],
-    $settings['port'],
-    $settings['charset']
-  ),
-  $settings['username'],
-  $settings['password']
-  );
-  $errors = '';
+  
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,26 +27,43 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
 <body>
 
   <header>
-    <h1><?php $todayTitle = date("l dS M Y");
+    <h1><?php $todayTitle = date("l dS F Y");
         echo $todayTitle;
         ?>
     </h1>
+    
   </header>
   <nav class="nav nav-pills top-nav">
     <ul>
-    <li><a href="<?php $today = date("Ymd").strftime("yesterday"); $todayTitle = date("l dS M Y").strftime("yesterday"); ?>" id="yesterday" title="Yesterday" class="glyphicon glyphicon-arrow-left"></a></li>
+    <li><a href="#" id="yesterday" title="Yesterday" class="glyphicon glyphicon-arrow-left"></a></li>
     <li><a href="#" id="today" >Today</a></li>
-    <li><a href="<?php $today = date("Ymd").strftime("tomorrow"); $todayTitle = date("l dS M Y").strftime("tomorrow"); ?>" id="tomorrow" title="Tomorrow" class="glyphicon glyphicon-arrow-right"></a></li>
+    <li><a href="#" id="tomorrow" title="Tomorrow" class="glyphicon glyphicon-arrow-right"></a></li>
     </ul>
   </nav>
 <div class="container-fluid" >
-  <div class="col-sm-8" id="diarypage">  
-    <div class="col-sm-3" id="timetracker">
+  <div class="col-sm-8 col-md-8" id="diarypage">  
+    <div class="col-sm-1 col-md-1" id="timetracker">
     <ul>
+    <span id="hidden-date"><?php 
+      $now = date("Y-m-d");
+    ?></span>
 <?php
+function drawData($today) {
+  include('../settings.php');
+  $pdo = new PDO(
+  sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
+    $settings['host'],
+    $settings['dbname'],
+    $settings['port'],
+    $settings['charset']
+  ),
+  $settings['username'],
+  $settings['password']
+  );
+  $errors = '';
   
   if ($pdo != NULL ) {
-    $today = date("d m Y");
+    //$today = date("Y-m-d");
     $select = "SELECT s_day, start_time, end_time, activity FROM time_usage WHERE s_day = :today ORDER BY start_time";
     $statement = $pdo->prepare($select);
     $statement->bindValue(":today", $today);
@@ -81,7 +87,7 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
 ?>  
     </ul>
     </div>
-    <div class="col-sm-2" id="times">
+    <div class="col-sm-2 col-md-2" id="times">
       <ul>
       <li class="0800">8:00 </li>
       <li class="0830">8:30 </li>
@@ -116,14 +122,15 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
       <li class="2300">23:00</li>
       </ul>
     </div>
-    <div class="col-sm-4" id="listings-todo">
+    <div class="col-sm-5 col-md-5" id="listings-todo">
 <?php
 
   if ($pdo !== 0 ) {
-    $today = date("dmY");
-    $recurSql = "SELECT * FROM routine_events LEFT JOIN categories ON routine_events.cat_id = categories.cat_id WHERE s_day = :today ORDER BY start_time";
+    //$today = date("dmY");
+    $recurSql = "SELECT * FROM routine_events LEFT JOIN categories ON routine_events.cat_id = categories.cat_id ORDER BY start_time";
     $statement = $pdo->prepare($recurSql);
-    $statement->bindValue(":today", $today);
+    // This needs some JavaScript to take the start date and recurs
+    // and create the recurring dates
     $statement->execute();
     if ($statement !== 0) 
     {
@@ -141,10 +148,9 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
           }
         }
     }
-?>     
-    </div>
-    <div class="col-sm-3" id="listings-routine">
-<?php
+     
+    echo "</div>\n<div class='col-sm-4 col-md-4' id=\"listings-routine\">";
+
     $todoSql = "SELECT * FROM todo_item  LEFT JOIN categories ON todo_item.cat_id = categories.cat_id WHERE s_day = :today ORDER BY start_time";
     $statement = $pdo->prepare($todoSql);
     $statement->bindValue(":today", $today);
@@ -162,11 +168,13 @@ src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
   {
     print("<p class=\"error\">Connection to the database has failed.</p>");
   }
+} // end of function
 
+drawData($now);              
 ?> 
     </div>    
-  </div>
-  <div class="col-sm-3" id="notes">
+  </div></div>
+  <div class="col-sm-4 col-md-4" id="notes">
     <h3>Notes</h3>
     <textarea class="form-control" id="todo-area" rows="8" placeholder="type here"></textarea>
     <button class="form-control" id="add-todo">Add Item</button>

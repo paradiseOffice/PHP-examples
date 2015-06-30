@@ -25,6 +25,7 @@ li { list-style-type: none; }
 
 }
 button#submit { float: right; }
+#hidden-date { margin-left: -10000px; }
 #diarypage #times ul li {  
     display: block;
     border-bottom: 1px solid gray;
