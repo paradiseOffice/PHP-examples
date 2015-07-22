@@ -1,5 +1,6 @@
 <?php
   include('../settings.php');
+  date_default_timezone_set("Europe/London");
   $pdo = new PDO(
   sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
     $settings['host'],
@@ -20,7 +21,7 @@
   $start_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $start_time); 
   $end_time = trim($_POST['end_time']); 
   $end_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $end_time);
-  $s_day = $_POST['s_day']; 
+  $s_day = date('Ymd', strtotime($_POST['s_day'])); 
   $priority = $_POST['priority'];
   $details = trim($_POST['details']); /* A-z .,- */
   $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
@@ -112,7 +113,7 @@ CREATE TABLE todo_item (
     <div class="form-group">
     <div class="col-sm-3">
     <label for="s_day">Date: </label>
-    <input class="form-control" type="date" id="s_day" name="s_day" placeholder="dd/mm/yyyy" />
+    <input class="form-control" type="date" id="s_day" name="s_day" placeholder="dd/mm/yyyy" value="<?php $today = date(); echo $today; ?>" />
     </div>
     <div class="col-sm-3">
     <label for="start_time">Starts: </label>

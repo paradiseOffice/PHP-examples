@@ -11,7 +11,10 @@
      <title>Year</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="" content="" />
-    <?php include_once("links.php"); ?>
+    <?php include_once("links.php");
+      date_default_timezone_set("Europe/London");
+    ?>
+
 </head>
 <body>
 
@@ -111,7 +114,7 @@ function drawData($today) {
       <li class="2300">23:00</li>
       </ul>
     </div>
-    <div class="col-sm-5 col-md-5" id="listings-todo">
+    <div class="col-sm-3 col-md-3" id="listings-todo">
 <?php
 
   if ($pdo !== 0 ) {

@@ -22,7 +22,9 @@
      <title>Year</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="" content="" />
-    <?php include_once url("links.php"); ?>
+    <?php include_once("links.php");
+    date_default_timezone_set("Europe/London");
+    ?>
     
 </head>
 <body class="year-page">
