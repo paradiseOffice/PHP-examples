@@ -8,7 +8,7 @@
   define('DEFAULT_ROLE', 'user');
   define('SECURE', 'FALSE'); // SSL - set to TRUE
   
-  $mysqli = mysqli_connect('127.0.0.1', 'coconut', '$^THFIkflwehr', 'paradiseOffice');
+  $mysqli = mysqli_connect('127.0.0.1', 'coconut', '$^THFIkflwehr', 'members');
   // check the bloody connection!
   if (mysqli_connect_errno()) {
     exit('Connect failed: '. mysqli_connect_error());

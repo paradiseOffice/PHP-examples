@@ -56,20 +56,19 @@ function login($uName, $password, $mysqli)
 {
 
   // Using prepared statements like below stops MySQL injection attacks.
-  if ($stmt = mysqli_query($mysqli, "SELECT custID, uName, email, password, salt FROM users WHERE email = '$uName' OR uName = '$uName' LIMIT 1"))
+  if ($stmt = mysqli_query($mysqli, "SELECT custID, uName, email, password FROM users WHERE email = '$uName' OR uName = '$uName' LIMIT 1"))
   {
     $row = mysqli_fetch_array($stmt, MYSQLI_ASSOC);
     $user_id = $row["custID"];
     $uName = $row["uName"];
     $email = $row["email"];
     $db_pass = $row["password"];
-    $salt = $row['salt'];
+    // $salt = $row['salt'];
     // the entered password from the user - sha512 hashed
     $cipher_pass = encrypt_string($password);
-    $cipher_pass = $salt . $cipher_pass;
-    echo "Encrypt_string pass: $cipher_pass\n"; 
-    echo "Salt: $salt DB pass: $db_pass\n"; // DEBUG
-    $db_pass = $salt . $db_pass;
+    // $cipher_pass = $salt . $cipher_pass;
+    
+    // $db_pass = $salt . $db_pass;
     
     if (mysqli_num_rows($stmt) == 1)
     {
@@ -89,17 +88,17 @@ function login($uName, $password, $mysqli)
       else
       {
         // check the passwords match
-        if ($cipher_pass == $db_pass)
+        if (password_verify($cipher_pass, $db_pass))
         {
           // Get the user agent string
           $user_browser = $_SERVER['HTTP_USER_AGENT'];
           // Protecting against bad guys using XSS attacks
-          echo $user_browser; // DEBUG
+          // echo $user_browser; // DEBUG
           $_SESSION['user_id'] = $user_id;
           $user_id = preg_replace("/[^0-9]+/", "", $user_id);
           $_SESSION['username'] = $uName; 
           $uName = preg_replace("/[^a-zA-Z0-9\-_]+/", "", $uName);
-          $_SESSION['login_string'] = hash('whirlpool', $salt . $cipher_pass . $user_browser);
+          $_SESSION['login_string'] = hash('whirlpool', $cipher_pass . $user_browser);
           return true;
         }
         else
@@ -155,7 +154,7 @@ function login_check($mysqli)
     $uName = $_SESSION['username'];
     // Get the user agent of the user.
     $user_browser = $_SERVER['HTTP_USER_AGENT'];
-    if ($stmt = mysqli_prepare($mysqli, "SELECT password, salt FROM users WHERE id = ? LIMIT 1"))
+    if ($stmt = mysqli_prepare($mysqli, "SELECT password FROM users WHERE id = ? LIMIT 1"))
     {
       // bind 'user_id'
       mysqli_stmt_bind_param($stmt, 'i', $user_id);
@@ -168,10 +167,11 @@ function login_check($mysqli)
       {
         // if the user exists get password variable
         mysqli_stmt_bind_result($stmt, $password);
-        mysqli_stmt_bind_result($stmt, $salt);
+        // mysqli_stmt_bind_result($stmt, $salt);
         mysqli_stmt_fetch($stmt);
         
-        $login_check = hash('whirlpool', $salt . $password . $user_browser);
+        $login_check = $password . $user_browser;
+        $login_check = hash('whirlpool', $login_check);
         
         if ($login_check == $login_string)
         {

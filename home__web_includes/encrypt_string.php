@@ -38,10 +38,10 @@ function encrypt_string($string)
    * 22 base64 characters
    */
   // password already hashed in js .
-  $ciphertext = hash('whirlpool', $string);  
+  $ciphertext = password_hash($string, PASSWORD_DEFAULT);  
   // debug
-  $length = strlen($ciphertext);
-  echo "Cipher length: $length\n";
+  // $length = strlen($ciphertext);
+  // echo "Cipher length: $length\n";
   // debug
   return $ciphertext;
 } // end of function encrypt_string($string)

@@ -90,9 +90,7 @@ if (isset($_POST['register']))
     if (preg_match('/[a-zA-Z0-9\-_*^!$]......+/', trim($_POST['password1'])))
     {
       $password = trim($_POST['passCipher']);
-      $cipher_pass = encrypt_string($password);
-      $rand = get_rand_string(20);
-      $salt = encrypt_string($rand); 
+      $cipher_pass = encrypt_string($password); 
     }
     else
     {
@@ -130,7 +128,7 @@ if (isset($_POST['register']))
       else 
       {
         // Your code here to handle a successful verification
-        insertUser($fName, $lName, $email, $company, $uName, $cipher_pass, $salt, $mysqli);
+        insertUser($fName, $lName, $email, $company, $uName, $cipher_pass, $mysqli);
         header("Location: login.php");
       }
     }

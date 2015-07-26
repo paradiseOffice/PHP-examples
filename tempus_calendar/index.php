@@ -41,7 +41,7 @@
     ?></span>
 <?php
 function drawData($today) {
-  include('../settings.php');
+  require_once('/usr/share/php5/settings.php');
   $pdo = new PDO(
   sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
     $settings['host'],

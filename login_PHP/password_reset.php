@@ -98,11 +98,11 @@ if (isset($_POST['change']))
     {
       if (preg_match('/[a-zA-Z0-9\-_*^!$]......+/', trim($_POST['password1'])))
       {
-        $rand = get_random_string(20);
-        $salt = encrypt_string($rand);
+        // $rand = get_random_string(20);
+        // $salt = encrypt_string($rand);
         // update the salt and pepper too...
         // and put them in database.        
-        $saltUpdate = "UPDATE users SET salt = '$salt' WHERE id = '$user_id' LIMIT 1";
+        // $saltUpdate = "UPDATE users SET salt = '$salt' WHERE id = '$user_id' LIMIT 1";
         $password = trim($_POST['passCipher']);
         // encrypt new password
         $cipher_pass = encrypt_string($password);
