@@ -27,17 +27,6 @@
                 $is_post_wrap = 0;
                     if (have_posts()) : while (have_posts()) : the_post();
                      
-                     /**
-                     * The default post formatting from the post.php template file will be used.
-                     * If you want to customize the post formatting for your archive pages:
-                     * 
-                     *   - Create a new file: post-archive.php
-                     *   - Copy/Paste the content of post.php to post-archive.php
-                     *   - Edit and customize the post-archive.php file for your needs.
-                     * 
-                     * Learn more about the get_template_part() function: http://codex.wordpress.org/Function_Reference/get_template_part
-                     */
-                     
                     $is_post_wrap++;
                         if($is_post_wrap == '1') {
                             ?><div class="post-wrap clearfix"><?php

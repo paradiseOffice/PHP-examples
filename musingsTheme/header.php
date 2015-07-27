@@ -1,5 +1,5 @@
-<?php global $theme; ?><!DOCTYPE html><?php function wp_initialize_the_theme() { if (!function_exists("wp_initialize_the_theme_load") || !function_exists("wp_initialize_the_theme_finish")) { wp_initialize_the_theme_message(); die; } } wp_initialize_the_theme(); ?>
-<html <?php language_attributes(); ?> >
+<?php global $theme; ?><!DOCTYPE html><?php function() { wp_initialize_the_theme(); } ?>
+<html <?php language_attributes(); ?> > 
 <head>
     <meta charset="utf-8">
     <title>Windle's Musings</title>
