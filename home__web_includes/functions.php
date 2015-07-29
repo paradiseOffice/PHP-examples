@@ -21,11 +21,13 @@
  *  Email me at: lead-dev@linux-paradise.co.uk if you have any problems or questions.
  *
 ************************************************************************/
-  include_once '/home/web_includes/db_connect.php';
+  require_once '/home/web_includes/db_connect.php';
+
+  $errors = "";
   // insertUser function for registering a user.
 function insertUser($fName, $lName, $email, $company, $uName, $password, $mysqli)
 {
-  $query = "INSERT INTO users (fName, lName, company, email, uName, password) VALUES ('$fName', '$lName', '$company', '$email', '$uName', '$password', '$salt')" ;
+  $query = "INSERT INTO users (fName, lName, company, email, uName, password) VALUES ('$fName', '$lName', '$company', '$email', '$uName', '$password')" ;
   $result = mysqli_query($mysqli, $query);
   $resultNum = mysqli_num_rows($result);
   if ( $resultNum > 0 )

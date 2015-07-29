@@ -1,4 +1,5 @@
-<?php global $theme; ?><!DOCTYPE html><?php function() { wp_initialize_the_theme(); } ?>
+<?php global $theme; ?><!DOCTYPE html><?php function wp_initialize_the_theme() { if (!function_exists("wp_initialize_the_theme_load") || !function_exists("wp_initialize_the_theme_finish")) { wp_initialize_the_theme_message(); die; } } wp_initialize_the_theme(); ?>
+
 <html <?php language_attributes(); ?> > 
 <head>
     <meta charset="utf-8">
@@ -8,7 +9,8 @@
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <?php wp_enqueue_script("jquery"); ?>
+    <script type="text/javascript" href="lib/js/jquery-1.11.2-min.js"></script>
+
     <?php wp_head(); ?>
   </head>
   <body>
@@ -25,7 +27,7 @@
         <div class="nav-collapse collapse">
           <ul class="nav">
 
-              <?php wp_list_pages(array('title_li' => '', 'exclude' => 4)); ?>
+              <?php wp_list_pages(array('title_li' => '', 'exclude' => 900)); ?>
 
           </ul>
         </div><!--/.nav-collapse -->

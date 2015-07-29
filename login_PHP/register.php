@@ -22,9 +22,9 @@
  *
 ************************************************************************/
 
-  include_once('/home/web_includes/db_connect.php');
+  require_once('/home/web_includes/db_connect.php');
   require_once('/home/web_includes/functions.php');
-  include_once('/home/web_includes/login.php');
+  require_once('/home/web_includes/login.php');
   require_once ('/home/web_includes/encrypt_string.php');
   require_once ('/home/web_includes/recaptchalib.php');
 
@@ -129,7 +129,7 @@ if (isset($_POST['register']))
       {
         // Your code here to handle a successful verification
         insertUser($fName, $lName, $email, $company, $uName, $cipher_pass, $mysqli);
-        header("Location: login.php");
+        // header("Location: login.php"); // Does this after successful insert
       }
     }
     $errors .= "Oops, one or more of the required boxes are empty. ";

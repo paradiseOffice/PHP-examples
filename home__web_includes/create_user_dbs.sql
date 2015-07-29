@@ -15,8 +15,7 @@ CREATE TABLE users (
        company VARCHAR(40),
        email VARCHAR(100) NOT NULL,
        uName VARCHAR(25) NOT NULL,
-       password VARCHAR(300) NOT NULL,
-       salt VARCHAR(300) NOT NULL
+       password VARCHAR(300) NOT NULL
 );
 CREATE TABLE programs (
        progID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -40,6 +39,7 @@ CREATE TABLE custPrograms (
 
 CREATE TABLE login_attempts (
   userid INT(11) NOT NULL,
-  time VARCHAR(30) NOT NULL
+  time VARCHAR(30) NOT NULL,
+  PRIMARY KEY(userid, time)
 );
 

@@ -22,7 +22,7 @@
  *
 ************************************************************************/
 
-include_once '/home/web_includes/db_connect.php';
+require_once '/home/web_includes/db_connect.php';
 require_once '/home/web_includes/encrypt_string.php';
   
 function sec_session_start() 

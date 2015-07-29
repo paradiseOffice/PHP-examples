@@ -23,9 +23,9 @@
  *
 ************************************************************************/
 
-  include_once('/home/web_includes/db_connect.php');
+  require_once('/home/web_includes/db_connect.php');
   require_once('/home/web_includes/functions.php');
-  include_once('/home/web_includes/login.php');
+  require_once('/home/web_includes/login.php');
   require_once ('/home/web_includes/encrypt_string.php');
   require_once ('/home/web_includes/recaptchalib.php');
   
