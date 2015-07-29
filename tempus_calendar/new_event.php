@@ -21,7 +21,7 @@
   $start_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $start_time); 
   $end_time = trim($_POST['end_time']); 
   $end_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $end_time);
-  $s_day = date('Ymd', strtotime($_POST['s_day'])); 
+  $s_day = date('dmY', strtotime($_POST['s_day'])); 
   $priority = $_POST['priority'];
   $details = trim($_POST['details']); /* A-z .,- */
   $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
