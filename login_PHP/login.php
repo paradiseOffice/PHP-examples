@@ -27,13 +27,14 @@
   include_once '/home/web_includes/functions.php';
   include_once '/home/web_includes/login.php';
   
-  sec_session_start(); // starting secure session.
+  header('X-Frame-Options: deny');
+  session_start(); // starting secure session.
   
   if (isset($_POST['login']))
   {
     $enteredUser = trim($_POST['user']);
     $enteredPass = $_POST['passCipher']; // altered via js
-    if (login($enteredUser, $enteredPass, $mysqli) == true)
+    if (login($enteredUser, $enteredPass, $pdo) == true)
     {
       // Login success
       header('Location: dashboard.php');

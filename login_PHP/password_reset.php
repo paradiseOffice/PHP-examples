@@ -33,31 +33,39 @@ if (isset($_POST['send']))
 {
   // fetch their entered email... clean up
   $email = trim(strtolower($_POST['email']));
-  $query = "SELECT custID, email FROM users WHERE email = '$email' LIMIT 1";
+  $query = "SELECT custID, email FROM users WHERE email = :email LIMIT 1";
+  $resultEmail = $pdo->prepare($query);
   // see if email is in users table and get user_id.
-  $resultEmail = mysqli_query($mysqli, $query);
-  $row = mysqli_fetch_row($resultEmail);
-  $user_id = (int) $row[0];
+  $resultEmail->bindValue(':email', $email);
+  if ( $resultEmail->execute() ) {
+    $row = $resultEmail->fetch(PDO::FETCH_ASSOC);
+  }
+  $user_id = $row['custID'];
   // echo $user_id; // DEBUG
   global $user_id;
-  $rows = mysqli_num_rows($resultEmail);
-  echo "Rows: $rows";
-  if ( (mysqli_num_rows($resultEmail)) > 0)
+  if ( $row )
   {
     // create random pin, expiration (now time)
     $pin = hash('whirlpool', rand(20,34503));
-    echo "Pin: $pin\n"; // DEBUG
+    // echo "Pin: $pin\n"; // DEBUG
     $now = time();
-    echo "Now: $now\n"; // DEBUG
+    // echo "Now: $now\n"; // DEBUG
     // put both variables and user_id in reset table
-    $query = "INSERT INTO reset (user_id,pin,now) VALUES ($user_id, '$pin', '$now')";
-    $resultInsert = mysqli_query($mysqli, $query);
+    $query = "INSERT INTO reset (user_id,pin,now) VALUES (:user_id, :pin, :now)";
+    $resultInsert = $pdo->prepare($query);
+    $resultInsert->bindValue(':user_id', $user_id);
+    $resultInsert->bindValue(':pin', $pin);
+    $resultInsert->bindValue(':now', $now);
+    if ( !$resultInsert->execute() ) {
+      echo "<p>Error in inserting the password reset record</p>";
+    }
     // send random pin to registered email
     $subject = "Paradise Office - Forgotten Password Reset";
-    $message = "Please use the password reset form to update your password.\r\n You will need the following pin. \r\nPlease copy the whole pin by selecting the text, and pressing Ctrl + C, then paste this into the form. \r\n\r\n" ;
+    $message = "Please use the password reset form to update your password.\r\n "
+    $message .= "You will need the following pin. \r\nPlease copy the whole pin by selecting the text, and pressing Ctrl + C, then paste this into the form. \r\n\r\n";
     $message .= $pin;
-    $headers = 'From: lead-dev@linux-paradise.co.uk' . "\r\n" .
-    'Reply-To: lead-dev@linux-paradise.co.uk' . "\r\n"; // change to support email
+    $headers = "From: lead-dev@linux-paradise.co.uk" . "\r\n" .
+    "Reply-To: lead-dev@linux-paradise.co.uk" . "\r\n"; // change to support email
     // install ssmtp for simple emailing 
     if (mail($email, $subject, $message, $headers))
     {
@@ -79,15 +87,16 @@ if (isset($_POST['change']))
 {
   // see if the user submits the form too late (after 24 hours from email being sent)
   $changeTime = time();
-  $query = "SELECT user_id, pin, now FROM reset WHERE user_id = '$user_id' LIMIT 1";
+  $query = "SELECT user_id, pin, now FROM reset WHERE user_id = :user_id LIMIT 1";
   // get user_id.
-  $resultReset = mysqli_query($mysqli, $query);
-  $row = mysqli_fetch_row($resultReset);
-  $user_id = (int) $row[0];
-  $db_pin = $row[1];
-  $firstTime = $row[2];
+  $resultReset = $pdo->prepare($query);
+  $resultReset->bindValue(':user_id', $user_id);
+  $row = $resultReset->FETCH(PDO::FETCH_ASSOC);
+  $user_id = $row['user_id'];
+  $db_pin = $row['pin'];
+  $firstTime = $row['now'];
   $diffTime = $changeTime - $firstTime;
-  echo "difftime:  $diffTime"; // DEBUG
+  // echo "difftime:  $diffTime"; // DEBUG
   // check pin in reset table
   $userPin = trim($_POST['pin']);
   // Do more data sweeping on the above
@@ -98,11 +107,7 @@ if (isset($_POST['change']))
     {
       if (preg_match('/[a-zA-Z0-9\-_*^!$]......+/', trim($_POST['password1'])))
       {
-        // $rand = get_random_string(20);
-        // $salt = encrypt_string($rand);
-        // update the salt and pepper too...
-        // and put them in database.        
-        // $saltUpdate = "UPDATE users SET salt = '$salt' WHERE id = '$user_id' LIMIT 1";
+        // $rand = new password_hash, password_verify methods 5.5 onwards.
         $password = trim($_POST['passCipher']);
         // encrypt new password
         $cipher_pass = encrypt_string($password);
@@ -121,9 +126,13 @@ if (isset($_POST['change']))
         else 
         {
           // update db users by user_id, changing password
-          $update = "UPDATE users SET password = '$cipher_pass' WHERE id = '$user_id' LIMIT 1";
-          $updResult = mysqli_query($mysqli, $update);
-          if (mysqli_affected_rows($updResult) == 1)
+          $update = "UPDATE users SET password = :cipher_pass' WHERE id = :user_id' LIMIT 1";
+          $updResult = $pdo->prepare($update);
+          $updResult->bindValue(':cipher_pass', $cipher_pass);
+          $updResult->bindValue(':user_id', $user_id);
+          $updResult->execute();
+          $row = $updResult->FETCH(PDO::FETCH_ASSOC);
+          if ( $row )
           {
             $errors .= "<p class='success'>The password has now been updated. Please feel free to <a href='login.php' id='login'>Login</a></p>";
           }

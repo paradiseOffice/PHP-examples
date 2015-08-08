@@ -105,6 +105,10 @@
     <input  class="form-control" type="time" id="end_time" name="end_time" placeholder="00:00"  />
     </div>
     <div class="col-sm-3">
+    <label for="s_day">Date: </label>
+    <input type="date" id="s_day" name="s_day" class="form-control" />
+    </div>
+    <div class="col-sm-3">
     <label for="recurs">Recurs: </label>
     <select class="form-control col-sm-3"  id="recurs" name="recurs">
       <option>daily</option>
@@ -115,10 +119,12 @@
       <option>quarterly</option>
       <option>biannual</option>
     </select>
-    </div>
-    <div class="col-sm-3">
-    <label for="s_day">Date: </label>
-    <input type="date" id="s_day" name="s_day" class="form-control" />
+    <!-- put in a No of times recurs field, with a checkbox for forever. 
+       Add a table in SQL with re_id, event_id, date. Compute all the dates where the event recurs in a PHP array.
+       Insert each recurrence in this table. the index.php/daily page will need to search by date in that table and
+       do a join on event_id, gathering the routine_event details. Hide most of the details with Javascript.
+    
+    -->
     </div>
     </div>
     <div class="form-group">

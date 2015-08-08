@@ -3,7 +3,7 @@
   include_once ('/home/web_includes/functions.php');
   include_once ('/home/web_includes/login.php');
   
-  sec_session_start();
+  session_start();
   
   $_SESSION = array();
   

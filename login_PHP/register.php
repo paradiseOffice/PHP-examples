@@ -102,13 +102,16 @@ if (isset($_POST['register']))
   {
     $errors .= "<p>These passwords must match. </p>";
   } // password check and encrypt.
-  $dupUser = "SELECT uName, email FROM users WHERE uName = '$uName' OR email = '$email' ";
-  $testResults = mysqli_query($mysqli, $dupUser);
-  $dupValue = mysqli_num_rows($testResults);
+  $dupUser = "SELECT uName, email FROM users WHERE uName = :uName OR email = :email ";
+  $testResults = $pdo->prepare($dupUser);
+  $testResults->bindValue(':uName', $uName);
+  $testResults->bindValue(':email', $email);
+  $testResults->execute();
+  $dupValue = $testResults->FETCH(PDO::FETCH_ASSOC);
   if (($uName != "") && ($cipher_pass != "") && ($fName != "") && ($lName != "") && ($email != ""))
   {
 
-    if ($dupValue > 0)
+    if ($dupValue)
     {
       $errors .= "<p>A user already exists using that user name or email address. </p>";
     }
@@ -128,7 +131,7 @@ if (isset($_POST['register']))
       else 
       {
         // Your code here to handle a successful verification
-        insertUser($fName, $lName, $email, $company, $uName, $cipher_pass, $mysqli);
+        insertUser($fName, $lName, $email, $company, $uName, $cipher_pass, $pdo);
         // header("Location: login.php"); // Does this after successful insert
       }
     }

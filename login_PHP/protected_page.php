@@ -3,7 +3,7 @@
   require_once ('/home/web_includes/functions.php');
   require_once ('/home/web_includes/login.php');
   
-  sec_session_start();
+  session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +15,7 @@
   <script type="text/JavaScript" src="scripts/login_js.js" >  </script>
 </head>
 <body>
-<?php if (login_check($mysqli) == true) : ?>
+<?php if (login_check($pdo) == true) : ?>
   <a href="logout.php" title="Log out when finished using the programs">Log Out</a>
   <p>Welcome <?php echo htmlentities($_SESSION['username']); ?>. </p>
 

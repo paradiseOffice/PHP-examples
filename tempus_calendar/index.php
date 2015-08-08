@@ -1,6 +1,3 @@
-<?php
-  
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -173,7 +170,8 @@ drawData($now);
     <ol class="todo-list"></ol>
   </div>
 </div>
-
+<!-- Add a default colour list to the categories table, and have a hidden form field to update the day via Javascript, 
+  for tomorrow and yesterday  -->
 
 
 <footer>
