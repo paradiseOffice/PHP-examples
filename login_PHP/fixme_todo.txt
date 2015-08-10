@@ -1,0 +1,11 @@
+# Edit the Javascript permissions, make sure the links are correct.
+  Add a https://localhost/login/etc to each link, making the recaptcha have
+  https:// too.
+
+# Make sure the captcha shows up.
+
+# Check the brute force login maths as 5 consecutive logins over 5 minutes
+# works ok without lockout.
+
+# Firefox moans about the certificate encryption not being strong enough and
+# displays warnings everywhere.
