@@ -1,4 +1,10 @@
 <?php
+  /**
+   * @author 
+   *   Hazel Windle
+   * 
+   * Places a new (non-recurring) event into the database. TODO: Check the times in MySQL 
+   */
   include('../settings.php');
   date_default_timezone_set("Europe/London");
   $pdo = new PDO(
@@ -175,7 +181,7 @@ CREATE TABLE todo_item (
   <nav id="main-nav">
     <ul class="nav navbar-nav">
     <li class="disabled active"><a href="new_event.php" >New Event</a></li>
-    <li><a href="daily.php">Daily</a></li>
+    <li><a href="index.php">Daily</a></li>
     <li><a href="month.php" >Month</a></li>
     <li><a href="year.php" >Year</a></li>
     </ul>

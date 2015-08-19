@@ -28,7 +28,8 @@
   require_once ('/home/web_includes/encrypt_string.php');
   require_once ('/home/web_includes/recaptchalib.php');
 
-  // Plonk these files two dirs out of web root somewhere - in a folder called web_includes.
+  // TODO: Change all links to absolute https:// ones for use with SSL, http + https in one site isn't allowed.
+  // See https://developer.mozilla.org/en-US/docs/Security/MixedContent/How_to_fix_website_with_mixed_content 
 
   // register.php - for creating a new user.
 if (isset($_POST['register']))
