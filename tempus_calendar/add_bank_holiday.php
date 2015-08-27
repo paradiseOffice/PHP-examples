@@ -23,8 +23,7 @@
       }
       $title = trim($_POST['title']); /* a-z A-Z spaces */
       $title = preg_replace('/[^a-zA-Z \']+/', '', $title);
-      $shops_open = trim($_POST['shops_open']); 
-      $shops_open = preg_replace('/[^A-Za-z \.,-]+/', '', $shops_open);
+      (isset($_POST['shops_open'])) ? $shops_open = 1 : $shops_open = 0; 
       $holiday = trim($_POST['holiday']); 
       $holiday = preg_replace('/[^0-9]+/', '', $holiday);
       $insert = "INSERT INTO bank_holidays (title, shops_open, holiday) VALUES (:title, :shops_open, :holiday ) ";
@@ -51,14 +50,17 @@
 <!--[if lt IE 9]>
 <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
-     <title>Tempus - New Event</title>
+     <title>Tempus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <meta name="" content="" />
-<?php include_once("links.php"); ?>
+<?php require_once("links.php"); ?>
 </head>
 <body>
 
-  <header><h1>Add Bank Holiday</h1></header>
+  <header>
+    <h1>Tempus</h1>
+    <h2>Add Bank Holiday</h2>
+  </header>
   <nav class="nav top-nav">
     <ul class="nav-pills">
     <li><a href="special_event.php" id="special" title="Special event" class="glyphicon glyphicon-star-empty">Special event</a></li>
@@ -79,7 +81,7 @@
     </div>
     <div class="form-group">
     <label for="shops_open">Shops Open</label>
-    <input  class="form-control" type="text" id="shops_open" name="shops_open" length="200"  />
+    <input  class="form-control" type="checkbox" id="shops_open" name="shops_open" />
     </div>
     <div class="form-group">
       <label for="holiday">Date</label>
@@ -92,7 +94,7 @@
   
 </div><!--container-->
 
-<?php include_once("footer-nav.php"); ?>
+<?php require_once("footer-nav.php"); ?>
 
 </body>
 </html>

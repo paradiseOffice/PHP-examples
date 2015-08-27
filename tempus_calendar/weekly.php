@@ -57,11 +57,11 @@
     $today = date("Ymd");
     $endMonth = date("Ymd").strtotime("first day of next month");
     // $dayno = strtotime($endMonth, strtotime($today));
-    $select = "SELECT * FROM task_item  LEFT JOIN categories ON task_item.cat_id = categories.cat_id WHERE priority = :priority AND s_day >= :today AND s_day < :endMonth ORDER BY s_day LIMIT 15";
+    $select = "SELECT * FROM todo_item  LEFT JOIN categories ON todo_item.cat_id = categories.cat_id WHERE priority = :priority AND s_day >= :today AND s_day < 20150701 ORDER BY s_day LIMIT 15";
     $statement = $pdo->prepare($select);
     $statement->bindValue(":priority", "high");
     $statement->bindValue(":today", $today);
-    $statement->bindValue(":endMonth", $endMonth);
+    // $statement->bindValue(":endMonth", $endMonth);
     // $statement->bindValue(":dayno", $dayno, PDO::PARAM_INT);
     $statement->execute();
     if ($statement !== 0) 

@@ -22,22 +22,22 @@
       }
       $start_date = trim($_POST['start_date']);
       $end_date = trim($_POST['end_date']); 
-      $work_days = $_POST['work_days']; 
-      $hol_days = trim($_POST['hol_days']); 
+      $work = $_POST['work']; 
+      $holiday = trim($_POST['holiday']); 
       $start_date = preg_replace('/[^0-9]+/', '', $start_date);
       $end_date = preg_replace('/[^0-9]+/', '', $end_date);
-      if ($hol_days == False) {
-        $hol_days = 0;
+      if ($holiday == False) {
+        $holiday = 0;
       } 
-      if ($work_days == False) {
-        $work_days = 0;
+      if ($work == False) {
+        $work = 0;
       }
-      $insert = "INSERT INTO work_hol (start_date, end_date, work_days, hol_days) VALUES (:start_date, :end_date, :work_days, :hol_days ) ";
+      $insert = "INSERT INTO work_hol (start_date, end_date, work, holiday) VALUES (:start_date, :end_date, :work, :holiday ) ";
       $statement = $pdo->prepare($insert);
       $statement->bindValue(":start_date", $start_date);
       $statement->bindValue(":end_date", $end_date);
-      $statement->bindValue(":work_days", $work_days);
-      $statement->bindValue(":hol_days", $hol_days);
+      $statement->bindValue(":work", $work);
+      $statement->bindValue(":holiday", $holiday);
       if ($statement->execute()) 
       {
         $errors .= "\n Your event was successfully saved.";
@@ -81,8 +81,8 @@
   <h2>Add Holiday Days</h2>
   <form action="add_work_hols.php" method="post" class="form">
     <div class="form-group">
-    <input class="form-control" type="radio" id="work_days" name="work_days" value="1"/>Work <br />
-    <input class="form-control" type="radio" id="hol_days" name="hol_days" value="1" />Holiday <br />
+    <input class="form-control" type="radio" id="work" name="work" value="1"/>Work <br />
+    <input class="form-control" type="radio" id="holiday" name="holiday" value="1" />Holiday <br />
     </div>
     <div class="form-group">
     <div class="col-sm-6">
@@ -98,16 +98,8 @@
   </section>
   
 </div><!--container-->
-<footer>
-  <nav id="main-nav">
-    <ul class="nav navbar-nav">
-    <li><a href="new_event.php" >New Event</a></li>
-    <li><a href="daily.php">Daily</a></li>
-    <li><a href="month.php" >Month</a></li>
-    <li><a href="year.php" >Year</a></li>
-    </ul>
-  </nav>
-</footer>
+
+<?php require_once("footer-nav.php"); ?>
 
 </body>
 </html>

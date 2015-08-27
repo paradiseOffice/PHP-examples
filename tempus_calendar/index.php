@@ -8,17 +8,19 @@
      <title>Year</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="" content="" />
-    <?php include_once("links.php");
-      date_default_timezone_set("Europe/London");
+    <?php require_once('links.php');
+      date_default_timezone_set('Europe/London');
     ?>
 
 </head>
 <body>
 
   <header>
-    <h1><?php $todayTitle = date("l dS F Y");
+    <h1>
+      <?php $todayTitle = date('l dS F Y');
         echo $todayTitle;
-        ?>
+        $today = date('dmY');
+      ?>
     </h1>
     
   </header>
@@ -31,52 +33,7 @@
   </nav>
 <div class="container-fluid" >
   <div class="col-sm-8 col-md-8" id="diarypage">  
-    <div class="col-sm-1 col-md-1" id="timetracker">
-    <ul>
-    <span id="hidden-date"><?php 
-      $now = date("Y-m-d");
-    ?></span>
-<?php
-function drawData($today) {
-  require_once('/usr/share/php5/settings.php');
-  $pdo = new PDO(
-  sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
-    $settings['host'],
-    $settings['dbname'],
-    $settings['port'],
-    $settings['charset']
-  ),
-  $settings['username'],
-  $settings['password']
-  );
-  $errors = '';
-  
-  if ($pdo != NULL ) {
-    //$today = date("Y-m-d");
-    $select = "SELECT s_day, start_time, end_time, activity FROM time_usage WHERE s_day = :today ORDER BY start_time";
-    $statement = $pdo->prepare($select);
-    $statement->bindValue(":today", $today);
-    $statement->execute();
-    if ($statement !== 0) 
-    {
-        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
-        {
-          print("<li id='" . $row["start_time"] . "' class='tt_activity'><p>" . $row["activity"] . "</p></li>");
-        }
-    }
-    else 
-    {
-      print("<li> </li>");
-    } 
-  } 
-  else 
-  {
-    print("<p class=\"error\">Connection to the database has failed.</p>");
-  }
-?>  
-    </ul>
-    </div>
-    <div class="col-sm-2 col-md-2" id="times">
+    <div class="col-sm-2 col-md-2 col-lg-1" id="times">
       <ul>
       <li class="0800">8:00 </li>
       <li class="0830">8:30 </li>
@@ -114,33 +71,41 @@ function drawData($today) {
     <div class="col-sm-3 col-md-3" id="listings-todo">
 <?php
 
-  if ($pdo !== 0 ) {
+  if ($pdo !== 0 ):
     //$today = date("dmY");
-    $recurSql = "SELECT * FROM routine_events LEFT JOIN categories ON routine_events.cat_id = categories.cat_id ORDER BY start_time";
+    $recurSql = 'SELECT * FROM routine_events 
+                 LEFT JOIN categories ON routine_events.cat_id = categories.cat_id 
+                 LEFT JOIN recurrences ON routine_events.event_id = recurrences.rec_id
+                 WHERE recurrences.s_day = :today1 AND routine_events.s_day = :today2
+                 ORDER BY start_time';
     $statement = $pdo->prepare($recurSql);
     // This needs some JavaScript to take the start date and recurs
     // and create the recurring dates
+    $statement->bindValue(':today1', $today);
+    $statement->bindValue(':today2', $today);
     $statement->execute();
-    if ($statement !== 0) 
-    {
-        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
-        {
-          $html = "<div class='routine-event " . $row["start_time"] . "'>\n";
-          $html .= "<h3 class='summary' style='background-color: " . $row["colour"] . ";'>" . $row["event"] . "</h3>\n";
-          $html .= "<div class='event-details'>\n<span class='time'>Starts " . $row["start_time"] . "</span>";
-          $html .= "<span class='time'> Ends " . $row["end_time"] . "</span> Recurring  " . $row["recurs"] . "<br />\n";
-          $html .= "<h4 class='place'>" . $row["place"] . "</h4>\n";
-          $html .= "<p>" . $row["details"] . "</p>\n<p class='attendees'>" .$row["attendees"] . "<br />\n<span class='category'>" . $row["name"] . "</span>";
-          $html .= "<a href='" . $row["url"] . "' target='blank'>Web Link</a></p></div>";
-          echo $html;
-
-          }
-        }
-    }
+    if ($statement !== 0):
+        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false): ?>
+          <div class='routine-event <?php echo $row["start_time"]; ?>'>
+          <h3 class='summary' style='background-color: <?php echo $row["colour"] ?>'><?php echo $row["event"]; ?></h3>
+          <div class='event-details'>
+            <span class='time'>Starts <?php echo $row["start_time"]; ?></span>
+            <span class='time'> Ends <?php echo $row["end_time"]; ?></span> Recurring <?php echo $row["recurs"]; ?><br />
+            <h4 class='place'><?php echo $row["place"]; ?></h4>
+            <p><?php echo $row["details"]; ?></p>
+            <p class='attendees'><?php echo $row["attendees"]; ?><br />
+            <span class='category'><?php echo $row["name"]; ?></span>
+            <a href='<?php echo $row["url"]; ?>' target='blank'>Web Link</a></p></div>
+    <?php endwhile;
+        endif;
+      endif;          
+    ?>    
      
-    echo "</div>\n<div class='col-sm-4 col-md-4' id=\"listings-routine\">";
-
-    $todoSql = "SELECT * FROM todo_item  LEFT JOIN categories ON todo_item.cat_id = categories.cat_id WHERE s_day = :today ORDER BY start_time";
+    </div>
+    <div class='col-sm-4 col-md-4' id='listings-routine'>
+    <?php
+    
+    $todoSql = "SELECT * FROM task_item  LEFT JOIN categories ON task_item.cat_id = categories.cat_id WHERE s_day = :today ORDER BY start_time";
     $statement = $pdo->prepare($todoSql);
     $statement->bindValue(":today", $today);
     $statement->execute();
@@ -157,9 +122,7 @@ function drawData($today) {
   {
     print("<p class=\"error\">Connection to the database has failed.</p>");
   }
-} // end of function
-
-drawData($now);              
+             
 ?> 
     </div>    
   </div></div>
@@ -173,17 +136,7 @@ drawData($now);
 <!-- Add a default colour list to the categories table, and have a hidden form field to update the day via Javascript, 
   for tomorrow and yesterday  -->
 
-
-<footer>
-  <nav id="main-nav">
-    <ul class="nav navbar-nav">
-    <li><a href="new_event.php" >New Event</a></li>
-    <li class="active disabled"><a href="daily.php">Daily</a></li>
-    <li><a href="month.php" >Month</a></li>
-    <li><a href="year.php" >Year</a></li>
-    </ul>
-  </nav>
-</footer>
+<?php require_once("footer-nav.php"); ?>
 
 </body>
 </html>

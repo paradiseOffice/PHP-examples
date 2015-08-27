@@ -17,9 +17,9 @@
    $event = trim($_POST['event']); /* a-z A-Z spaces */
    $event = preg_replace('/[^a-zA-Z ]+/', '', $event);
    $s_day = $_POST['s_day']; 
-   $yearly = $_POST['yearly'];
-   $attendees = trim($_POST['attendees']); /* A-z - spaces */
-   $attendees = preg_replace('/[^a-zA-Z ]+/', '', $attendees);
+   $birthday = $_POST['birthday'];
+   $place = trim($_POST['place']); /* A-z - spaces */
+   $place = preg_replace('/[^a-zA-Z ]+/', '', $place);
    $details = trim($_POST['details']); /* A-z .,- */
    $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
 
@@ -28,12 +28,12 @@
     $errors .= "\n Please fill in these required fields.";
   }
  
-  $insert = "INSERT INTO special_events (event, s_day, yearly, attendees, details) VALUES (:event, :s_day, :yearly, :attendees, :details ) ";
+  $insert = "INSERT INTO anniversary (event, s_day, birthday, place, details) VALUES (:event, :s_day, :birthday, :place, :details ) ";
     $statement = $pdo->prepare($insert);
     $statement->bindValue(":event", $event);
     $statement->bindValue(":s_day", $s_day);
-    $statement->bindValue(":yearly", $yearly);
-    $statement->bindValue(":attendees", $attendees);
+    $statement->bindValue(":birthday", $birthday);
+    $statement->bindValue(":place", $place);
     $statement->bindValue(":details", $details);
     if ($statement->execute()) 
     {
@@ -86,28 +86,20 @@
     </div>
     <div class="col-sm-7">
     <label for="end_time">Yearly: </label>
-    <input  class="form-control" type="radio" id="yes" name="yearly" value="1">Yes</input>
-    <input class="form-control" type="radio" id="no" name="yearly" value="0">No</input>
+    <input  class="form-control" type="radio" id="yes" name="birthday" value="1">Yes</input>
+    <input class="form-control" type="radio" id="no" name="birthday" value="0">No</input>
     </div>
     </div>
-      <label for="attendees" class="sr-only">Attendees: </label>
-      <input id="attendees" name="attendees" type="text" class="form-control" placeholder="attendees" />
+      <label for="place" class="sr-only">Attendees: </label>
+      <input id="place" name="place" type="text" class="form-control" placeholder="place" />
     <textarea id="details" name="details" class="form-group col-sm-12" placeholder="Details..." rows="4"></textarea>
     <button type="submit" id="submit" name="submit" class="btn btn-primary btn-lg">Submit</button>
   </form>
   </section>
   
 </div><!--container-->
-<footer>
-  <nav id="main-nav">
-    <ul class="nav navbar-nav">
-    <li><a href="new_event.php" >New Event</a></li>
-    <li><a href="daily.php">Daily</a></li>
-    <li><a href="month.php" >Month</a></li>
-    <li><a href="year.php" >Year</a></li>
-    </ul>
-  </nav>
-</footer>
+
+<?php require_once("footer-nav.php"); ?>
 
 </body>
 </html>

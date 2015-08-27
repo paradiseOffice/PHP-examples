@@ -40,9 +40,11 @@
     {
       $errors .= "\n Please fill in these required fields.";
     }
-    $insert = "INSERT INTO routine_events (event, recurs, start_time, end_time, place, attendees, details, url, cat_id, s_day) VALUES (:event_name, :start_time, :end_time,  :place, :attendees, :details, :url, :category, :s_day ) ";
+    $insert = "INSERT INTO routine_events (event, recurs, s_day, start_time, end_time, place, attendees, details, url, cat_id) VALUES (:event_name, :recurs, :s_day, :start_time, :end_time,  :place, :attendees, :details, :url, :category) ";
     $statement = $pdo->prepare($insert);
     $statement->bindValue(":event_name", $event_name);
+    $statement->bindValue(':recurs', $recurs);
+    $statement->bindValue(":s_day", $s_day);
     $statement->bindValue(":start_time", $start_time);
     $statement->bindValue(":end_time", $end_time);
     $statement->bindValue(":place", $place);
@@ -50,7 +52,6 @@
     $statement->bindValue(":details", $details);
     $statement->bindValue(":url", $url);
     $statement->bindValue(":category", $cat_id, PDO::PARAM_INT);
-    $statement->bindValue(":s_day", $s_day);
     if ($statement->execute()) 
     {
     $errors .= "\n Your event was successfully saved.";
@@ -60,6 +61,7 @@
     $errors .= "\n Unable to insert record!";
     }
   }
+  // Work out recurrences (next_date event_id REFERENCES tempus.routine_events (event_id). Next 10 events by default.
     
 ?>
 <!DOCTYPE html>
@@ -114,10 +116,10 @@
       <option>daily</option>
       <option>weekly</option>
       <option>fortnightly</option>
+      <option>lunar</option>
       <option>monthly</option>
       <option>yearly</option>
       <option>quarterly</option>
-      <option>biannual</option>
     </select>
     <!-- put in a No of times recurs field, with a checkbox for forever. 
        Add a table in SQL with re_id, event_id, date. Compute all the dates where the event recurs in a PHP array.
@@ -175,16 +177,8 @@
   </section>
   
 </div><!--container-->
-<footer>
-  <nav id="main-nav">
-    <ul class="nav navbar-nav">
-    <li><a href="new_event.php" >New Event</a></li>
-    <li><a href="daily.php">Daily</a></li>
-    <li><a href="month.php" >Month</a></li>
-    <li><a href="year.php" >Year</a></li>
-    </ul>
-  </nav>
-</footer>
+
+<?php require_once("footer-nav.php"); ?>
 
 </body>
 </html>

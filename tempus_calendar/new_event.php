@@ -41,7 +41,7 @@
   {
     $errors .= "\n Please fill in these required fields.";
   }
-    $insert = "INSERT INTO todo_item (task, s_day, start_time, end_time, details, priority, cat_id) VALUES (:task, :s_day, :start_time, :end_time, :details, :priority, :category ) ";
+    $insert = "INSERT INTO task_item (task, s_day, start_time, end_time, details, priority, cat_id) VALUES (:task, :s_day, :start_time, :end_time, :details, :priority, :category ) ";
     $statement = $pdo->prepare($insert);
     $statement->bindValue(":task", $task);
     $statement->bindValue(":start_time", $start_time);
@@ -87,28 +87,6 @@
   </nav>
   
 <div class="container">
-<!--
-
-CREATE TABLE categories (
-  cat_id        INTEGER PRIMARY KEY AUTO_INCREMENT,
-  name          VARCHAR(100) NOT NULL,
-  colour        VARCHAR(100) NOT NULL 
-  /* rgba(255,255,255,1.0) */
-);
-
-CREATE TABLE todo_item (
-  task_id       INTEGER PRIMARY KEY AUTO_INCREMENT,
-  task          VARCHAR(100) NOT NULL,
-  s_day         DATE NOT NULL,
-  start_time    TIME,
-  end_time      TIME,
-  details       VARCHAR(1000),
-  priority      ENUM("urgent", "high", "medium", "low"),
-  cat_id        INTEGER, 
-  CONSTRAINT FOREIGN KEY (cat_id) REFERENCES categories(cat_id)
-);
-
--->
 
   <section id="event_form">
   <h2>New Todo</h2>
@@ -177,16 +155,8 @@ CREATE TABLE todo_item (
   </section>
   
 </div><!--container-->
-<footer>
-  <nav id="main-nav">
-    <ul class="nav navbar-nav">
-    <li class="disabled active"><a href="new_event.php" >New Event</a></li>
-    <li><a href="index.php">Daily</a></li>
-    <li><a href="month.php" >Month</a></li>
-    <li><a href="year.php" >Year</a></li>
-    </ul>
-  </nav>
-</footer>
+
+<?php require_once("footer-nav.php"); ?>
 
 </body>
 </html>
