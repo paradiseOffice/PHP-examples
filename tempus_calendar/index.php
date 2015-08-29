@@ -5,11 +5,24 @@
 <!--[if lt IE 9]>
 <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
-     <title>Year</title>
+     <title>Today</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="" content="" />
     <?php require_once('links.php');
       date_default_timezone_set('Europe/London');
+      
+      require('../settings.php');
+      $pdo = new PDO(
+        sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
+        $settings['host'],
+        $settings['dbname'],
+        $settings['port'],
+        $settings['charset']
+      ),
+        $settings['username'],
+        $settings['password']
+      );
+      $errors = '';
     ?>
 
 </head>

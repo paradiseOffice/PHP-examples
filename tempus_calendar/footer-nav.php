@@ -1,6 +1,4 @@
-<?php
 
-$html = <<<EOF
 <footer>
   <nav id="main-nav">
     <ul class="nav navbar-nav">
@@ -12,7 +10,5 @@ $html = <<<EOF
     </ul>
   </nav>
 </footer>
-EOF;
-echo $html;
 
-?>
+

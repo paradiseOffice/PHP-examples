@@ -1,5 +1,7 @@
 <?php
-  include('../settings.php');
+
+function insert_bank_holiday() {
+  require('../settings.php');
   $pdo = new PDO(
   sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
     $settings['host'],
@@ -17,30 +19,34 @@
   {
     if (isset($_POST['submit'])) 
     {
-      if( empty($_POST['title']) ||  empty($_POST['holiday']))
+      if( empty($_POST['title']) ||  empty($_POST['hol_date']))
       {
-        $errors .= "\n Please fill in these required fields.";
+        $errors .= '<p> Please fill in these required fields.</p>';
       }
       $title = trim($_POST['title']); /* a-z A-Z spaces */
       $title = preg_replace('/[^a-zA-Z \']+/', '', $title);
       (isset($_POST['shops_open'])) ? $shops_open = 1 : $shops_open = 0; 
-      $holiday = trim($_POST['holiday']); 
-      $holiday = preg_replace('/[^0-9]+/', '', $holiday);
-      $insert = "INSERT INTO bank_holidays (title, shops_open, holiday) VALUES (:title, :shops_open, :holiday ) ";
+      $hol_date = trim($_POST['hol_date']); 
+      $hol_date = preg_replace('/[^0-9]+/', '', $hol_date);
+      $insert = 'INSERT INTO bank_holidays (title, shops_open, hol_date) VALUES (:title, :shops_open, :hol_date ) ';
       $statement = $pdo->prepare($insert);
-      $statement->bindValue(":title", $title);
-      $statement->bindValue(":shops_open", $shops_open);
-      $statement->bindValue(":holiday", $holiday);
+      $statement->bindValue(':title', $title);
+      $statement->bindValue(':shops_open', $shops_open);
+      $statement->bindValue(':hol_date', $hol_date);
       if ($statement->execute()) 
       {
-        $errors .= "\n Your event was successfully saved.";
+        $errors .= '<p class="success"> Your event was successfully saved.</p>';
+        return $pdo->lastInsertId();
       } 
       else 
       {
-        $errors .= "\n Unable to insert record!";
+        $errors .= '<p> Unable to insert record!</p>';
+        return false;
       }
     }
   }
+  
+}
     
 ?>
 <!DOCTYPE html>
@@ -84,13 +90,23 @@
     <input  class="form-control" type="checkbox" id="shops_open" name="shops_open" />
     </div>
     <div class="form-group">
-      <label for="holiday">Date</label>
-      <input type="date" id="holiday" name="holiday" class="form-control" placeholder="dd-mm-yyyy" />
+      <label for="hol_date">Date</label>
+      <input type="date" id="hol_date" name="hol_date" class="form-control" placeholder="dd-mm-yyyy" />
     </div>
 
     <input type="submit" id="submit" name="submit" class="btn btn-primary btn-lg" value="Add" />
   </form>
   </section>
+  <?php 
+  
+    try {
+      $id = insert_bank_holiday(); 
+      echo '<span id="sql-id" style="left: -5000px;">' . $id . '</span>';
+    } catch (PDOException $e) {
+      $errors .= '<p class="sql-error">PDO Exception ' . $e . '</p>';
+    }
+  
+  ?>
   
 </div><!--container-->
 
