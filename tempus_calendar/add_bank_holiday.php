@@ -16,12 +16,9 @@ function insert_bank_holiday() {
   $dtz = new DateTimeZone('Europe/London'); 
   
   
-  if ($pdo !== 0) 
-  {
-    if (isset($_POST['submit'])) 
-    {
-      if( empty($_POST['title']) ||  empty($_POST['hol_date']))
-      {
+  if ($pdo !== 0) {
+    if (isset($_POST['submit'])) {
+      if( empty($_POST['title']) ||  empty($_POST['hol_date'])) {
         $errors .= '<p> Please fill in these required fields.</p>';
       }
       $title = trim($_POST['title']); /* a-z A-Z spaces */
@@ -33,7 +30,6 @@ function insert_bank_holiday() {
       $month = substr($dirty_date, -6, 2);
       $date = substr($dirty_date, 0, 2);
       $clean_date = $year . $month . $date . ' 12:00';
-      $errors .= $clean_date; // debugging line
       $hol_date = new DateTime($clean_date, $dtz);
       $hol_date = $hol_date->format('Ymd');
       $insert = 'INSERT INTO bank_holidays (title, shops_open, hol_date) VALUES (:title, :shops_open, :hol_date ) ';
@@ -41,20 +37,17 @@ function insert_bank_holiday() {
       $statement->bindValue(':title', $title);
       $statement->bindValue(':shops_open', $shops_open);
       $statement->bindValue(':hol_date', $hol_date);
-      if ($statement->execute()) 
-      {
+      if ($statement->execute()) {
         $errors .= '<p class="success"> Your event was successfully saved.</p>';
         return $pdo->lastInsertId();
-      } 
-      else 
-      {
+      } else {
         $errors .= '<p> Unable to insert record!</p>';
         return false;
       }
-    }
-  }
+    } // submit isset
+  } // pdo
   
-}
+} // function end 
     
 ?>
 <!DOCTYPE html>
@@ -106,14 +99,12 @@ function insert_bank_holiday() {
   </form>
   </section>
   <?php 
-  
     try {
       $id = insert_bank_holiday(); 
       echo '<span id="sql-id" style=" position: relative; left: -5000px; ">' . $id . '</span>';
     } catch (PDOException $e) {
       $errors .= '<p class="sql-error">PDO Exception ' . $e . '</p>';
     }
-  
   ?>
   
 </div><!--container-->

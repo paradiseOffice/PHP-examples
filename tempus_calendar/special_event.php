@@ -1,4 +1,6 @@
 <?php
+
+function add_special_event() {
   require_once('../settings.php');
   $pdo = new PDO(
   sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
@@ -11,47 +13,42 @@
   $settings['password']
   );
   $errors = '';
-
   $dtz = new DateTimeZone('Europe/London');
 
- if (isset($_POST['submit'])) {
-   $event = trim($_POST['event']); /* a-z A-Z spaces */
-   $event = preg_replace('/[^a-zA-Z ]+/', '', $event);
-   $dirty_start_date = trim($_POST['s_day']);
-   $dirty_start_date = preg_replace('/[^\d]*/', '', $dirty_start_date);
-   $clean_start_date = substr($dirty_start_date, -4, 4) . 
-    substr($dirty_start_date, -6, 2) . substr($dirty_start_date, 0, 2) . ' 12:00';
-   $start_date = new DateTime($clean_start_date, $dtz);
-   $s_day = $start_date->format('Ymd'); 
-   $birthday = $_POST['birthday'];
-   $place = trim($_POST['place']); /* A-z - spaces */
-   $place = preg_replace('/[^a-zA-Z ]+/', '', $place);
-   $details = trim($_POST['details']); /* A-z .,- */
-   $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
-
-  if(empty($_POST['event']) || empty($_POST['s_day']) )
-  {
-    $errors .= '<p> Please fill in these required fields.</p>';
-  }
- 
-  $insert = 'INSERT INTO anniversary (event, s_day, birthday, place, details) VALUES 
+  if (isset($_POST['submit'])) {
+    $event = trim($_POST['event']); /* a-z A-Z spaces */
+    $event = preg_replace('/[^a-zA-Z ]+/', '', $event);
+    $dirty_start_date = trim($_POST['s_day']);
+    $dirty_start_date = preg_replace('/[^\d]*/', '', $dirty_start_date);
+    $clean_start_date = substr($dirty_start_date, -4, 4) . 
+     substr($dirty_start_date, -6, 2) . substr($dirty_start_date, 0, 2) . ' 12:00';
+    $start_date = new DateTime($clean_start_date, $dtz);
+    $s_day = $start_date->format('Ymd'); 
+    $birthday = $_POST['birthday'];
+    $place = trim($_POST['place']); /* A-z - spaces */
+    $place = preg_replace('/[^a-zA-Z ]+/', '', $place);
+    $details = trim($_POST['details']); /* A-z .,- */
+    $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
+    if (empty($_POST['event']) || empty($_POST['s_day'])) {
+      $errors .= '<p> Please fill in these required fields.</p>';
+    }
+    $insert = 'INSERT INTO anniversary (event, s_day, birthday, place, details) VALUES 
              (:event, :s_day, :birthday, :place, :details )';
-  $statement = $pdo->prepare($insert);
-  $statement->bindValue(':event', $event);
-  $statement->bindValue(':s_day', $s_day);
-  $statement->bindValue(':birthday', $birthday);
-  $statement->bindValue(':place', $place);
-  $statement->bindValue(':details', $details);
-  if ($statement->execute()) 
-  {
-    $errors .= '<p class="success"> Your event was successfully saved.</p>';
-  } 
-  else 
-  {
-    $errors .= '<p class="sql-error"> Unable to insert record!</p>';
-  }
-}
-    
+    $statement = $pdo->prepare($insert);
+    $statement->bindValue(':event', $event);
+    $statement->bindValue(':s_day', $s_day);
+    $statement->bindValue(':birthday', $birthday);
+    $statement->bindValue(':place', $place);
+    $statement->bindValue(':details', $details);
+    if ($statement->execute()) {
+      $errors .= '<p class="success"> Your event was successfully saved.</p>';
+    } else {
+      $errors .= '<p class="sql-error"> Unable to insert record!</p>';
+    }
+  }  // submit isset
+} // end function
+add_special_event();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

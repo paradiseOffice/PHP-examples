@@ -1,4 +1,6 @@
 <?php
+
+function add_routine_event() {
   require_once('../settings.php');
   $pdo = new PDO(
   sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
@@ -11,64 +13,56 @@
   $settings['password']
   );
   $errors = '';
-
   $dtz = new DateTimeZone('Europe/London');
 
- if (isset($_POST['submit'])) {
-   $event_name = trim($_POST['event_name']); /* a-z A-Z spaces */
-   $event_name = preg_replace('/[^a-zA-Z ]+/', '', $event_name);
-   $start_time = trim($_POST['start_time']); /* 00:00 */
-   $start_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $start_time); 
-   $end_time = trim($_POST['end_time']); 
-   $end_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $end_time);
-   $dirty_start_date = trim($_POST['s_day']);
-   $dirty_start_date = preg_replace('/[^\d]*/', '', $dirty_start_date);
-   $clean_start_date = substr($dirty_start_date, -4, 4) . 
-    substr($dirty_start_date, -6, 2) . substr($dirty_start_date, 0, 2) . ' 12:00';
-   $start_date = new DateTime($clean_start_date, $dtz);
-   $s_day = $start_date->format('Ymd');
-   $recurs = $_POST['recurs']; 
-   $place = trim($_POST['place']); /* a-z -+ 0-9 spaces () */
-   $place = preg_replace('/[^a-zA-Z \(\)-_]+/', '', $place);
-   $attendees = trim($_POST['attendees']); /* A-z - spaces */
-   $attendees = preg_replace('/[^a-zA-Z ]+/', '', $attendees);
-   $details = trim($_POST['details']); /* A-z .,- */
-   $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
-   $url = trim($_POST['url']); /* url regex */
-   $url = preg_replace('/[^A-Za-z\/:\.]+/', '', $url);
-   $cat_id = $_POST['category']; 
+  if (isset($_POST['submit'])) {
+    $event_name = trim($_POST['event_name']); /* a-z A-Z spaces */
+    $event_name = preg_replace('/[^a-zA-Z ]+/', '', $event_name);
+    $start_time = trim($_POST['start_time']); /* 00:00 */
+    $start_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $start_time); 
+    $end_time = trim($_POST['end_time']); 
+    $end_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $end_time);
+    $dirty_start_date = trim($_POST['s_day']);
+    $dirty_start_date = preg_replace('/[^\d]*/', '', $dirty_start_date);
+    $clean_start_date = substr($dirty_start_date, -4, 4) . 
+     substr($dirty_start_date, -6, 2) . substr($dirty_start_date, 0, 2) . ' 12:00';
+    $start_date = new DateTime($clean_start_date, $dtz);
+    $s_day = $start_date->format('Ymd');
+    $recurs = $_POST['recurs']; 
+    $place = trim($_POST['place']); /* a-z -+ 0-9 spaces () */
+    $place = preg_replace('/[^a-zA-Z \(\)-_]+/', '', $place);
+    $attendees = trim($_POST['attendees']); /* A-z - spaces */
+    $attendees = preg_replace('/[^a-zA-Z ]+/', '', $attendees);
+    $details = trim($_POST['details']); /* A-z .,- */
+    $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
+    $url = trim($_POST['url']); /* url regex */
+    $url = preg_replace('/[^A-Za-z\/:\.]+/', '', $url);
+    $cat_id = $_POST['category']; 
 
-   if (
-    empty($_POST['event_name']) ||
-    empty($_POST['start_time']) ||
-    empty($_POST['end_time']) ||
-    empty($_POST['recurs']))
-   {
-     $errors .= '<p> Please fill in these required fields.</p>';
-   }
-   $insert = 'INSERT INTO routine_events 
-    (event, recurs, s_day, start_time, end_time, place, attendees, details, url, cat_id) VALUES 
-    (:event_name, :recurs, :s_day, :start_time, :end_time,  :place, :attendees, :details, :url, :category)';
-   $statement = $pdo->prepare($insert);
-   $statement->bindValue(':event_name', $event_name);
-   $statement->bindValue(':recurs', $recurs);
-   $statement->bindValue(':s_day', $s_day);
-   $statement->bindValue(':start_time', $start_time);
-   $statement->bindValue(':end_time', $end_time);
-   $statement->bindValue(':place', $place);
-   $statement->bindValue(':attendees', $attendees);
-   $statement->bindValue(':details', $details);
-   $statement->bindValue(':url', $url);
-   $statement->bindValue(':category', $cat_id, PDO::PARAM_INT);
-   if ($statement->execute()) 
-   {
-     $errors .= '<p class="success"> Your event was successfully saved.</p>';
-   } 
-   else 
-   {
-     $errors .= '<p class="sql-error"> Unable to insert record!</p>';
-   }
- }
+    if (empty($_POST['event_name']) || empty($_POST['start_time']) ||
+      empty($_POST['end_time']) || empty($_POST['recurs'])) {
+      $errors .= '<p> Please fill in these required fields.</p>';
+    }
+    $insert = 'INSERT INTO routine_events 
+     (event, recurs, s_day, start_time, end_time, place, attendees, details, url, cat_id) VALUES 
+     (:event_name, :recurs, :s_day, :start_time, :end_time,  :place, :attendees, :details, :url, :category)';
+    $statement = $pdo->prepare($insert);
+    $statement->bindValue(':event_name', $event_name);
+    $statement->bindValue(':recurs', $recurs);
+    $statement->bindValue(':s_day', $s_day);
+    $statement->bindValue(':start_time', $start_time);
+    $statement->bindValue(':end_time', $end_time);
+    $statement->bindValue(':place', $place);
+    $statement->bindValue(':attendees', $attendees);
+    $statement->bindValue(':details', $details);
+    $statement->bindValue(':url', $url);
+    $statement->bindValue(':category', $cat_id, PDO::PARAM_INT);
+    if ($statement->execute()) {
+      $errors .= '<p class="success"> Your event was successfully saved.</p>';
+    } else {
+      $errors .= '<p class="sql-error"> Unable to insert record!</p>';
+    }
+  } // submit isset
  // Work out recurrences (next_date event_id REFERENCES tempus.routine_events (event_id). Next 10 events by default.
     
 ?>
@@ -160,8 +154,7 @@
     $select = 'SELECT * FROM categories ORDER BY cat_id';
     $statement = $pdo->prepare($select);
     $statement->execute();
-    if ($statement !== 0) 
-    {
+    if ($statement !== 0) {
       while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false):
       ?>  
 
@@ -170,16 +163,15 @@
 
       <?php
       endwhile;  
-    }
-    else 
-    {
+    } else {
       echo('<option value="0">No categories</option>');
     } 
-  } 
-  else 
-  {
+  } else {
     echo('<p class="sql-error">Connection to the database has failed.</p>');
   }
+} // end function 
+add_routine_event();
+
 ?>
         
       </select>

@@ -1,19 +1,3 @@
-<?php
-  require_once('../settings.php');
-  $pdo = new PDO(
-  sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
-    $settings['host'],
-    $settings['dbname'],
-    $settings['port'],
-    $settings['charset']
-  ),
-  $settings['username'],
-  $settings['password']
-  );
-  $errors = '';
-  
-  $dtz = new DateTimeZone('Europe/London');
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,14 +8,32 @@
      <title>Month - Year</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="" content="" />
-    <?php require_once('links.php');
-    
-   ?>
+    <?php require_once('links.php'); ?>
     
 </head>
 <body>
 
-  <header><h1><?php $today = new DateTime('now', $dtz); echo $today->format('M Y'); ?></h1></header>
+  <header><h1>
+  <?php 
+  function fetch_month() {
+    require_once('../settings.php');
+    $pdo = new PDO(
+    sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
+      $settings['host'],
+      $settings['dbname'],
+      $settings['port'],
+      $settings['charset']
+    ),
+    $settings['username'],
+    $settings['password']
+    );
+    $errors = '';
+  
+    $dtz = new DateTimeZone('Europe/London');
+    $today = new DateTime('now', $dtz); 
+    echo $today->format('M Y'); 
+  ?>
+  </h1></header>
   <nav class="nav nav-pills top-nav">
     <ul>
     <li><a href="<?php $prevMonth = new DateTime('today -1 month', $dtz); echo $prevMonth->format('M'); ?>" id="prev_month" title="Previous month" class="glyphicon glyphicon-arrow-left"></a></li>
@@ -68,7 +70,6 @@
     // $statement->bindValue(":dayno", $dayno, PDO::PARAM_INT);
     $statement->execute();
     if ($statement !== 0):
-    
       while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false):
       ?>
         <tr>
@@ -85,7 +86,7 @@
           <span class="category"><?php echo $row['name']; ?></span></p>
           <p><?php echo $row['details']; ?></p>
           <p class="priority"><?php echo $row['priority']; ?></p>
-        </div>
+        </div></div>
         </td>
     <?php
         endfor; // end of for
@@ -93,6 +94,8 @@
       endwhile;
     endif;    // end of if $statement...
 endif; 
+} // end function
+fetch_month();
 ?>    
 
   </tbody>

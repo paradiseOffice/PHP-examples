@@ -8,9 +8,15 @@
      <title>Today</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="" content="" />
-    <?php require_once('links.php');
+    <?php require_once('links.php'); ?>
+</head>
+<body>
+
+  <header>
+    <h1>
+    <?php 
+    function fetch_data() {
       $dtz = new DateTimeZone('Europe/London');
-      
       require_once('../settings.php');
       $pdo = new PDO(
         sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
@@ -23,17 +29,10 @@
         $settings['password']
       );
       $errors = '';
+      $todayTitle = new DateTime('now', $dtz);
+      echo $todayTitle->format('l DS F Y');
+      $today = $todayTitle->format('Ymd'); // for the SQL database
     ?>
-
-</head>
-<body>
-
-  <header>
-    <h1>
-      <?php $todayTitle = new DateTime('now', $dtz);
-        echo $todayTitle->format('l dS F Y');
-        $today = $todayTitle->format('Ymd'); // for the SQL database
-      ?>
     </h1>
     
   </header>
@@ -107,7 +106,8 @@
             <p><?php echo $row['details']; ?></p>
             <p class="attendees"><?php echo $row['attendees']; ?><br />
             <span class="category"><?php echo $row['name']; ?></span>
-            <a href="<?php echo $row['url']; ?>" target="blank">Web Link</a></p></div>
+            <a href="<?php echo $row['url']; ?>" target="blank">Web Link</a></p>
+        </div></div>
     <?php endwhile;
         endif;
       endif;          
@@ -122,8 +122,7 @@
     $statement = $pdo->prepare($todoSql);
     $statement->bindValue(':today', $today);
     $statement->execute();
-    if ($statement !== 0) 
-    {
+    if ($statement !== 0) {
         while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false):
         ?>
         <div class="todo <?php echo $row['start_time']; ?>">
@@ -136,11 +135,13 @@
             <p><?php echo $row['details']; ?></p>
             <p class="priority"><?php echo $row['priority']; ?></p>
           </div>
+        </div>
         <?php endwhile;
     }  else  {
       echo '<p class="sql-error">Connection to the database has failed.</p>';
     }
-             
+ } // end function
+   fetch_data();
    ?> 
     </div>    
   </div></div>

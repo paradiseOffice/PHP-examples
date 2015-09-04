@@ -1,4 +1,6 @@
 <?php
+
+function add_work_hols() {
   require_once('../settings.php');
   $pdo = new PDO(
   sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
@@ -13,11 +15,9 @@
   $errors = '';
   $dtz = new DateTimeZone('Europe/London');
    
-  
   if ($pdo !== 0) {
     if (isset($_POST['submit'])) {
-      if( empty($_POST['start_date']) ||  empty($_POST['end_date']) )
-      {
+      if (empty($_POST['start_date']) ||  empty($_POST['end_date'])) {
         $errors .= '<p> Please fill in these required fields.</p>';
       }
       $dirty_start_date = trim($_POST['start_date']);
@@ -48,17 +48,16 @@
       $statement->bindValue(':end_date', $end_date);
       $statement->bindValue(':work', $work);
       $statement->bindValue(':holiday', $holiday);
-      if ($statement->execute()) 
-      {
+      if ($statement->execute()) {
         $errors .= '<p class="success"> Your event was successfully saved. </p>';
-      } 
-      else 
-      {
+      } else {
         $errors .= '<p class="sql-error"> Unable to insert record! </p>';
       }
-    }
-  }
-    
+    } // submit isset
+  } // pdo true
+} // end function
+add_work_hols();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

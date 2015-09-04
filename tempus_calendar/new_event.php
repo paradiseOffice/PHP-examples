@@ -1,9 +1,10 @@
 <?php
+function new_event() {
   /**
    * @author 
    *   Hazel Windle
    * 
-   * Places a new (non-recurring) event into the database. TODO: Check the times in MySQL 
+   * Places a new (non-recurring) event into the database.
    */
   require_once('../settings.php');
   
@@ -18,36 +19,29 @@
   $settings['password']
   );
   $errors = '';
-  
   $dtz = new DateTimeZone('Europe/London');
 
- if (isset($_POST['submit'])) 
- {
-  $task = trim($_POST['task']); /* a-z A-Z spaces */
-  $task = preg_replace('/[^a-zA-Z ]+/', '', $task);
-  $start_time = trim($_POST['start_time']); /* 00:00 */
-  $start_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $start_time); 
-  $end_time = trim($_POST['end_time']); 
-  $end_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $end_time);
-  $dirty_start_date = trim($_POST['s_day']);
-  $dirty_start_date = preg_replace('/[^\d]*/', '', $dirty_start_date);
-  $clean_start_date = substr($dirty_start_date, -4, 4) . 
-    substr($dirty_start_date, -6, 2) . substr($dirty_start_date, 0, 2) . ' 12:00';
-  $start_date = new DateTime($clean_start_date, $dtz);
-  $s_day = $start_date->format('Ymd');
-  $priority = $_POST['priority'];
-  $details = trim($_POST['details']); /* A-z .,- */
-  $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
-  $cat_id = $_POST['category']; 
-
-  if (
-    empty($_POST['task']) ||
-    empty($_POST['start_time']) ||
-    empty($_POST['end_time']) ||
-     empty($_POST['s_day']))
-  {
-    $errors .= '<p> Please fill in these required fields.</p>';
-  }
+  if (isset($_POST['submit'])) {
+    $task = trim($_POST['task']); /* a-z A-Z spaces */
+    $task = preg_replace('/[^a-zA-Z ]+/', '', $task);
+    $start_time = trim($_POST['start_time']); /* 00:00 */
+    $start_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $start_time); 
+    $end_time = trim($_POST['end_time']); 
+    $end_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $end_time);
+    $dirty_start_date = trim($_POST['s_day']);
+    $dirty_start_date = preg_replace('/[^\d]*/', '', $dirty_start_date);
+    $clean_start_date = substr($dirty_start_date, -4, 4) . 
+      substr($dirty_start_date, -6, 2) . substr($dirty_start_date, 0, 2) . ' 12:00';
+    $start_date = new DateTime($clean_start_date, $dtz);
+    $s_day = $start_date->format('Ymd');
+    $priority = $_POST['priority'];
+    $details = trim($_POST['details']); /* A-z .,- */
+    $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
+    $cat_id = $_POST['category']; 
+    if (empty($_POST['task']) || empty($_POST['start_time']) ||
+      empty($_POST['end_time']) || empty($_POST['s_day'])) {
+      $errors .= '<p> Please fill in these required fields.</p>';
+    }
     $insert = 'INSERT INTO task_item (task, s_day, start_time, end_time, details, priority, cat_id) 
              VALUES (:task, :s_day, :start_time, :end_time, :details, :priority, :category ) ';
     $statement = $pdo->prepare($insert);
@@ -58,16 +52,15 @@
     $statement->bindValue(':details', $details);
     $statement->bindValue(':priority', $priority);
     $statement->bindValue(':category', $cat_id);
-    if ($statement->execute()) 
-    {
-    $errors .= '<p class="success"> Your event was successfully saved.</p>';
-    } 
-    else 
-    {
-    $errors .= '<p class="sql-error"> Unable to insert record!</p>';
+    if ($statement->execute()) {
+      $errors .= '<p class="success"> Your event was successfully saved.</p>';
+    } else {
+      $errors .= '<p class="sql-error"> Unable to insert record!</p>';
     }
-  }
-    
+  } // submit isset
+} // end function
+new_event();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -133,35 +126,44 @@
       <select id="category" name="category" class="form-control">
       
 <?php
+function get_categories() {  
+  require_once('../settings.php');
+  $pdo = new PDO(
+  sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
+    $settings['host'],
+    $settings['dbname'],
+    $settings['port'],
+    $settings['charset']
+  ),
+  $settings['username'],
+  $settings['password']
+  );
+  $errors = '';
   
   if ($pdo !== NULL ) {
     $select = 'select * from categories ORDER BY cat_id';
     $statement = $pdo->prepare($select);
     $statement->execute();
-    if ($statement !== 0) 
-    {
-        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
-        {
+    if ($statement !== 0) {
+        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) {
           echo('<option value="' . $row['cat_id'] . '" style="background-color: ' . $row['colour'] . ';">' 
             . $row['name'] . '</option>' . "\n");
         }
-    }
-    else 
-    {
+    } else {
       echo('<p class="sql-error">No categories found in table</p>');
     } 
-  } 
-  else 
-  {
+  } else {
     echo('<p class="error">Connection to the database has failed.</p>');
-  }
+  } // pdo true
+} // end function
+get_categories();
 ?>
         
       </select>
     </div>
     <button type="submit" id="submit" name="submit" class="btn btn-primary btn-lg">Submit</button>
   </form>
-  <p class="php-errors"><?php echo $errors; ?></p>
+  <!--<p class="php-errors"><?php //echo $errors; ?></p>-->
   </section>
   
 </div><!--container-->
