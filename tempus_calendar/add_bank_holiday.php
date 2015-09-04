@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * $dtz = new DateTimeZone("Europe/London");
+ * $dt = new DateTime("now", $dtz);
+ * echo "date: " . $dt->format("Y-m-d");
+ * $past = new DateTime("2008-08-03 15:01:20", $dtz);
+ * $current = $dt;
+ *  // Creates a new instance of DateInterval
+ * $diff = $past->diff($current);
+ * $pastString = $past->format("Y-m-d");
+ * $currentString = $current->format("Ymd");
+ * $diffString = $diff->format("%yy %mm, %dd");
+ * echo 'Difference between ' . $pastString . ' and ' . $currentString . ' is: ' . $diffString;
+ */ 
+
 function insert_bank_holiday() {
   require('../settings.php');
   $pdo = new PDO(
@@ -59,7 +73,7 @@ function insert_bank_holiday() {
      <title>Tempus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <meta name="" content="" />
-<?php require_once("links.php"); ?>
+<?php require_once('links.php'); ?>
 </head>
 <body>
 
@@ -80,7 +94,7 @@ function insert_bank_holiday() {
 
   <section id="bank_holiday">
   <h2>Bank Holiday</h2>
-  <form action="add_bank_holiday.php" method="post" class="form">
+  <form action="add_bank_holiday.php" id="add_bank_holiday" method="post" class="form">
     <div class="form-group">
     <label for="title" class="sr-only">Holiday</label>
     <input class="form-control" type="text" id="title" name="title"  length="100" placeholder="Holiday title" />
@@ -101,7 +115,7 @@ function insert_bank_holiday() {
   
     try {
       $id = insert_bank_holiday(); 
-      echo '<span id="sql-id" style="left: -5000px;">' . $id . '</span>';
+      echo '<span id="sql-id" style="{ position: relative; left: -5000px; }">' . $id . '</span>';
     } catch (PDOException $e) {
       $errors .= '<p class="sql-error">PDO Exception ' . $e . '</p>';
     }
@@ -110,7 +124,7 @@ function insert_bank_holiday() {
   
 </div><!--container-->
 
-<?php require_once("footer-nav.php"); ?>
+<?php require_once('footer-nav.php'); ?>
 
 </body>
 </html>

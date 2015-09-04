@@ -11,7 +11,7 @@
     <?php require_once('links.php');
       date_default_timezone_set('Europe/London');
       
-      require('../settings.php');
+      require_once('../settings.php');
       $pdo = new PDO(
         sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
         $settings['host'],
@@ -30,9 +30,9 @@
 
   <header>
     <h1>
-      <?php $todayTitle = date('l dS F Y');
-        echo $todayTitle;
-        $today = date('dmY');
+      <?php $todayTitle = new DateTime('now', new DateTimeZone('Europe/London'));
+        echo $todayTitle->format('l dS F Y');
+        $today = $todayTitle->format('Ymd'); // for the SQL database
       ?>
     </h1>
     
@@ -85,7 +85,6 @@
 <?php
 
   if ($pdo !== 0 ):
-    //$today = date("dmY");
     $recurSql = 'SELECT * FROM routine_events 
                  LEFT JOIN categories ON routine_events.cat_id = categories.cat_id 
                  LEFT JOIN recurrences ON routine_events.event_id = recurrences.rec_id
@@ -98,45 +97,51 @@
     $statement->bindValue(':today2', $today);
     $statement->execute();
     if ($statement !== 0):
-        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false): ?>
-          <div class='routine-event <?php echo $row["start_time"]; ?>'>
-          <h3 class='summary' style='background-color: <?php echo $row["colour"] ?>'><?php echo $row["event"]; ?></h3>
-          <div class='event-details'>
-            <span class='time'>Starts <?php echo $row["start_time"]; ?></span>
-            <span class='time'> Ends <?php echo $row["end_time"]; ?></span> Recurring <?php echo $row["recurs"]; ?><br />
-            <h4 class='place'><?php echo $row["place"]; ?></h4>
-            <p><?php echo $row["details"]; ?></p>
-            <p class='attendees'><?php echo $row["attendees"]; ?><br />
-            <span class='category'><?php echo $row["name"]; ?></span>
-            <a href='<?php echo $row["url"]; ?>' target='blank'>Web Link</a></p></div>
+      while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false): ?>
+        <div class="routine-event <?php echo $row['start_time']; ?>">
+        <h3 class="summary" style="background-color: <?php echo $row['colour'] ?>"><?php echo $row['event']; ?></h3>
+        <div class="event-details">
+          <span class="time">Starts <?php echo $row['start_time']; ?></span>
+          <span class="time"> Ends <?php echo $row['end_time']; ?></span> Recurring <?php echo $row['recurs']; ?><br />
+          <h4 class="place"><?php echo $row['place']; ?></h4>
+            <p><?php echo $row['details']; ?></p>
+            <p class="attendees"><?php echo $row['attendees']; ?><br />
+            <span class="category"><?php echo $row['name']; ?></span>
+            <a href="<?php echo $row['url']; ?>" target="blank">Web Link</a></p></div>
     <?php endwhile;
         endif;
       endif;          
     ?>    
      
     </div>
-    <div class='col-sm-4 col-md-4' id='listings-routine'>
+    <div class="col-sm-4 col-md-4" id="listings-routine">
     <?php
     
-    $todoSql = "SELECT * FROM task_item  LEFT JOIN categories ON task_item.cat_id = categories.cat_id WHERE s_day = :today ORDER BY start_time";
+    $todoSql = 'SELECT * FROM task_item  LEFT JOIN categories ON task_item.cat_id = categories.cat_id 
+                WHERE s_day = :today ORDER BY start_time';
     $statement = $pdo->prepare($todoSql);
-    $statement->bindValue(":today", $today);
+    $statement->bindValue(':today', $today);
     $statement->execute();
     if ($statement !== 0) 
     {
-        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
-        {
-            print("<div class='todo " . $row["start_time"] . "'>\n<h3 class='summary' style='background-color: " . $row["colour"] . ";'>" . $row["task"] . "</h3>\n<div class='todo-details'>\n<p><span class='time'>Starts " . $row["start_time"] . "</span><span class='time'> Ends " . $row["end_time"] . "</span> <span class='category'> " . $row["name"] . "</span></p>\n<p>" . $row["details"] . "</p>\n<p class='priority'>" . $row["priority"] . "</p></div>");
-        }
+        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false):
+        ?>
+        <div class="todo <?php echo $row['start_time']; ?>">
+          <h3 class="summary" style="background-color: <?php echo $row['colour']; ?>">
+          <?php echo $row['task']; ?></h3>
+          <div class="todo-details">
+            <p><span class="time">Starts <?php echo $row['start_time']; ?></span>
+            <span class="time"> Ends <?php echo $row['end_time']; ?></span> 
+            <span class="category"><?php echo $row['name']; ?></span></p>
+            <p><?php echo $row['details']; ?></p>
+            <p class="priority"><?php echo $row['priority']; ?></p>
+          </div>
+        <?php endwhile;
+    }  else  {
+      echo '<p class="sql-error">Connection to the database has failed.</p>';
     }
-
-  
-  else 
-  {
-    print("<p class=\"error\">Connection to the database has failed.</p>");
-  }
              
-?> 
+   ?> 
     </div>    
   </div></div>
   <div class="col-sm-4 col-md-4" id="notes">
@@ -149,7 +154,7 @@
 <!-- Add a default colour list to the categories table, and have a hidden form field to update the day via Javascript, 
   for tomorrow and yesterday  -->
 
-<?php require_once("footer-nav.php"); ?>
+<?php require_once('footer-nav.php'); ?>
 
 </body>
 </html>

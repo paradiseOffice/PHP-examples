@@ -1,5 +1,5 @@
 <?php
-  include('../settings.php');
+  require_once('../settings.php');
   $pdo = new PDO(
   sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
     $settings['host'],
@@ -22,19 +22,19 @@
      <title>Month - Year</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="" content="" />
-    <?php include_once("links.php");
-    date_default_timezone_set("Europe/London");
+    <?php require_once('links.php');
+    date_default_timezone_set('Europe/London');
    ?>
     
 </head>
 <body>
 
-  <header><h1><?php echo date("M Y"); ?></h1></header>
+  <header><h1><?php echo date('M Y'); ?></h1></header>
   <nav class="nav nav-pills top-nav">
     <ul>
-    <li><a href="<?php $today = date("Ymd").strftime("last month"); ?>" id="prev_month" title="Previous month" class="glyphicon glyphicon-arrow-left"></a></li>
-    <li><a href="#" id="this_month" ><?php echo date("M"); ?></a></li>
-    <li><a href="<?php $today = date("Ymd").strftime("next month"); ?>" id="next_month" title="Next month" class="glyphicon glyphicon-arrow-right"></a></li>
+    <li><a href="<?php $today = date('Ymd').strftime('last month'); ?>" id="prev_month" title="Previous month" class="glyphicon glyphicon-arrow-left"></a></li>
+    <li><a href="#" id="this_month" ><?php echo date('M'); ?></a></li>
+    <li><a href="<?php $today = date('Ymd').strftime('next month'); ?>" id="next_month" title="Next month" class="glyphicon glyphicon-arrow-right"></a></li>
     </ul>
   </nav>
 <div class="container-fluid">
@@ -52,39 +52,49 @@
   <tbody>
 
 <?php
-  /* ("urgent", "high", "medium", "low"), priority */
+ 
   if ($pdo !== NULL ) {
-    $today = date("Ymd");
-    $endMonth = date("Ymd").strtotime("first day of next month");
+    $today = date('Ymd');
+    $endMonth = date('Ymd').strtotime('first day of next month');
     // $dayno = strtotime($endMonth, strtotime($today));
-    $select = "SELECT * FROM task_item  LEFT JOIN categories ON task_item.cat_id = categories.cat_id WHERE priority = :priority AND s_day >= :today AND s_day < :endMonth ORDER BY s_day LIMIT 15";
+    $select = 'SELECT * FROM task_item  LEFT JOIN categories ON task_item.cat_id = categories.cat_id 
+             WHERE priority = :priority AND s_day >= :today AND s_day < :endMonth 
+             ORDER BY s_day LIMIT 15';
     $statement = $pdo->prepare($select);
-    $statement->bindValue(":priority", "high");
-    $statement->bindValue(":today", $today);
-    $statement->bindValue(":endMonth", $endMonth);
+    $statement->bindValue(':priority', 'high');
+    $statement->bindValue(':today', $today);
+    $statement->bindValue(':endMonth', $endMonth);
     // $statement->bindValue(":dayno", $dayno, PDO::PARAM_INT);
     $statement->execute();
     if ($statement !== 0) 
     {
-        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
-        {
-          print("<tr>");
-          for ($i = 1; $i <= 7; $i++)
-          {
-            print("<td>\n");
-            print("<div class='todo " . $row["start_time"] . "'>\n<h3 class='summary' style='background-color: " . $row["colour"] . ";'>" . $row["task"] . "</h3>\n<div class='todo-details'>\n<p><span class='time'>Starts " . $row["start_time"] . "</span><span class='time'> Ends " . $row["end_time"] . "</span> <span class='category'> " . $row["name"] . "</span></p>\n<p>" . $row["details"] . "</p>\n<p class='priority'>" . $row["priority"] . "</p></div></td>");
-          }
-          print("</tr>\n");
-        }
-    }
-    else 
-    {
-      print(" ?");
-    } // mysqli num rows if
+      while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false):
+      ?>
+        <tr>
+    <?php 
+      for ($i = 1; $i <= 7; $i++)
+      {
+        echo("<td>\n"); ?>
+
+        <div class="todo <?php echo $row['start_time']; ?>">
+        <h3 class="summary" style="background-color: <?php echo $row['colour']; ?>">
+        <?php echo $row['task']; ?></h3>
+        <div class="todo-details">
+          <p><span class="time">Starts <?php echo $row['start_time']; ?></span>
+          <span class="time"> Ends <?php echo $row['end_time']; ?></span> 
+          <span class="category"><?php echo $row['name']; ?></span></p>
+          <p><?php echo $row['details']; ?></p>
+          <p class="priority"><?php echo $row['priority']; ?></p>
+        </div>
+        </td>
+    <?php
+        } // end of for
+          echo("</tr>\n");
+      }  // end of if $statement...
   } 
   else 
   {
-    print("<p class=\"error\">Connection to the database has failed.</p>");
+    echo('<p class="sql-error">Connection to the database has failed.</p>');
   }
 ?>    
 
@@ -94,7 +104,7 @@
   
 </div>
 
-<?php require_once("footer-nav.php"); ?>
+<?php require_once('footer-nav.php'); ?>
 
 </body>
 </html>

@@ -5,8 +5,8 @@
    * 
    * Places a new (non-recurring) event into the database. TODO: Check the times in MySQL 
    */
-  include('../settings.php');
-  date_default_timezone_set("Europe/London");
+  require_once('../settings.php');
+  date_default_timezone_set('Europe/London');
   $pdo = new PDO(
   sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
     $settings['host'],
@@ -27,36 +27,37 @@
   $start_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $start_time); 
   $end_time = trim($_POST['end_time']); 
   $end_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $end_time);
-  $s_day = date('dmY', strtotime($_POST['s_day'])); 
+  $s_day = date('dmY', strtotime($_POST['s_day'])); // BUG TODO Ymd!
   $priority = $_POST['priority'];
   $details = trim($_POST['details']); /* A-z .,- */
   $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
   $cat_id = $_POST['category']; 
 
-  if(
+  if (
     empty($_POST['task']) ||
     empty($_POST['start_time']) ||
     empty($_POST['end_time']) ||
      empty($_POST['s_day']))
   {
-    $errors .= "\n Please fill in these required fields.";
+    $errors .= '<p> Please fill in these required fields.</p>';
   }
-    $insert = "INSERT INTO task_item (task, s_day, start_time, end_time, details, priority, cat_id) VALUES (:task, :s_day, :start_time, :end_time, :details, :priority, :category ) ";
+    $insert = 'INSERT INTO task_item (task, s_day, start_time, end_time, details, priority, cat_id) 
+             VALUES (:task, :s_day, :start_time, :end_time, :details, :priority, :category ) ';
     $statement = $pdo->prepare($insert);
-    $statement->bindValue(":task", $task);
-    $statement->bindValue(":start_time", $start_time);
-    $statement->bindValue(":end_time", $end_time);
-    $statement->bindValue(":s_day", $s_day);
-    $statement->bindValue(":details", $details);
-    $statement->bindValue(":priority", $priority);
-    $statement->bindValue(":category", $cat_id);
+    $statement->bindValue(':task', $task);
+    $statement->bindValue(':start_time', $start_time);
+    $statement->bindValue(':end_time', $end_time);
+    $statement->bindValue(':s_day', $s_day);
+    $statement->bindValue(':details', $details);
+    $statement->bindValue(':priority', $priority);
+    $statement->bindValue(':category', $cat_id);
     if ($statement->execute()) 
     {
-    $errors .= "\n Your event was successfully saved.";
+    $errors .= '<p class="success"> Your event was successfully saved.</p>';
     } 
     else 
     {
-    $errors .= "\n Unable to insert record!";
+    $errors .= '<p class="sql-error"> Unable to insert record!</p>';
     }
   }
     
@@ -71,7 +72,7 @@
      <title>Tempus - New Event</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="" content="" />
-    <?php include_once("links.php"); ?>
+    <?php require_once('links.php'); ?>
     
 </head>
 <body>
@@ -97,7 +98,8 @@
     <div class="form-group">
     <div class="col-sm-3">
     <label for="s_day">Date: </label>
-    <input class="form-control" type="date" id="s_day" name="s_day" placeholder="dd/mm/yyyy" value="<?php $today = date(); echo $today; ?>" />
+    <input class="form-control" type="date" id="s_day" name="s_day" placeholder="dd/mm/yyyy" 
+    value="<?php $today = date(); echo $today; ?>" />
     </div>
     <div class="col-sm-3">
     <label for="start_time">Starts: </label>
@@ -126,24 +128,25 @@
 <?php
   
   if ($pdo !== NULL ) {
-    $select = "select * from categories ORDER BY cat_id";
+    $select = 'select * from categories ORDER BY cat_id';
     $statement = $pdo->prepare($select);
     $statement->execute();
     if ($statement !== 0) 
     {
         while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
         {
-          print("<option value='" . $row["cat_id"] . "' style='background-color: " . $row["colour"] . ";'>" . $row["name"] . "</option>\n");
+          echo('<option value="' . $row['cat_id'] . '" style="background-color: ' . $row['colour'] . ';">' 
+            . $row['name'] . '</option>' . "\n");
         }
     }
     else 
     {
-      print("?");
-    } // mysqli num rows if
+      echo('<p class="sql-error">No categories found in table</p>');
+    } 
   } 
   else 
   {
-    print("<p class=\"error\">Connection to the database has failed.</p>");
+    echo('<p class="error">Connection to the database has failed.</p>');
   }
 ?>
         
@@ -156,7 +159,7 @@
   
 </div><!--container-->
 
-<?php require_once("footer-nav.php"); ?>
+<?php require_once('footer-nav.php'); ?>
 
 </body>
 </html>

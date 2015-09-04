@@ -1,5 +1,5 @@
 <?php
-  include('../settings.php');
+  require_once('../settings.php');
   $pdo = new PDO(
   sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
     $settings['host'],
@@ -25,25 +25,26 @@
 
   if(empty($_POST['event']) || empty($_POST['s_day']) )
   {
-    $errors .= "\n Please fill in these required fields.";
+    $errors .= '<p> Please fill in these required fields.</p>';
   }
  
-  $insert = "INSERT INTO anniversary (event, s_day, birthday, place, details) VALUES (:event, :s_day, :birthday, :place, :details ) ";
-    $statement = $pdo->prepare($insert);
-    $statement->bindValue(":event", $event);
-    $statement->bindValue(":s_day", $s_day);
-    $statement->bindValue(":birthday", $birthday);
-    $statement->bindValue(":place", $place);
-    $statement->bindValue(":details", $details);
-    if ($statement->execute()) 
-    {
-    $errors .= "\n Your event was successfully saved.";
-    } 
-    else 
-    {
-    $errors .= "\n Unable to insert record!";
-    }
+  $insert = 'INSERT INTO anniversary (event, s_day, birthday, place, details) VALUES 
+             (:event, :s_day, :birthday, :place, :details )';
+  $statement = $pdo->prepare($insert);
+  $statement->bindValue(':event', $event);
+  $statement->bindValue(':s_day', $s_day);
+  $statement->bindValue(':birthday', $birthday);
+  $statement->bindValue(':place', $place);
+  $statement->bindValue(':details', $details);
+  if ($statement->execute()) 
+  {
+    $errors .= '<p class="success"> Your event was successfully saved.</p>';
+  } 
+  else 
+  {
+    $errors .= '<p class="sql-error"> Unable to insert record!</p>';
   }
+}
     
 ?>
 <!DOCTYPE html>
@@ -56,7 +57,7 @@
      <title>Tempus - New Event</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="" content="" />
-    <?php include_once("links.php"); ?>
+    <?php require_once('links.php'); ?>
    
 </head>
 <body>
@@ -99,7 +100,7 @@
   
 </div><!--container-->
 
-<?php require_once("footer-nav.php"); ?>
+<?php require_once('footer-nav.php'); ?>
 
 </body>
 </html>

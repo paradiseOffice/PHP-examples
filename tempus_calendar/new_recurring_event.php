@@ -1,5 +1,5 @@
 <?php
-  include('../settings.php');
+  require_once('../settings.php');
   $pdo = new PDO(
   sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
     $settings['host'],
@@ -28,40 +28,42 @@
    $attendees = preg_replace('/[^a-zA-Z ]+/', '', $attendees);
    $details = trim($_POST['details']); /* A-z .,- */
    $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
-    $url = trim($_POST['url']); /* url regex */
-    $url = preg_replace('/[^A-Za-z\/:\.]+/', '', $url);
-    $cat_id = $_POST['category']; 
+   $url = trim($_POST['url']); /* url regex */
+   $url = preg_replace('/[^A-Za-z\/:\.]+/', '', $url);
+   $cat_id = $_POST['category']; 
 
-    if(
+   if (
     empty($_POST['event_name']) ||
     empty($_POST['start_time']) ||
     empty($_POST['end_time']) ||
     empty($_POST['recurs']))
-    {
-      $errors .= "\n Please fill in these required fields.";
-    }
-    $insert = "INSERT INTO routine_events (event, recurs, s_day, start_time, end_time, place, attendees, details, url, cat_id) VALUES (:event_name, :recurs, :s_day, :start_time, :end_time,  :place, :attendees, :details, :url, :category) ";
-    $statement = $pdo->prepare($insert);
-    $statement->bindValue(":event_name", $event_name);
-    $statement->bindValue(':recurs', $recurs);
-    $statement->bindValue(":s_day", $s_day);
-    $statement->bindValue(":start_time", $start_time);
-    $statement->bindValue(":end_time", $end_time);
-    $statement->bindValue(":place", $place);
-    $statement->bindValue(":attendees", $attendees);
-    $statement->bindValue(":details", $details);
-    $statement->bindValue(":url", $url);
-    $statement->bindValue(":category", $cat_id, PDO::PARAM_INT);
-    if ($statement->execute()) 
-    {
-    $errors .= "\n Your event was successfully saved.";
-    } 
-    else 
-    {
-    $errors .= "\n Unable to insert record!";
-    }
-  }
-  // Work out recurrences (next_date event_id REFERENCES tempus.routine_events (event_id). Next 10 events by default.
+   {
+     $errors .= '<p> Please fill in these required fields.</p>';
+   }
+   $insert = 'INSERT INTO routine_events 
+    (event, recurs, s_day, start_time, end_time, place, attendees, details, url, cat_id) VALUES 
+    (:event_name, :recurs, :s_day, :start_time, :end_time,  :place, :attendees, :details, :url, :category)';
+   $statement = $pdo->prepare($insert);
+   $statement->bindValue(':event_name', $event_name);
+   $statement->bindValue(':recurs', $recurs);
+   $statement->bindValue(':s_day', $s_day);
+   $statement->bindValue(':start_time', $start_time);
+   $statement->bindValue(':end_time', $end_time);
+   $statement->bindValue(':place', $place);
+   $statement->bindValue(':attendees', $attendees);
+   $statement->bindValue(':details', $details);
+   $statement->bindValue(':url', $url);
+   $statement->bindValue(':category', $cat_id, PDO::PARAM_INT);
+   if ($statement->execute()) 
+   {
+     $errors .= '<p class="success"> Your event was successfully saved.</p>';
+   } 
+   else 
+   {
+     $errors .= '<p class="sql-error"> Unable to insert record!</p>';
+   }
+ }
+ // Work out recurrences (next_date event_id REFERENCES tempus.routine_events (event_id). Next 10 events by default.
     
 ?>
 <!DOCTYPE html>
@@ -74,7 +76,7 @@
      <title>Tempus - New Event</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="" content="" />
-    <?php include_once("links.php"); ?>
+    <?php require_once('links.php'); ?>
     
 </head>
 <body>
@@ -149,24 +151,28 @@
 <?php
   
   if ($pdo !== NULL ) {
-    $select = "select * from categories ORDER BY cat_id";
+    $select = 'SELECT * FROM categories ORDER BY cat_id';
     $statement = $pdo->prepare($select);
     $statement->execute();
     if ($statement !== 0) 
     {
-        while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false) 
-        {
-          print("<option value='" . $row["cat_id"] . "' style='background-color: " . $row["colour"] . ";'>" . $row["name"] . "</option>\n");
-        }
+      while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false):
+      ?>  
+
+      <option value="<?php echo $row['cat_id']; ?>" style="background-color: <?php echo $row['colour']; ?>;">
+      <?php echo $row['name']; ?></option>
+
+      <?php
+      endwhile;  
     }
     else 
     {
-      print("<option value=\"0\">No categories</option>");
-    } // mysqli num rows if
+      echo('<option value="0">No categories</option>');
+    } 
   } 
   else 
   {
-    print("<p class=\"error\">Connection to the database has failed.</p>");
+    echo('<p class="sql-error">Connection to the database has failed.</p>');
   }
 ?>
         
@@ -178,7 +184,7 @@
   
 </div><!--container-->
 
-<?php require_once("footer-nav.php"); ?>
+<?php require_once('footer-nav.php'); ?>
 
 </body>
 </html>

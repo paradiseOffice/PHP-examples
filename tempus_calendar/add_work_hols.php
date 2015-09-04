@@ -1,5 +1,5 @@
 <?php
-  include('../settings.php');
+  require_once('../settings.php');
   $pdo = new PDO(
   sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
     $settings['host'],
@@ -18,7 +18,7 @@
     if (isset($_POST['submit'])) {
       if( empty($_POST['start_date']) ||  empty($_POST['end_date']) )
       {
-        $errors .= "\n Please fill in these required fields.";
+        $errors .= '<p> Please fill in these required fields.</p>';
       }
       $start_date = trim($_POST['start_date']);
       $end_date = trim($_POST['end_date']); 
@@ -32,19 +32,19 @@
       if ($work == False) {
         $work = 0;
       }
-      $insert = "INSERT INTO work_hol (start_date, end_date, work, holiday) VALUES (:start_date, :end_date, :work, :holiday ) ";
+      $insert = 'INSERT INTO work_hol (start_date, end_date, work, holiday) VALUES (:start_date, :end_date, :work, :holiday )';
       $statement = $pdo->prepare($insert);
-      $statement->bindValue(":start_date", $start_date);
-      $statement->bindValue(":end_date", $end_date);
-      $statement->bindValue(":work", $work);
-      $statement->bindValue(":holiday", $holiday);
+      $statement->bindValue(':start_date', $start_date);
+      $statement->bindValue(':end_date', $end_date);
+      $statement->bindValue(':work', $work);
+      $statement->bindValue(':holiday', $holiday);
       if ($statement->execute()) 
       {
-        $errors .= "\n Your event was successfully saved.";
+        $errors .= '<p class="success"> Your event was successfully saved. </p>';
       } 
       else 
       {
-        $errors .= "\n Unable to insert record!";
+        $errors .= '<p class="sql-error"> Unable to insert record! </p>';
       }
     }
   }
@@ -60,7 +60,7 @@
      <title>Tempus - New Event</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="" content="" />
-    <?php include_once("links.php"); ?>
+    <?php require_once('links.php'); ?>
    
 </head>
 <body>
@@ -99,7 +99,7 @@
   
 </div><!--container-->
 
-<?php require_once("footer-nav.php"); ?>
+<?php require_once('footer-nav.php'); ?>
 
 </body>
 </html>

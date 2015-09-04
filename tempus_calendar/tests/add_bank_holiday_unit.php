@@ -12,6 +12,7 @@ class AddBankHolidayTest extends PHPUnit_Extensions_Selenium2TestCase
     $this->setPort(4444);
     $this->setBrowserUrl('http://localhost/tempus/add_bank_holiday.php');
     $this->setBrowser('firefox');
+    $this->prepareSession();
   }
 
 
@@ -50,7 +51,7 @@ class AddBankHolidayTest extends PHPUnit_Extensions_Selenium2TestCase
     */
   public function fillFormAndSubmit(array $inputs)
   {
-    $form = $this->byId('subscriptionForm');
+    $form = $this->byId('add_bank_holiday');
     foreach ($inputs as $input => $value) {
       $form->byName($input)->value($value);
     }
@@ -79,3 +80,8 @@ class AddBankHolidayTest extends PHPUnit_Extensions_Selenium2TestCase
   }
   
 }  // end of class
+
+$test = new AddBankHolidayTest();
+$test->setUp();
+$test->fillFormAndSubmit($test->validInputsProvider());
+$test->tearDown();
