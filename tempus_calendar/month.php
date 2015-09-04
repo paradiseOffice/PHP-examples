@@ -11,6 +11,8 @@
   $settings['password']
   );
   $errors = '';
+  
+  $dtz = new DateTimeZone('Europe/London');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,18 +25,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="" content="" />
     <?php require_once('links.php');
-    date_default_timezone_set('Europe/London');
+    
    ?>
     
 </head>
 <body>
 
-  <header><h1><?php echo date('M Y'); ?></h1></header>
+  <header><h1><?php $today = new DateTime('now', $dtz); echo $today->format('M Y'); ?></h1></header>
   <nav class="nav nav-pills top-nav">
     <ul>
-    <li><a href="<?php $today = date('Ymd').strftime('last month'); ?>" id="prev_month" title="Previous month" class="glyphicon glyphicon-arrow-left"></a></li>
-    <li><a href="#" id="this_month" ><?php echo date('M'); ?></a></li>
-    <li><a href="<?php $today = date('Ymd').strftime('next month'); ?>" id="next_month" title="Next month" class="glyphicon glyphicon-arrow-right"></a></li>
+    <li><a href="<?php $prevMonth = new DateTime('today -1 month', $dtz); echo $prevMonth->format('M'); ?>" id="prev_month" title="Previous month" class="glyphicon glyphicon-arrow-left"></a></li>
+    <li><a href="#" id="this_month" ><?php echo $today->format('M'); ?></a></li>
+    <li><a href="<?php $nextMonth = new DateTime('today +1 month', $dtz); echo $nextMonth->format('M'); ?>" id="next_month" title="Next month" class="glyphicon glyphicon-arrow-right"></a></li>
     </ul>
   </nav>
 <div class="container-fluid">
@@ -52,9 +54,8 @@
   <tbody>
 
 <?php
- 
-  if ($pdo !== NULL ) {
-    $today = date('Ymd');
+  // use Javascript on this part to populate each day with events.
+  if ($pdo !== NULL ):
     $endMonth = date('Ymd').strtotime('first day of next month');
     // $dayno = strtotime($endMonth, strtotime($today));
     $select = 'SELECT * FROM task_item  LEFT JOIN categories ON task_item.cat_id = categories.cat_id 
@@ -62,18 +63,17 @@
              ORDER BY s_day LIMIT 15';
     $statement = $pdo->prepare($select);
     $statement->bindValue(':priority', 'high');
-    $statement->bindValue(':today', $today);
+    $statement->bindValue(':today', $today->format('Ymd'));
     $statement->bindValue(':endMonth', $endMonth);
     // $statement->bindValue(":dayno", $dayno, PDO::PARAM_INT);
     $statement->execute();
-    if ($statement !== 0) 
-    {
+    if ($statement !== 0):
+    
       while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false):
       ?>
         <tr>
     <?php 
-      for ($i = 1; $i <= 7; $i++)
-      {
+      for ($i = 1; $i <= 7; $i++):
         echo("<td>\n"); ?>
 
         <div class="todo <?php echo $row['start_time']; ?>">
@@ -88,14 +88,11 @@
         </div>
         </td>
     <?php
-        } // end of for
+        endfor; // end of for
           echo("</tr>\n");
-      }  // end of if $statement...
-  } 
-  else 
-  {
-    echo('<p class="sql-error">Connection to the database has failed.</p>');
-  }
+      endwhile;
+    endif;    // end of if $statement...
+endif; 
 ?>    
 
   </tbody>

@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="" content="" />
     <?php require_once('links.php');
-      date_default_timezone_set('Europe/London');
+      $dtz = new DateTimeZone('Europe/London');
       
       require_once('../settings.php');
       $pdo = new PDO(
@@ -30,7 +30,7 @@
 
   <header>
     <h1>
-      <?php $todayTitle = new DateTime('now', new DateTimeZone('Europe/London'));
+      <?php $todayTitle = new DateTime('now', $dtz);
         echo $todayTitle->format('l dS F Y');
         $today = $todayTitle->format('Ymd'); // for the SQL database
       ?>

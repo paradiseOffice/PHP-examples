@@ -12,11 +12,17 @@
   );
   $errors = '';
 
+  $dtz = new DateTimeZone('Europe/London');
 
  if (isset($_POST['submit'])) {
    $event = trim($_POST['event']); /* a-z A-Z spaces */
    $event = preg_replace('/[^a-zA-Z ]+/', '', $event);
-   $s_day = $_POST['s_day']; 
+   $dirty_start_date = trim($_POST['s_day']);
+   $dirty_start_date = preg_replace('/[^\d]*/', '', $dirty_start_date);
+   $clean_start_date = substr($dirty_start_date, -4, 4) . 
+    substr($dirty_start_date, -6, 2) . substr($dirty_start_date, 0, 2) . ' 12:00';
+   $start_date = new DateTime($clean_start_date, $dtz);
+   $s_day = $start_date->format('Ymd'); 
    $birthday = $_POST['birthday'];
    $place = trim($_POST['place']); /* A-z - spaces */
    $place = preg_replace('/[^a-zA-Z ]+/', '', $place);

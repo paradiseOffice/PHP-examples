@@ -12,6 +12,7 @@
   );
   $errors = '';
 
+  $dtz = new DateTimeZone('Europe/London');
 
  if (isset($_POST['submit'])) {
    $event_name = trim($_POST['event_name']); /* a-z A-Z spaces */
@@ -20,7 +21,12 @@
    $start_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $start_time); 
    $end_time = trim($_POST['end_time']); 
    $end_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $end_time);
-   $s_day = trim($_POST['s_day']);
+   $dirty_start_date = trim($_POST['s_day']);
+   $dirty_start_date = preg_replace('/[^\d]*/', '', $dirty_start_date);
+   $clean_start_date = substr($dirty_start_date, -4, 4) . 
+    substr($dirty_start_date, -6, 2) . substr($dirty_start_date, 0, 2) . ' 12:00';
+   $start_date = new DateTime($clean_start_date, $dtz);
+   $s_day = $start_date->format('Ymd');
    $recurs = $_POST['recurs']; 
    $place = trim($_POST['place']); /* a-z -+ 0-9 spaces () */
    $place = preg_replace('/[^a-zA-Z \(\)-_]+/', '', $place);

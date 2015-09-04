@@ -1,19 +1,5 @@
 <?php
 
-/**
- * $dtz = new DateTimeZone("Europe/London");
- * $dt = new DateTime("now", $dtz);
- * echo "date: " . $dt->format("Y-m-d");
- * $past = new DateTime("2008-08-03 15:01:20", $dtz);
- * $current = $dt;
- *  // Creates a new instance of DateInterval
- * $diff = $past->diff($current);
- * $pastString = $past->format("Y-m-d");
- * $currentString = $current->format("Ymd");
- * $diffString = $diff->format("%yy %mm, %dd");
- * echo 'Difference between ' . $pastString . ' and ' . $currentString . ' is: ' . $diffString;
- */ 
-
 function insert_bank_holiday() {
   require('../settings.php');
   $pdo = new PDO(
@@ -27,6 +13,7 @@ function insert_bank_holiday() {
   $settings['password']
   );
   $errors = '';
+  $dtz = new DateTimeZone('Europe/London'); 
   
   
   if ($pdo !== 0) 
@@ -40,8 +27,15 @@ function insert_bank_holiday() {
       $title = trim($_POST['title']); /* a-z A-Z spaces */
       $title = preg_replace('/[^a-zA-Z \']+/', '', $title);
       (isset($_POST['shops_open'])) ? $shops_open = 1 : $shops_open = 0; 
-      $hol_date = trim($_POST['hol_date']); 
-      $hol_date = preg_replace('/[^0-9]+/', '', $hol_date);
+      $dirty_date = trim($_POST['hol_date']);
+      $dirty_date = preg_replace('/[^\d]*/', '', $dirty_date);
+      $year = substr($dirty_date, -4, 4);
+      $month = substr($dirty_date, -6, 2);
+      $date = substr($dirty_date, 0, 2);
+      $clean_date = $year . $month . $date . ' 12:00';
+      $errors .= $clean_date; // debugging line
+      $hol_date = new DateTime($clean_date, $dtz);
+      $hol_date = $hol_date->format('Ymd');
       $insert = 'INSERT INTO bank_holidays (title, shops_open, hol_date) VALUES (:title, :shops_open, :hol_date ) ';
       $statement = $pdo->prepare($insert);
       $statement->bindValue(':title', $title);
@@ -115,7 +109,7 @@ function insert_bank_holiday() {
   
     try {
       $id = insert_bank_holiday(); 
-      echo '<span id="sql-id" style="{ position: relative; left: -5000px; }">' . $id . '</span>';
+      echo '<span id="sql-id" style=" position: relative; left: -5000px; ">' . $id . '</span>';
     } catch (PDOException $e) {
       $errors .= '<p class="sql-error">PDO Exception ' . $e . '</p>';
     }

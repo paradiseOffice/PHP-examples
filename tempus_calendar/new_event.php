@@ -6,7 +6,7 @@
    * Places a new (non-recurring) event into the database. TODO: Check the times in MySQL 
    */
   require_once('../settings.php');
-  date_default_timezone_set('Europe/London');
+  
   $pdo = new PDO(
   sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
     $settings['host'],
@@ -18,6 +18,8 @@
   $settings['password']
   );
   $errors = '';
+  
+  $dtz = new DateTimeZone('Europe/London');
 
  if (isset($_POST['submit'])) 
  {
@@ -27,7 +29,12 @@
   $start_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $start_time); 
   $end_time = trim($_POST['end_time']); 
   $end_time = preg_replace('/[a-zA-Z;@#~!\"\(\)\|?<>\^£$\*]+/', '', $end_time);
-  $s_day = date('dmY', strtotime($_POST['s_day'])); // BUG TODO Ymd!
+  $dirty_start_date = trim($_POST['s_day']);
+  $dirty_start_date = preg_replace('/[^\d]*/', '', $dirty_start_date);
+  $clean_start_date = substr($dirty_start_date, -4, 4) . 
+    substr($dirty_start_date, -6, 2) . substr($dirty_start_date, 0, 2) . ' 12:00';
+  $start_date = new DateTime($clean_start_date, $dtz);
+  $s_day = $start_date->format('Ymd');
   $priority = $_POST['priority'];
   $details = trim($_POST['details']); /* A-z .,- */
   $details = preg_replace('/[^A-Za-z \.,-]+/', '', $details);
@@ -99,7 +106,7 @@
     <div class="col-sm-3">
     <label for="s_day">Date: </label>
     <input class="form-control" type="date" id="s_day" name="s_day" placeholder="dd/mm/yyyy" 
-    value="<?php $today = date(); echo $today; ?>" />
+    value="<?php $today = date('now'); echo $today; ?>" />
     </div>
     <div class="col-sm-3">
     <label for="start_time">Starts: </label>

@@ -11,7 +11,7 @@
   $settings['password']
   );
   $errors = '';
-  
+  $dtz = new DateTimeZone('Europe/London');
    
   
   if ($pdo !== 0) {
@@ -20,17 +20,27 @@
       {
         $errors .= '<p> Please fill in these required fields.</p>';
       }
-      $start_date = trim($_POST['start_date']);
-      $end_date = trim($_POST['end_date']); 
-      $work = $_POST['work']; 
-      $holiday = trim($_POST['holiday']); 
-      $start_date = preg_replace('/[^0-9]+/', '', $start_date);
-      $end_date = preg_replace('/[^0-9]+/', '', $end_date);
-      if ($holiday == False) {
+      $dirty_start_date = trim($_POST['start_date']);
+      $dirty_start_date = preg_replace('/[^\d]*/', '', $dirty_start_date);
+      $clean_start_date = substr($dirty_start_date, -4, 4) . 
+        substr($dirty_start_date, -6, 2) . substr($dirty_start_date, 0, 2) . ' 12:00';
+      $start_date = new DateTime($clean_start_date, $dtz);
+      $start_date = $start_date->format('Ymd');
+      $dirty_end_date = trim($_POST['end_date']); 
+      $dirty_end_date = preg_replace('/[^\d]*/', '', $dirty_end_date);
+      $clean_end_date = substr($dirty_end_date, -4, 4) . 
+        substr($dirty_end_date, -6, 2) . substr($dirty_end_date, 0, 2) . ' 12:00';
+      $end_date = new DateTime($clean_end_date, $dtz);
+      $end_date = $end_date->format('Ymd');
+      if (!isset($_POST['holiday'])) {
         $holiday = 0;
-      } 
-      if ($work == False) {
+      } else {
+        $holiday = 1;
+      }
+      if (!isset($_POST['work'])) {
         $work = 0;
+      } else {
+        $work = 1;
       }
       $insert = 'INSERT INTO work_hol (start_date, end_date, work, holiday) VALUES (:start_date, :end_date, :work, :holiday )';
       $statement = $pdo->prepare($insert);

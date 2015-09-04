@@ -11,6 +11,8 @@
   $settings['password']
   );
   $errors = '';
+  
+  $dtz = new DateTimeZone('Europe/London');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,15 +24,15 @@
      <title>Year</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="" content="" />
-    <?php include_once("links.php");
-    date_default_timezone_set("Europe/London");
+    <?php require_once('links.php');
+
     ?>
     
 </head>
 <body class="year-page">
 
   <header>
-    <h1><?php echo date("Y"); ?></h1>
+    <h1><?php echo date('Y'); ?></h1>
   </header>
     <nav class="nav top-nav">
     <ul class="nav-pills">
@@ -86,7 +88,7 @@
 
 <!-- container div --></div>
 
-<?php require_once("footer-nav.php"); ?>
+<?php require_once('footer-nav.php'); ?>
 
 </body>
 </html>
