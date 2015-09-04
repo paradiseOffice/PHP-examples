@@ -2,14 +2,15 @@
 
 /**
  * @file tests/AddBankHolidayTest.php
- *
+ * Use java -jar selenium-server to run the selenium server before running.
  */
 class AddBankHolidayTest extends PHPUnit_Extensions_Selenium2TestCase
 {
   public function setUp()
   {
-    $this->setHost('localhost');
-    $this->setPort(4444);
+    
+    // $this->setHost('localhost');
+    // $this->setPort(4444);
     $this->setBrowserUrl('http://localhost/tempus/add_bank_holiday.php');
     $this->setBrowser('firefox');
     $this->prepareSession();
@@ -51,6 +52,7 @@ class AddBankHolidayTest extends PHPUnit_Extensions_Selenium2TestCase
     */
   public function fillFormAndSubmit(array $inputs)
   {
+    // $this->waitForPageToLoad('30000');
     $form = $this->byId('add_bank_holiday');
     foreach ($inputs as $input => $value) {
       $form->byName($input)->value($value);
