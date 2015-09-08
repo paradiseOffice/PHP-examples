@@ -36,9 +36,9 @@ class AddBankHolidayTest extends PHPUnit_Framework_TestCase
     $sql = 'SELECT (num, title, shops_open, hol_date) FROM bank_holidays WHERE title = "unicorn holiday" AND shops_open = 0 AND hol_date = 20151225';
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
-    $row = $statement->fetch(PDO::FETCH_ASSOC);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $actualString = $row['title'] . ' ' . $row['shops_open'] . ' ' . $row['hol_date'];
-    $testString = 'unicorn holiday 0 20151225';
+    $testString = 'unicorn holiday 0 2015-12-25';
     $this->assertEquals($testString, $actualString);
     $lastId = $row['num'];
     $tidy = 'DELETE FROM bank_holidays WHERE num = :id';

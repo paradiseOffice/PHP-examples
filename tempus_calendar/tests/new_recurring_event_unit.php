@@ -43,7 +43,7 @@ class NewRecurringEventTest extends PHPUnit_Framework_TestCase
     $sql = 'SELECT (event_id, event, recurs, s_day, start_time, end_time, place, attendees, details, url, cat_id) FROM routine_events WHERE event = "Going on a date" AND s_day = 20150301';
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
-    $row = $statement->fetch(PDO::FETCH_ASSOC);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $actualString = $row['event'] . ' ' . $row['recurs'] . ' ' . $row['s_day'] . ' ' . $row['start_time'];
     $actualString .= ' ' . $row['end_time'] . ' ' . $row['place'] . ' ' . $row['attendees'] . ' ' . $row['details'];
     $actualString .= ' ' . $row['url'] . ' ' . $row['cat_id'];

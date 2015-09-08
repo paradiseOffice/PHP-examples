@@ -38,7 +38,7 @@ class SpecialEventTest extends PHPUnit_Framework_TestCase
     $sql = 'SELECT (num, event, s_day, birthday, place, details) FROM anniversary WHERE event = "Sue" AND place = "Leeds"';
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
-    $row = $statement->fetch(PDO::FETCH_ASSOC);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $actualString = $row['event'] . ' ' . $row['s_day'] . ' ' . $row['birthday'];
     $actualString .= ' ' . $row['place'] . ' ' . $row['details'];
     $testString = 'Sue 20150711 1 Leeds I think it was then';
@@ -54,5 +54,5 @@ class SpecialEventTest extends PHPUnit_Framework_TestCase
   
 }  // end of class
 
-$test = new NewRecurringEventTest();
+$test = new SpecialEventTest();
 $test->fillFormAndSubmit();

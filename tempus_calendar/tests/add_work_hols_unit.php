@@ -30,7 +30,7 @@ class AddWorkHolidayTest extends PHPUnit_Framework_TestCase
     $sql = 'SELECT (num, start_date, end_date, work, holiday) FROM work_hol WHERE start_date = 20140503 AND end_date = 20160101 AND work = 0 AND holiday = 1 LIMIT 1';
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
-    $row = $statement->fetch(PDO::FETCH_ASSOC);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $actualString = $row['start_date'] . ' ' . $row['end_date'] . ' ' . $row['work'] . ' ' . $row['holiday'];
     $correctString = '20140503 20160101 0 1';
     $this->assertEquals($correctString, $actualString);
