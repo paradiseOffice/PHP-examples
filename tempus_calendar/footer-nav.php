@@ -12,3 +12,6 @@
 </footer>
 
 
+<script type="text/JavaScript" src="scripts/lib/jquery-1.11.2-min.js"></script>
+<script type="text/JavaScript" src="scripts/application.js"></script>
+<script type="text/JavaScript" src="foundation_lib/js/foundation.min.js"></script>

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file tests/add_bank_holiday_unit.php
+ * @file tests/special_event_unit.php
  * Run all unit tests together using a shell script
  *
  */
-class AddBankHolidayTest extends PHPUnit_Framework_TestCase
+class SpecialEventTest extends PHPUnit_Framework_TestCase
 {
   /**
   * function to test: insert_bank_holiday. 
@@ -16,9 +16,11 @@ class AddBankHolidayTest extends PHPUnit_Framework_TestCase
   * {
   *  $inputs[] = [
   *    [
-  *     'title'       => 'unicorn holiday',
-  *     'shops_open'  => 0,
-  *     'hol_date'     => '20151225',
+  *     'event'       => 'Sue',
+  *      's_day'      => 20150711,
+  *      'birthday'  => 1,
+  *      'place'     =>  'Leeds',
+  *      'details' => 'I think it was then',
   *   ]
   * ];
   */
@@ -26,22 +28,23 @@ class AddBankHolidayTest extends PHPUnit_Framework_TestCase
   
   
   /**
-    * passes an array of input into a form, and then submits the form
-    *
-    */
+  * Tests for the inserted data.
+  *
+  */
   public function fillFormAndSubmit() {
     // set up the database
     require_once '../common_libs.php';
     $pdo = db_connect();
-    $sql = 'SELECT (num, title, shops_open, hol_date) FROM bank_holidays WHERE title = "unicorn holiday" AND shops_open = 0 AND hol_date = 20151225';
+    $sql = 'SELECT (num, event, s_day, birthday, place, details) FROM anniversary WHERE event = "Sue" AND place = "Leeds"';
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $row = $statement->fetch(PDO::FETCH_ASSOC);
-    $actualString = $row['title'] . ' ' . $row['shops_open'] . ' ' . $row['hol_date'];
-    $testString = 'unicorn holiday 0 20151225';
+    $actualString = $row['event'] . ' ' . $row['s_day'] . ' ' . $row['birthday'];
+    $actualString .= ' ' . $row['place'] . ' ' . $row['details'];
+    $testString = 'Sue 20150711 1 Leeds I think it was then';
     $this->assertEquals($testString, $actualString);
     $lastId = $row['num'];
-    $tidy = 'DELETE FROM bank_holidays WHERE num = :id';
+    $tidy = 'DELETE FROM anniversary WHERE num = :id';
     $clearUp = $pdo->prepare($tidy);
     $clearUp->bindValue(':id', $lastId);
     if ($clearUp->execute()) {
@@ -51,6 +54,5 @@ class AddBankHolidayTest extends PHPUnit_Framework_TestCase
   
 }  // end of class
 
-$test = new AddBankHolidayTest();
+$test = new NewRecurringEventTest();
 $test->fillFormAndSubmit();
-

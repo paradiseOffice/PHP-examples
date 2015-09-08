@@ -1,17 +1,8 @@
 <?php
 
 function insert_bank_holiday() {
-  require('../settings.php');
-  $pdo = new PDO(
-  sprintf('mysql:host=%s;dbname=%s;port=%s;charset=%s',
-    $settings['host'],
-    $settings['dbname'],
-    $settings['port'],
-    $settings['charset']
-  ),
-  $settings['username'],
-  $settings['password']
-  );
+  require_once 'common_libs.php';
+  $pdo = db_connect();
   $errors = '';
   $dtz = new DateTimeZone('Europe/London'); 
   
@@ -101,7 +92,7 @@ function insert_bank_holiday() {
   <?php 
     try {
       $id = insert_bank_holiday(); 
-      echo '<span id="sql-id" style=" position: relative; left: -5000px; ">' . $id . '</span>';
+      echo '<span id="sql-id" name="sql-id" style=" position: relative; left: -5000px; ">' . $id . '</span>';
     } catch (PDOException $e) {
       $errors .= '<p class="sql-error">PDO Exception ' . $e . '</p>';
     }
