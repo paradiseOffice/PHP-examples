@@ -67,53 +67,63 @@ new_event();
 </head>
 <body>
 
-  <header><h1>New Event</h1></header>
-  <nav class="nav top-nav">
-    <ul class="nav-pills">
+<header>
+    <h1>Tempus</h1>
+    <h2>New Event</h2>
+  </header>
+  <nav class="top-nav">
+    <ul class="nav-elements">
     <li><a href="special_event.php" id="special" title="Special event" class="glyphicon glyphicon-star-empty">Special event</a></li>
     <li><a href="add_work_hols.php" id="work_hols" class="glyphicon glyphicon-calendar">Days off</a></li>
     <li><a href="add_bank_holiday.php" id="bank_holiday" title="Next month" class="glyphicon glyphicon-arrow-right">Add bank holiday</a></li>
-    <li><strong><a href="new_recurring_event.php" id="recurring_event" title="Recurring event" class="disabled glyphicon glyphicon-refresh">Recurring Event</a></strong></li>
+    <li><a href="new_recurring_event.php" id="recurring_event" title="Recurring event" class="glyphicon glyphicon-refresh">Recurring Event</a></li>
     </ul>
   </nav>
   
 <div class="container">
 
   <section id="event_form">
-  <h2>New Todo</h2>
+  <h3>Enter Event</h3>
   <form action="new_event.php" method="post" class="form">
-    <div class="form-group">
-    <input class="form-control" type="text" id="task" name="task"  length="100" placeholder="Task name" />
+    <div class="row">
+      <div class="small-12 medium-12 large=10 columns">
+      <label for="task">Task
+      <input class="" type="text" id="task" name="task"  length="100" placeholder="title" />
+      </label></div>
     </div>
-    <div class="form-group">
-    <div class="col-sm-3">
-    <label for="s_day">Date: </label>
-    <input class="form-control" type="date" id="s_day" name="s_day" placeholder="dd/mm/yyyy" 
-    value="<?php $today = date('now'); echo $today; ?>" />
+    <div class="row">
+    <div class="small-4 medium-3 large-3 columns">
+      <label for="s_day">Date 
+      <input class="" type="date" id="s_day" name="s_day" placeholder="dd/mm/yyyy" 
+      value="<?php $today = date('now'); echo $today; ?>" />
+      </label>
     </div>
-    <div class="col-sm-3">
+    <div class="small-4 medium-3 large-3 columns">
     <label for="start_time">Starts: </label>
-    <input  class="form-control" type="time" id="start_time" name="start_time" placeholder="00:00" />
+    <input  class="" type="time" id="start_time" name="start_time" placeholder="00:00" />
     </div>
-    <div class="col-sm-3">
+    <div class="small-4 medium-3 large-3 columns">
     <label for="end_time">Ends: </label>
-    <input  class="form-control" type="time" id="end_time" name="end_time" placeholder="00:00"  />
+    <input  class="" type="time" id="end_time" name="end_time" placeholder="00:00"  />
     </div>
-    <div class="col-sm-3">
+    <div class="small-4 medium-3 large-3 columns">
     <label for="priority">Priority: </label>
-    <select class="form-control col-sm-3"  id="priority" name="priority">
+    <select class=""  id="priority" name="priority">
       <option value="urgent">Urgent</option>
       <option value="high">high</option>
       <option value="medium">Medium</option>
       <option value="low">Low</option>
     </select>
     </div></div>
-    <textarea id="details" name="details" class="form-group col-sm-12" placeholder="Details..." rows="4"></textarea>
-    <div class="col-sm-7">
-      <p>Category:</p>
+    <div class="row small-12 large-10 columns">
+      <textarea id="details" name="details" placeholder="Details..." rows="4"></textarea>
     </div>
-    <div class="col-sm-5">
-      <select id="category" name="category" class="form-control">
+    <div class="row">
+    <div class="small-7 medium-7 large-7 columns">
+      <label for="category">Category</label>
+    </div>
+    <div class="small-5 medium-5 large-5 columns">
+      <select id="category" name="category" class="">
       
 <?php
 function get_categories() {  
@@ -141,8 +151,8 @@ get_categories();
 ?>
         
       </select>
-    </div>
-    <button type="submit" id="submit" name="submit" class="btn btn-primary btn-lg">Submit</button>
+    </div></div>
+    <input type="submit" id="submit" name="submit" class="btn btn-primary btn-lg">Submit</button>
   </form>
   <!--<p class="php-errors"><?php //echo $errors; ?></p>-->
   </section>

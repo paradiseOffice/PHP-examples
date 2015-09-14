@@ -1,7 +1,7 @@
 
 <footer>
-  <nav id="main-nav">
-    <ul class="nav navbar-nav">
+  <nav id="bottom-nav">
+    <ul class="">
     <li><a href="new_event.php" >New Event</a></li>
     <li><a href="index.php">Daily</a></li>
     <li><a href="weekly.php">Weekly</a></li>

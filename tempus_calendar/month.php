@@ -25,14 +25,14 @@
     echo $today->format('M Y'); 
   ?>
   </h1></header>
-  <nav class="nav nav-pills top-nav">
-    <ul>
+  <nav class="top-nav">
+    <ul class="nav-elements">
     <li><a href="<?php $prevMonth = new DateTime('today -1 month', $dtz); echo $prevMonth->format('M'); ?>" id="prev_month" title="Previous month" class="glyphicon glyphicon-arrow-left"></a></li>
     <li><a href="#" id="this_month" ><?php echo $today->format('M'); ?></a></li>
     <li><a href="<?php $nextMonth = new DateTime('today +1 month', $dtz); echo $nextMonth->format('M'); ?>" id="next_month" title="Next month" class="glyphicon glyphicon-arrow-right"></a></li>
     </ul>
   </nav>
-<div class="container-fluid">
+
 
   <table class="table-striped table-bordered table-hover" id="month">
     <thead>
@@ -93,7 +93,7 @@ fetch_month();
   </table>
  
   
-</div>
+
 
 <?php require_once('footer-nav.php'); ?>
 

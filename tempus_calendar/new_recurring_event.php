@@ -72,48 +72,56 @@ function add_routine_event() {
 </head>
 <body>
 
-  <header><h1>New Event</h1></header>
-  <nav class="nav top-nav">
-    <ul class="nav-pills">
+<header>
+    <h1>Tempus</h1>
+    <h2>Add Recurring Event</h2>
+  </header>
+  <nav class="top-nav">
+    <ul class="nav-elements">
     <li><a href="special_event.php" id="special" title="Special event" class="glyphicon glyphicon-star-empty">Special event</a></li>
     <li><a href="add_work_hols.php" id="work_hols" class="glyphicon glyphicon-calendar">Days off</a></li>
     <li><a href="add_bank_holiday.php" id="bank_holiday" title="Next month" class="glyphicon glyphicon-arrow-right">Add bank holiday</a></li>
-    <li><strong><a href="new_recurring_event.php" id="recurring_event" title="Recurring event" class="disabled glyphicon glyphicon-refresh">Recurring Event</a></strong></li>
+    <li><a href="new_recurring_event.php" id="recurring_event" title="Recurring event" class="disabled glyphicon glyphicon-refresh">Recurring Event</a></li>
     </ul>
   </nav>
   
-<div class="container">
+<div class="">
 
   <section id="recurring_event_form">
   <h2>Recurring Event</h2>
   <form action="new_recurring_event.php" method="post" class="form">
-    <div class="form-group">
-    <input class="form-control" type="text" id="event_name" name="event_name"  length="100" placeholder="event name" />
+    <div class="row small-12 medium-10 large-10 columns">
+      <label for="event_name">Event
+      <input class="" type="text" id="event_name" name="event_name"  length="100" placeholder="name" />
+      </label>
     </div>
-    <div class="form-group">
-    <div class="col-sm-3">
-    <label for="start_time">Starts: </label>
-    <input  class="form-control" type="time" id="start_time" name="start_time" placeholder="00:00" />
+    <div class="row">
+    <div class="small-4 medium-3 large-3 columns">
+      <label for="start_time">Starts 
+      <input  class="" type="time" id="start_time" name="start_time" placeholder="00:00" />
+      </label>
     </div>
-    <div class="col-sm-3">
-    <label for="end_time">Ends: </label>
-    <input  class="form-control" type="time" id="end_time" name="end_time" placeholder="00:00"  />
+    <div class="small-4 medium-3 large-3 columns">
+      <label for="end_time">Ends 
+      <input  class="" type="time" id="end_time" name="end_time" placeholder="00:00"  />
+      </label>
     </div>
-    <div class="col-sm-3">
-    <label for="s_day">Date: </label>
-    <input type="date" id="s_day" name="s_day" class="form-control" />
+    <div class="small-4 medium-3 large-3 columns">
+      <label for="s_day">Date 
+      <input type="date" id="s_day" name="s_day" class="" />
+      </label>
     </div>
-    <div class="col-sm-3">
-    <label for="recurs">Recurs: </label>
-    <select class="form-control col-sm-3"  id="recurs" name="recurs">
-      <option>daily</option>
-      <option>weekly</option>
-      <option>fortnightly</option>
-      <option>lunar</option>
-      <option>monthly</option>
-      <option>yearly</option>
-      <option>quarterly</option>
-    </select>
+    <div class="small-4 medium-3 large-3 columns">
+      <label for="recurs">Recurs </label>
+      <select class=""  id="recurs" name="recurs">
+        <option>daily</option>
+        <option>weekly</option>
+        <option>fortnightly</option>
+        <option>lunar</option>
+        <option>monthly</option>
+        <option>yearly</option>
+        <option>quarterly</option>
+      </select>
     <!-- put in a No of times recurs field, with a checkbox for forever. 
        Add a table in SQL with re_id, event_id, date. Compute all the dates where the event recurs in a PHP array.
        Insert each recurrence in this table. the index.php/daily page will need to search by date in that table and
@@ -122,22 +130,29 @@ function add_routine_event() {
     -->
     </div>
     </div>
-    <div class="form-group">
-    <div class="col-sm-10">
-      <label for="place" class="sr-only">Place:</label>
-      <input type="text" id="place" name="place" class="form-control" length="100" placeholder="Place" />
-    </div><div class="col-sm-2">
+    <div class="row">
+    <div class="small-10 medium-10 large-10 columns">
+      <label for="place" class="">Place
+      <input type="text" id="place" name="place" class="" length="100" placeholder="Place" />
+      </label>
+    </div><div class="small-2 medium-2 large-2 columns">
       <a href="http://www.bing.com/maps/" target="blank" title="Map with GPS" class="glyphicon glyphicon-map-marker"> Find</a>
     </div></div>
-      <label for="attendees" class="sr-only">Attendees: </label>
-      <input id="attendees" name="attendees" type="text" class="form-control" placeholder="attendees" />
-    <textarea id="details" name="details" class="form-group col-sm-12" placeholder="Details..." rows="4"></textarea>
-    <div class="col-sm-8">
-      <label for="url" class="sr-only">Web page</label>
-      <input type="url" class="form-control" id="url" name="url" placeholder="web page" />
+    <div class="row">
+      <label for="attendees" class="small-2 large-2 columns">Attendees 
+      <input id="attendees" name="attendees" type="text" class="small-10 large-10 columns" placeholder="attendees" />
+      </label>
     </div>
-    <div class="col-sm-4">
-      <select id="category" name="category" class="form-control">
+    <div class="row">
+      <textarea id="details" name="details" class="small-12 large-12 columns" placeholder="Details..." rows="4"></textarea>
+    </div>
+    <div class="row">
+    <div class="small-8 medium-8 large-8 columns">
+      <label for="url" class="small-2 medium-2 large-2 columns">Web page</label>
+      <input type="url" class="small-10 medium-10 large-10 columns" id="url" name="url" placeholder="web page" />
+    </div>
+    <div class="small-4 medium-4 large-4 columns">
+      <select id="category" name="category" class="">
       
 <?php
   
@@ -166,8 +181,8 @@ add_routine_event();
 ?>
         
       </select>
-    </div>
-    <button type="submit" id="submit" name="submit" class="btn btn-primary btn-lg">Submit</button>
+    </div></div>
+    <input type="submit" id="submit" name="submit" class="btn btn-primary btn-lg">Submit</button>
   </form>
   </section>
   

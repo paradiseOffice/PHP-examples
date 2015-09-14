@@ -1,13 +1,62 @@
+/**
+ * Colours
+ * 
+ * header: green with white text                        #82b548, or rgb(130, 181, 72)
+ * Smaller headings: yellow with dark grey outline      #e8e368, or rgb(232, 227, 104)
+ * Buttons, borders: light blue?                        #55c3c6, or rgb(85, 195, 198)
+ * Text: Black on white for paragraphs
+ * Form area: grey                                      #8a9496, or rgb(138, 148, 150)
+ */
 
-body { font-size: 14pt; }
-header { height: 120px; width: 100%; }
-header h1 {
-   text-align: center;
+body { 
+  font-size: 1.2em; 
+  font-family: body-copy, 'times new roman', 'Liberation serif', serif;
+  background: white;
+  color: black;
+}
+h1, h2, h3, h4 {
+  font-family: header, sans-serif;
+  text-align: center;
+  color: #383368;
+}
+h5, h6 {
+  font-family: 'Liberation sans', Arial, sans-serif;
+  color: #383368;
+  text-shadow: 1px 1px 1px 0 #333;
+}
+header { 
+  height: 120px; width: 80%; 
+  margin: 0 auto;
+  margin-top: 1%;
+  background: rgba(130, 181, 72, 0.76) url('../images/header.jpg') no-repeat top right;
+  color: white;
+  border-radius: 10px;
+}
+h1 {
    font-size: 200%;
 }
 
 li { list-style-type: none; }
+.btn {
+  border-radius: 0 0 6px 6px;
+  color: white;
+  background: #55c3c6;
+}
 
+
+.top-nav {
+  
+}
+
+.top-nav > .disabled {
+  
+}
+.nav-elements {
+  
+}
+#bottom-nav {
+
+}
 /* daily page */
 #diarypage { 
     
@@ -23,6 +72,21 @@ li { list-style-type: none; }
 }
 #notes {
 
+}
+.event-details {
+  
+}
+.task-event {
+  
+}
+.summary {
+  
+}
+.todo {
+  
+}
+.todo-details {
+  
 }
 button#submit { float: right; }
 #hidden-date { margin-left: -10000px; }

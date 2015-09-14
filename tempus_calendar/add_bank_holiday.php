@@ -59,12 +59,12 @@ function insert_bank_holiday() {
     <h1>Tempus</h1>
     <h2>Add Bank Holiday</h2>
   </header>
-  <nav class="nav top-nav">
-    <ul class="nav-pills">
+  <nav class="top-nav">
+    <ul class="nav-elements">
     <li><a href="special_event.php" id="special" title="Special event" class="glyphicon glyphicon-star-empty">Special event</a></li>
     <li><a href="add_work_hols.php" id="work_hols" class="glyphicon glyphicon-calendar">Days off</a></li>
-    <li class="active disabled"><a href="add_bank_holiday.php" id="bank_holiday" title="Next month" class="glyphicon glyphicon-arrow-right">Add bank holiday</a></li>
-    <li><strong><a href="new_recurring_event.php" id="recurring_event" title="Recurring event" class="disabled glyphicon glyphicon-refresh">Recurring Event</a></strong></li>
+    <li class="active disabled"><a href="add_bank_holiday.php" id="bank_holiday" title="Next month" class="disabled glyphicon glyphicon-arrow-right">Add bank holiday</a></li>
+    <li><a href="new_recurring_event.php" id="recurring_event" title="Recurring event" class="glyphicon glyphicon-refresh">Recurring Event</a></li>
     </ul>
   </nav>
   
@@ -73,17 +73,26 @@ function insert_bank_holiday() {
   <section id="bank_holiday">
   <h2>Bank Holiday</h2>
   <form action="add_bank_holiday.php" id="add_bank_holiday" method="post" class="form">
-    <div class="form-group">
-    <label for="title" class="sr-only">Holiday</label>
-    <input class="form-control" type="text" id="title" name="title"  length="100" placeholder="Holiday title" />
+    <div class="row prefix-round">
+    <label for="title" class="right inline">Holiday</label>
+      <div class="small-3 large-2 columns">
+        <span class="button prefix">Label </span>
+      </div>
+      <div class="small-6 large-8 columns">
+        <input class="" type="text" id="title" name="title"  length="100" placeholder="title" />
+        <!-- next to columns class, put error
+        <small class="error">testing Invalid entry</small>
+        -->
+      </div>
     </div>
-    <div class="form-group">
-    <label for="shops_open">Shops Open</label>
-    <input  class="form-control" type="checkbox" id="shops_open" name="shops_open" />
+    <div class="row">
+    <label for="shops_open" class="right inline">Shops Open
+      <input  class="small-8 large-9 columns" type="checkbox" id="shops_open" name="shops_open" />
+    </label>
     </div>
-    <div class="form-group">
-      <label for="hol_date">Date</label>
-      <input type="date" id="hol_date" name="hol_date" class="form-control" placeholder="dd-mm-yyyy" />
+    <div class="row">
+      <input type="date" id="hol_date" name="hol_date" class="small-5 large-8 columns" placeholder="dd-mm-yyyy" />
+      <label for="hol_date" class="left inline">Date</label>
     </div>
 
     <input type="submit" id="submit" name="submit" class="btn btn-primary btn-lg" value="Add" />

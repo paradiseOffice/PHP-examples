@@ -65,13 +65,17 @@ add_work_hols();
 </head>
 <body>
 
-  <header><h1>New Event</h1></header>
-    <nav class="nav top-nav">
-    <ul class="nav-pills">
+<header>
+    <h1>Tempus</h1>
+    <h2>New Holiday</h2>
+  </header>
+ 
+    <nav class="top-nav">
+    <ul class="nav-elements">
     <li><a href="special_event.php" id="special" title="Special event" class="glyphicon glyphicon-star-empty">Special event</a></li>
-    <li><a href="add_work_hols.php" id="work_hols" class="glyphicon glyphicon-calendar">Days off</a></li>
-    <li class="active disabled"><a href="add_bank_holiday.php" id="bank_holiday" title="Next month" class="glyphicon glyphicon-arrow-right">Add bank holiday</a></li>
-    <li><strong><a href="new_recurring_event.php" id="recurring_event" title="Recurring event" class="disabled glyphicon glyphicon-refresh">Recurring Event</a></strong></li>
+    <li><a href="add_work_hols.php" id="work_hols" class="disabled glyphicon glyphicon-calendar">Days off</a></li>
+    <li><a href="add_bank_holiday.php" id="bank_holiday" title="Next month" class="glyphicon glyphicon-arrow-right">Add bank holiday</a></li>
+    <li><a href="new_recurring_event.php" id="recurring_event" title="Recurring event" class="disabled glyphicon glyphicon-refresh">Recurring Event</a></li>
     </ul>
   </nav>
   
@@ -80,20 +84,26 @@ add_work_hols();
   <section id="work_hols">
   <h2>Add Holiday Days</h2>
   <form action="add_work_hols.php" method="post" class="form">
-    <div class="form-group">
-    <input class="form-control" type="radio" id="work" name="work" value="1"/>Work <br />
-    <input class="form-control" type="radio" id="holiday" name="holiday" value="1" />Holiday <br />
+    <div class="row">
+      <div class="small-12 large-6">
+        <input class="" type="radio" id="work" name="work" value="1"/><label for="work">Work </label>
+      </div><div class="small-12 large-6">
+        <input class="" type="radio" id="holiday" name="holiday" value="1" /><label for="holiday">Holiday </label>
+      </div>
     </div>
-    <div class="form-group">
-    <div class="col-sm-6">
-    <label for="start_date">Start Date</label>
-    <input  class="form-control" type="date" id="start_date" name="start_date" placeholder="dd-mm-yyyy" />
+  <div class="row">
+    <div class="small-6 large-6">
+    <label for="start_date">Start Date
+      <input  class="" type="date" id="start_date" name="start_date" placeholder="dd-mm-yyyy" />
+    </label>
     </div>
-    <div class="col-sm-6">
-    <label for="end_date">End Date </label>
-    <input  class="form-control" type="date" id="end_date" name="end_date" placeholder="dd-mm-yyyy"  />
-    </div></div>
-    <button type="submit" id="submit" name="submit" class="btn btn-primary btn-lg">Submit</button>
+    <div class="small-6 large-6">
+      <label for="end_date">End Date 
+        <input  class="" type="date" id="end_date" name="end_date" placeholder="dd-mm-yyyy"  />
+      </label>
+    </div>
+  </div>
+    <input type="submit" id="submit" name="submit" class="btn btn-primary btn-lg">Submit</button>
   </form>
   </section>
   

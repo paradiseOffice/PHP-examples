@@ -19,7 +19,10 @@
     
 </head>
 <body>
-
+<header>
+    <h1>Tempus</h1>
+    <h2>Weekly</h2>
+  </header>
  
 
 <?php require_once("footer-nav.php"); ?>

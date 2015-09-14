@@ -56,39 +56,49 @@ add_special_event();
 </head>
 <body>
 
-  <header><h1>New Event</h1></header>
-  <nav class="nav top-nav">
-    <ul class="nav-pills">
-    <li><a href="special_event.php" id="special" title="Special event" class="glyphicon glyphicon-star-empty">Special event</a></li>
+<header>
+    <h1>Tempus</h1>
+    <h2>Add Special Event</h2>
+  </header>
+  <nav class="top-nav">
+    <ul class="nav-elements">
+    <li><a href="special_event.php" id="special" title="Special event" class="disabled glyphicon glyphicon-star-empty">Special event</a></li>
     <li><a href="add_work_hols.php" id="work_hols" class="glyphicon glyphicon-calendar">Days off</a></li>
     <li><a href="add_bank_holiday.php" id="bank_holiday" class="">Add bank holiday</a></li>
-    <li><strong><a href="new_recurring_event.php" id="recurring_event" title="Recurring event" class="disabled glyphicon glyphicon-refresh">Recurring Event</a></strong></li>
+    <li><a href="new_recurring_event.php" id="recurring_event" title="Recurring event" class="glyphicon glyphicon-refresh">Recurring Event</a></strong></li>
     </ul>
   </nav>
   
-<div class="container">
+<div class="">
 
   <section id="special_event_form">
-  <h2>Special Event</h2>
+  <h3>Add Birthday</h3>
   <form action="special_event.php" method="post" class="form">
-    <div class="form-group">
-    <input class="form-control" type="text" id="event" name="event"  length="100" placeholder="event name" />
+    <div class="row">
+    <input class="small-12 large-12 columns" type="text" id="event" name="event"  length="100" placeholder="event name" />
     </div>
-    <div class="form-group">
-    <div class="col-sm-5">
-    <label for="s_day">Date: </label>
-    <input  class="form-control" type="date" id="s_day" name="s_day" placeholder="dd/mm/yyyy" />
+    <div class="row">
+    <div class="small-5 large-5 columns">
+      <label for="s_day">Date 
+      <input  class="" type="date" id="s_day" name="s_day" placeholder="dd/mm/yyyy" />
+      </label>
     </div>
-    <div class="col-sm-7">
-    <label for="end_time">Yearly: </label>
-    <input  class="form-control" type="radio" id="yes" name="birthday" value="1">Yes</input>
-    <input class="form-control" type="radio" id="no" name="birthday" value="0">No</input>
+    <div class="small-7 large-7 columns">
+      <label for="end_time">Yearly 
+      <input  class="small-6 large-6 columns" type="radio" id="yes" name="birthday" value="1">Yes</input>
+      <input class="small-6 large-6 columns" type="radio" id="no" name="birthday" value="0">No</input>
+      </label>
     </div>
     </div>
-      <label for="place" class="sr-only">Attendees: </label>
-      <input id="place" name="place" type="text" class="form-control" placeholder="place" />
-    <textarea id="details" name="details" class="form-group col-sm-12" placeholder="Details..." rows="4"></textarea>
-    <button type="submit" id="submit" name="submit" class="btn btn-primary btn-lg">Submit</button>
+    <div class="row">
+      <label for="place" class="small-3 large-3 columns">Attendees 
+      <input id="place" name="place" type="text" class="small-9 large-9 columns" placeholder="place" />
+      </label>
+    </div>
+    <div class="row">
+    <textarea id="details" name="details" class="small-12 large-12 columns" placeholder="Details..." rows="4"></textarea>
+    </div>
+    <input type="submit" id="submit" name="submit" class="btn btn-primary btn-lg">Submit</button>
   </form>
   </section>
   

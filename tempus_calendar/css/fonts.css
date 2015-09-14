@@ -1,0 +1,11 @@
+@font-face {
+  font-family: body-copy;
+  src: url('fonts/CrimsonText-Roman.ttf');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: header;
+  src: url('fonts/Limelight.ttf');
+  font-weight: normal;
+}

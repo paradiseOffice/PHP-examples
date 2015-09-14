@@ -25,18 +25,19 @@
       $today = $todayTitle->format('Ymd'); // for the SQL database
     ?>
     </h1>
-    
+    <h2>Today's Schedule</h2>
   </header>
-  <nav class="nav nav-pills top-nav">
-    <ul>
+  <nav class="top-nav">
+    <ul class="nav-elements">
     <li><a href="#" id="yesterday" title="Yesterday" class="glyphicon glyphicon-arrow-left"></a></li>
     <li><a href="#" id="today" >Today</a></li>
     <li><a href="#" id="tomorrow" title="Tomorrow" class="glyphicon glyphicon-arrow-right"></a></li>
     </ul>
   </nav>
-<div class="container-fluid" >
-  <div class="col-sm-8 col-md-8" id="diarypage">  
-    <div class="col-sm-2 col-md-2 col-lg-1" id="times">
+<div class="row" >
+  <div class="small-8 medium-8 large-8 columns" id="diarypage">  
+    <div class="row">
+    <div class="small-2 medium-2 large-1 columns" id="times">
       <ul>
       <li class="0800">8:00 </li>
       <li class="0830">8:30 </li>
@@ -71,7 +72,7 @@
       <li class="2300">23:00</li>
       </ul>
     </div>
-    <div class="col-sm-3 col-md-3" id="listings-todo">
+    <div class="small-3 medium-3 large-3 columns" id="listings-todo">
 <?php
 
   if ($pdo !== 0 ):
@@ -88,7 +89,7 @@
     $statement->execute();
     if ($statement !== 0):
       while (($row = $statement->fetch(PDO::FETCH_ASSOC)) !== false): ?>
-        <div class="routine-event <?php echo $row['start_time']; ?>">
+        <div class="task-event <?php echo $row['start_time']; ?>">
         <h3 class="summary" style="background-color: <?php echo $row['colour'] ?>"><?php echo $row['event']; ?></h3>
         <div class="event-details">
           <span class="time">Starts <?php echo $row['start_time']; ?></span>
@@ -105,7 +106,7 @@
     ?>    
      
     </div>
-    <div class="col-sm-4 col-md-4" id="listings-routine">
+    <div class="small-3 medium-3 large-2 columns" id="listings-routine">
     <?php
     
     $todoSql = 'SELECT * FROM task_item  LEFT JOIN categories ON task_item.cat_id = categories.cat_id 
@@ -134,13 +135,15 @@
  } // end function
    fetch_data();
    ?> 
-    </div>    
+    </div> </div>   
   </div></div>
-  <div class="col-sm-4 col-md-4" id="notes">
+  <div class="small-4 medium-4 large-4 columns" id="notes">
     <h3>Notes</h3>
-    <textarea class="form-control" id="todo-area" rows="8" placeholder="type here"></textarea>
-    <button class="form-control" id="add-todo">Add Item</button>
+    <textarea class="" id="todo-area" rows="8" placeholder="type here"></textarea>
+    <button class="btn" id="add-todo">Add Item</button>
     <ol class="todo-list"></ol>
+    <br />
+    <img width="400" height="1000" src="images/big_ben.jpg" />
   </div>
 </div>
 <!-- Add a default colour list to the categories table, and have a hidden form field to update the day via Javascript, 
